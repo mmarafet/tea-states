@@ -7,11 +7,8 @@
   <style>
     :root{
       --bg:#0b0f14;
-      --card:#121824;
       --muted:#8ea1b3;
       --text:#e8eef5;
-      --accent:#7dd3fc;
-      --accent2:#a7f3d0;
       --border:rgba(255,255,255,.08);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
     }
@@ -29,38 +26,25 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    h1{
-      margin:0 0 6px;
-      font-size: 20px;
-      letter-spacing: .2px;
-    }
-    .sub{
-      margin:0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.4;
-    }
+    h1{ margin:0 0 6px; font-size: 20px; letter-spacing: .2px; }
+    .sub{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.4; }
 
     .wrap{
       max-width: 1200px;
       margin: 0 auto;
       padding: 14px 18px 24px;
       display: grid;
-      grid-template-columns: 1fr 380px;
+      grid-template-columns: 1fr 420px;
       gap: 14px;
     }
-    @media (max-width: 980px){
-      .wrap{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 980px){ .wrap{ grid-template-columns: 1fr; } }
 
     .grid{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-    @media (max-width: 800px){
-      .grid{ grid-template-columns: 1fr; }
-    }
+    @media (max-width: 800px){ .grid{ grid-template-columns: 1fr; } }
 
     .panel{
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
@@ -78,24 +62,11 @@
       border-bottom: 1px solid var(--border);
       background: rgba(255,255,255,.02);
     }
-    .panel .head .title{
-      font-weight: 650;
-      font-size: 14px;
-      letter-spacing:.2px;
-    }
-    .panel .head .hint{
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .panel .body{
-      padding: 12px;
-    }
+    .panel .head .title{ font-weight: 650; font-size: 14px; letter-spacing:.2px; }
+    .panel .head .hint{ color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .panel .body{ padding: 12px; }
 
-    .legend{
-      display:flex; gap:8px; flex-wrap: wrap;
-      margin: 0 0 10px;
-    }
+    .legend{ display:flex; gap:8px; flex-wrap: wrap; margin: 0 0 10px; }
     .pill{
       font-size: 12px;
       padding: 6px 9px;
@@ -105,13 +76,7 @@
       background: rgba(255,255,255,.02);
     }
 
-    /* "Диаграмма" — облако кнопок */
-    .cloud{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 2px;
-    }
+    .cloud{ display:flex; flex-wrap: wrap; gap: 8px; padding: 2px; }
     button.node{
       border: 1px solid var(--border);
       background: rgba(255,255,255,.03);
@@ -123,28 +88,35 @@
       line-height: 1;
       transition: transform .06s ease, border-color .15s ease, background .15s ease;
       user-select: none;
+      position: relative;
+      white-space: nowrap;
     }
-    button.node:hover{ border-color: rgba(125, 211, 252, .45); }
     button.node:active{ transform: translateY(1px); }
-    button.node.bad[data-active="true"]{
-      border-color: rgba(125, 211, 252, .75);
-      background: rgba(125, 211, 252, .12);
-    }
-    button.node.good[data-active="true"]{
-      border-color: rgba(167, 243, 208, .75);
-      background: rgba(167, 243, 208, .10);
-    }
+    button.node:hover{ border-color: rgba(125, 211, 252, .45); }
+    button.node.bad[data-active="true"]{ border-color: rgba(125, 211, 252, .75); background: rgba(125, 211, 252, .12); }
+    button.node.good[data-active="true"]{ border-color: rgba(167, 243, 208, .75); background: rgba(167, 243, 208, .10); }
 
-    /* Правая карточка */
-    .side{
-      position: sticky;
-      top: 14px;
-      align-self: start;
-      height: fit-content;
+    button.node[data-selected="true"]{ border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); }
+    button.node.bad[data-selected="true"]{ border-color: rgba(125, 211, 252, .85); background: rgba(125, 211, 252, .14); }
+    button.node.good[data-selected="true"]{ border-color: rgba(167, 243, 208, .85); background: rgba(167, 243, 208, .12); }
+
+    .checkdot{
+      display:none;
+      position:absolute;
+      right:6px;
+      top:50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 0 0 2px rgba(0,0,0,.25);
     }
-    @media (max-width: 980px){
-      .side{ position: static; }
-    }
+    button.node[data-selected="true"] .checkdot{ display:block; }
+
+    .side{ position: sticky; top: 14px; align-self: start; height: fit-content; }
+    @media (max-width: 980px){ .side{ position: static; } }
+
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
       border: 1px solid var(--border);
@@ -170,16 +142,44 @@
       background: rgba(255,255,255,.02);
       white-space: nowrap;
     }
-    .card h2{
-      margin:0;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: .2px;
-    }
-    .card .content{
-      padding: 14px;
-    }
+    .card h2{ margin:0; font-size: 15px; font-weight: 700; letter-spacing: .2px; }
+    .card .content{ padding: 14px; }
     .muted{ color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .divider{ height:1px; background: var(--border); margin: 12px 0; }
+
+    .sectionTitle{
+      font-weight: 700;
+      font-size: 13px;
+      margin: 10px 0 8px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .miniBtn{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 6px 8px;
+      cursor:pointer;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .miniBtn:hover{ border-color: rgba(255,255,255,.18); }
+
+    .stateChips{ display:flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+    .stateChip{
+      font-size: 12px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+    }
+    .stateChip.bad{ border-color: rgba(125, 211, 252, .25); }
+    .stateChip.good{ border-color: rgba(167, 243, 208, .25); }
+
     .list{ margin: 10px 0 0; padding: 0; list-style: none; }
     .list li{
       padding: 9px 10px;
@@ -206,10 +206,50 @@
       background: rgba(0,0,0,.10);
       white-space: nowrap;
     }
-    .btnrow{
-      display:flex; gap: 8px; flex-wrap: wrap;
-      margin-top: 10px;
+
+    /* Блок управления под 3 блоками */
+    .controlsPanel{
+      grid-column: 1 / -1;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
     }
+    .controlsLeft{ display:flex; align-items:center; gap: 12px; flex-wrap: wrap; }
+
+    .toggleWrap{ display:flex; align-items:center; gap: 10px; color: var(--text); font-size: 13px; }
+    .toggle{
+      width: 44px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid var(--border);
+      position: relative;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+    .toggleKnob{
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      position:absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 2px;
+      transition: left .18s ease, background .18s ease;
+    }
+    .toggle[data-on="true"]{
+      background: rgba(125, 211, 252, .18);
+      border-color: rgba(125, 211, 252, .35);
+    }
+    .toggle[data-on="true"] .toggleKnob{
+      left: 20px;
+      background: rgba(167, 243, 208, .85);
+    }
+    .counter{ color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .barBtns{ display:flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
     .ghost{
       border: 1px solid var(--border);
       background: rgba(255,255,255,.02);
@@ -218,18 +258,65 @@
       padding: 8px 10px;
       cursor:pointer;
       font-size: 12px;
+      white-space: nowrap;
     }
     .ghost:hover{ border-color: rgba(255,255,255,.18); }
-    .note{
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
+
+    /* Popup modal (прозрачность 10%) */
+    .modalOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.10); /* 10% */
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 100;
+      padding: 16px;
+      backdrop-filter: blur(6px);
     }
-    .divider{
-      height:1px;
-      background: var(--border);
-      margin: 12px 0;
+    .modal{
+      width: min(520px, 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(18, 24, 36, .90); /* окно читаемое, фон затемнения 10% */
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
+    .modalTop{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255,255,255,.02);
+    }
+    .modalTop strong{ font-size: 14px; letter-spacing: .2px; }
+    .modalBody{
+      padding: 14px;
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+    .modalActions{
+      padding: 12px 14px 14px;
+      display:flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 12px;
+      cursor:pointer;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    .btn:hover{ border-color: rgba(255,255,255,.22); }
   </style>
 </head>
 
@@ -237,8 +324,8 @@
 <header>
   <h1>Чай → Состояния: две диаграммы (20 → 20)</h1>
   <p class="sub">
-    Слева — “есть сейчас” (что хочется убрать), справа — “хочу получить” (что хочется вызвать).
-    Нажми на состояние — справа появятся 3–4 подходящих вида чая (и как пить, чтобы это работало).
+    Нажми на состояние — справа появятся рекомендации. Включи режим “выбрать несколько состояний PRO”:
+    можно отметить до <b>5</b> из каждого списка (всего до <b>10</b>).
   </p>
 </header>
 
@@ -250,9 +337,7 @@
         <div class="hint">20 шт.</div>
       </div>
       <div class="body">
-        <div class="legend">
-          <span class="pill">Нажми: покажу чай + режим пролива</span>
-        </div>
+        <div class="legend"><span class="pill">Режим “несколько”: кликай, чтобы отмечать до 5</span></div>
         <div class="cloud" id="badCloud"></div>
       </div>
     </section>
@@ -264,8 +349,8 @@
       </div>
       <div class="body">
         <div class="legend">
-          <span class="pill">Вечером выбирай темнее/ферментированнее</span>
-          <span class="pill">Утром — “зеленее/светлее”</span>
+          <span class="pill">Утро — “зеленее/светлее”</span>
+          <span class="pill">Вечер — “темнее/ферментированнее”</span>
         </div>
         <div class="cloud" id="goodCloud"></div>
       </div>
@@ -276,54 +361,115 @@
     <div class="card" id="infoCard">
       <div class="top">
         <h2 id="cardTitle">Выбери состояние</h2>
-        <span class="chip" id="cardChip">Подсказка</span>
+        <span class="chip" id="cardChip">Один выбор</span>
       </div>
       <div class="content">
         <p class="muted" id="cardDesc">
-          Нажми на любую “пилюлю” слева/справа. Я покажу 3–4 варианта чая и небольшой режим пролива.
+          В режиме “Один выбор” — клик по состоянию покажет 3–4 чая для него.
+          В режиме “Несколько” — справа появится подбор под отмеченные состояния.
         </p>
+
+        <div id="multiBlocks" style="display:none;">
+          <div class="sectionTitle">
+            <span>Добавлено: “убрать”</span>
+            <button class="miniBtn" id="clearBadBtn">очистить</button>
+          </div>
+          <div class="stateChips" id="selectedBadChips"></div>
+
+          <div class="sectionTitle">
+            <span>Добавлено: “вызвать”</span>
+            <button class="miniBtn" id="clearGoodBtn">очистить</button>
+          </div>
+          <div class="stateChips" id="selectedGoodChips"></div>
+
+          <div class="divider"></div>
+
+          <div class="sectionTitle">
+            <span>Чайный подбор под выбранное</span>
+            <button class="miniBtn" id="clearAllBtn">сбросить всё</button>
+          </div>
+        </div>
 
         <ul class="list" id="teaList"></ul>
 
         <div class="divider"></div>
-
         <p class="muted"><b>Быстрая настройка пролива:</b><br/>
           120–150 мл гайвань/чайник • 4–6 г (вечером 3–5 г) • короткие проливы 5–15 сек, далее по вкусу.
         </p>
 
-        <div class="btnrow">
-          <button class="ghost" id="clearBtn">Сбросить выбор</button>
-          <button class="ghost" id="randomBadBtn">Случайное “убрать”</button>
-          <button class="ghost" id="randomGoodBtn">Случайное “вызвать”</button>
-        </div>
-
-        <div class="note">
+        <div class="muted" style="margin-top:10px;">
           ⚠️ Не медицинский совет. Если есть проблемы ЖКТ/сон/давление — подбирай крепость и время аккуратно.
         </div>
       </div>
     </div>
   </aside>
+
+  <!-- Управление -->
+  <section class="panel controlsPanel" id="controlsPanel">
+    <div class="controlsLeft">
+      <div class="toggleWrap">
+        <div class="toggle" id="multiToggle" data-on="false" role="switch" aria-checked="false" tabindex="0">
+          <div class="toggleKnob"></div>
+        </div>
+        <div>
+          <div style="font-weight:650;">Выбрать несколько состояний PRO</div>
+          <div class="counter" id="counterText">Убрать: 0/5 • Вызвать: 0/5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="barBtns">
+      <button class="ghost" id="randomBadBtn">Случайное “убрать”</button>
+      <button class="ghost" id="randomGoodBtn">Случайное “вызвать”</button>
+      <button class="ghost" id="clearBtn">Сбросить (одиночный)</button>
+    </div>
+  </section>
+</div>
+
+<!-- Лимит (как было) -->
+<div class="modalOverlay" id="limitModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modalTop">
+      <strong>Лимит выбора</strong>
+      <button class="btn" id="closeLimitBtn">ок</button>
+    </div>
+    <div class="modalBody">До 5 состояний из каждого списка (всего до 10шт), мой друг.</div>
+    <div class="modalActions"></div>
+  </div>
+</div>
+
+<!-- PRO (новое окно с ДА/НЕТ и донатом) -->
+<div class="modalOverlay" id="proModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modalTop">
+      <strong id="proTitle">PRO</strong>
+      <button class="btn" id="proCloseX" title="Закрыть">ок</button>
+    </div>
+    <div class="modalBody" id="proBody">Вы точно хотите приобрести версию PRO?</div>
+    <div class="modalActions" id="proActions">
+      <button class="btn" id="proYes">ДА</button>
+      <button class="btn" id="proNo">НЕТ</button>
+    </div>
+  </div>
 </div>
 
 <script>
-  // Унифицированные "виды чая" (можно менять формулировки)
+  // --- Виды чая ---
   const TEA = {
-    shu: {name:"Шу пуэр", tag:"↓ заземляет", brew:"4–5 г / 120–150 мл • 6–8 проливов • не крепко вечером"},
-    chaTou: {name:"Лао Ча Тоу (пуэрные “камушки”)", tag:"↓ мягко успокаивает", brew:"5–6 г • выдерживает много проливов • вечерний фаворит"},
-    liuBao: {name:"Лю Бао (хэй ча)", tag:"↓ стабилизирует", brew:"4–6 г • 6–10 проливов • хорошо после ужина"},
-    fuZhuan: {name:"Фу Чжуань (хэй ча, “золотые цветы”)", tag:"↓ ровный фон", brew:"4–6 г • 6–10 проливов • мягко и длительно"},
-    agedWhite: {name:"Выдержанный белый (Лао Бай Ча)", tag:"~ тихий", brew:"4–5 г • 5–8 проливов • мягко, почти без “удара”"},
-    white: {name:"Белый чай (Бай Му Дань / Инь Чжэнь)", tag:"↑ мягко", brew:"4–5 г • 5–7 проливов • не кипяток"},
-    hongCha: {name:"Красный чай (Хун Ча: Дянь Хун/Цзинь Цзюнь Мэй)", tag:"→ тёплый фокус", brew:"4–6 г • 4–7 проливов • бодрит мягко"},
-    green: {name:"Зелёный (Лунцзин/Аньцзи Бай Ча/Билочунь)", tag:"↑↑ ясность", brew:"3–4 г • 70–85°C • короткие проливы"},
-    lightOolong: {name:"Светлый улун (Те Гуань Инь / Бао Чжун)", tag:"↑ настроение", brew:"5–6 г • 85–95°C • 6–10 проливов"},
-    darkOolong: {name:"Тёмный улун (Уи: Да Хун Пао/Жоу Гуй)", tag:"→/↓ глубина", brew:"5–6 г • 95–100°C • 6–10 проливов"},
-    sheng: {name:"Шэн пуэр (сырой)", tag:"↑↑ бодрит", brew:"4–6 г • короткие проливы • лучше до 14:00"},
-    yancha: {name:"Яньча (утёсные улуны Уи)", tag:"→ глубокий фокус", brew:"5–6 г • кипяток • короткие проливы"},
-    tieLuoHan: {name:"Лю Бау / Хэй Ча (альтернатива пуэрам)", tag:"↓", brew:"Если шу “слишком бодрит” — бери хэй ча"}
+    shu: {key:"shu", name:"Шу пуэр", tag:"↓ заземляет", brew:"4–5 г / 120–150 мл • 6–8 проливов • не крепко вечером"},
+    chaTou: {key:"chaTou", name:"Лао Ча Тоу (пуэрные “камушки”)", tag:"↓ мягко успокаивает", brew:"5–6 г • выдерживает много проливов • поздним вечером — топ"},
+    liuBao: {key:"liuBao", name:"Лю Бао (хэй ча)", tag:"↓ стабилизирует", brew:"4–6 г • 6–10 проливов • хорошо после ужина"},
+    fuZhuan: {key:"fuZhuan", name:"Фу Чжуань (хэй ча, “золотые цветы”)", tag:"↓ ровный фон", brew:"4–6 г • 6–10 проливов • мягко и длительно"},
+    agedWhite: {key:"agedWhite", name:"Выдержанный белый (Лао Бай Ча)", tag:"~ тихий", brew:"4–5 г • 5–8 проливов • мягко, чисто"},
+    white: {key:"white", name:"Белый чай (Бай Му Дань / Инь Чжэнь)", tag:"↑ мягко", brew:"4–5 г • 80–90°C • короткие проливы"},
+    hongCha: {key:"hongCha", name:"Красный чай (Хун Ча)", tag:"→ тёплый фокус", brew:"4–6 г • 4–7 проливов • бодрит мягко"},
+    green: {key:"green", name:"Зелёный (Лунцзин/Аньцзи/Билочунь)", tag:"↑↑ ясность", brew:"3–4 г • 70–85°C • не передерживать"},
+    lightOolong: {key:"lightOolong", name:"Светлый улун (Те Гуань Инь / Бао Чжун)", tag:"↑ настроение", brew:"5–6 г • 85–95°C • 6–10 проливов"},
+    darkOolong: {key:"darkOolong", name:"Тёмный улун (Уи: Да Хун Пао/Жоу Гуй)", tag:"→/↓ глубина", brew:"5–6 г • 95–100°C • 6–10 проливов"},
+    sheng: {key:"sheng", name:"Шэн пуэр (сырой)", tag:"↑↑ бодрит", brew:"4–6 г • короткие проливы • лучше до 14:00"},
+    yancha: {key:"yancha", name:"Яньча (утёсные улуны Уи)", tag:"→ глубокий фокус", brew:"5–6 г • кипяток • короткие проливы"},
   };
 
-  // 20 состояний "убрать"
   const badStates = [
     {id:"bad1",  label:"Физическая усталость", teas:[TEA.shu, TEA.liuBao, TEA.hongCha, TEA.agedWhite]},
     {id:"bad2",  label:"Ментальная перегруженность", teas:[TEA.shu, TEA.agedWhite, TEA.liuBao, TEA.darkOolong]},
@@ -347,7 +493,6 @@
     {id:"bad20", label:"Бессонная голова вечером", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
   ];
 
-  // 20 состояний "вызвать"
   const goodStates = [
     {id:"good1",  label:"Сосредоточенность", teas:[TEA.yancha, TEA.darkOolong, TEA.hongCha, TEA.shu]},
     {id:"good2",  label:"Ясность", teas:[TEA.green, TEA.sheng, TEA.lightOolong, TEA.white]},
@@ -371,86 +516,393 @@
     {id:"good20", label:"Готовность ко сну", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
   ];
 
+  // --- DOM ---
   const badCloud  = document.getElementById("badCloud");
   const goodCloud = document.getElementById("goodCloud");
-
   const cardTitle = document.getElementById("cardTitle");
   const cardChip  = document.getElementById("cardChip");
   const cardDesc  = document.getElementById("cardDesc");
   const teaList   = document.getElementById("teaList");
+  const multiBlocks = document.getElementById("multiBlocks");
+  const selectedBadChips = document.getElementById("selectedBadChips");
+  const selectedGoodChips = document.getElementById("selectedGoodChips");
+  const multiToggle = document.getElementById("multiToggle");
+  const counterText = document.getElementById("counterText");
 
-  let activeBtn = null;
+  // limit modal
+  const limitModal = document.getElementById("limitModal");
+  const closeLimitBtn = document.getElementById("closeLimitBtn");
 
+  // pro modal
+  const proModal = document.getElementById("proModal");
+  const proTitle = document.getElementById("proTitle");
+  const proBody = document.getElementById("proBody");
+  const proActions = document.getElementById("proActions");
+  const proYes = document.getElementById("proYes");
+  const proNo = document.getElementById("proNo");
+  const proCloseX = document.getElementById("proCloseX");
+
+  // --- State ---
+  let multiMode = false;
+  let proPromptedOnce = false;   // <-- ПЕРВОЕ НАЖАТИЕ НА ПРО
+  let pendingToggleTarget = null; // true/false, что хотели включить/выключить
+
+  const selectedBad = new Set();
+  const selectedGood = new Set();
+
+  const badById = Object.fromEntries(badStates.map(s=>[s.id,s]));
+  const goodById = Object.fromEntries(goodStates.map(s=>[s.id,s]));
+
+  // ----- Modal helpers -----
+  function showModal(el){ el.style.display = "flex"; }
+  function hideModal(el){ el.style.display = "none"; }
+
+  function showLimitModal(){ showModal(limitModal); }
+  function hideLimitModal(){ hideModal(limitModal); }
+  closeLimitBtn.addEventListener("click", hideLimitModal);
+  limitModal.addEventListener("click", (e)=>{ if(e.target === limitModal) hideLimitModal(); });
+
+  function showProModal(){ showModal(proModal); }
+  function hideProModal(){ hideModal(proModal); }
+  proModal.addEventListener("click", (e)=>{ if(e.target === proModal) hideProModal(); });
+  proCloseX.addEventListener("click", hideProModal);
+
+  // ----- UI state helpers -----
+  function updateCounter(){
+    counterText.textContent = `Убрать: ${selectedBad.size}/5 • Вызвать: ${selectedGood.size}/5`;
+  }
+  function resetCardToIdle(){
+    cardTitle.textContent = "Выбери состояние";
+    cardDesc.textContent =
+      "В режиме “Один выбор” — клик по состоянию покажет 3–4 чая для него. В режиме “Несколько” — справа появится подбор под отмеченные состояния.";
+  }
+
+  function setMode(isMulti){
+    multiMode = isMulti;
+
+    document.querySelectorAll("button.node").forEach(b=> b.dataset.active = "false");
+
+    cardChip.textContent = isMulti ? "Несколько" : "Один выбор";
+    cardChip.style.color = isMulti ? "rgba(167, 243, 208, .95)" : "var(--muted)";
+    cardChip.style.borderColor = isMulti ? "rgba(125,211,252,.28)" : "var(--border)";
+
+    multiBlocks.style.display = isMulti ? "block" : "none";
+
+    if(!isMulti){
+      // выключаем: чистим мульти-выбор
+      selectedBad.clear();
+      selectedGood.clear();
+      document.querySelectorAll("button.node").forEach(b=> b.dataset.selected = "false");
+      teaList.innerHTML = "";
+      resetCardToIdle();
+      updateCounter();
+    } else {
+      renderSelectedChips();
+      renderTeaForMultiSelection();
+      updateCounter();
+      cardTitle.textContent = "Выбирай состояния (до 5 + до 5)";
+      cardDesc.textContent = "Отмечай состояния слева/справа — подбор чая будет собираться справа автоматически.";
+    }
+  }
+
+  // --- PRO logic: first press prompt ---
+  function openProFlowThenToggle(targetOn){
+    // Prepare confirm UI
+    pendingToggleTarget = targetOn;
+
+    proTitle.textContent = "PRO";
+    proBody.textContent = "Вы точно хотите приобрести версию PRO?";
+
+    // Show YES/NO
+    proActions.innerHTML = "";
+    const yesBtn = document.createElement("button");
+    yesBtn.className = "btn";
+    yesBtn.textContent = "ДА";
+    const noBtn = document.createElement("button");
+    noBtn.className = "btn";
+    noBtn.textContent = "НЕТ";
+    proActions.appendChild(noBtn);
+    proActions.appendChild(yesBtn);
+
+    // Close button in header: behaves like OK (closes only)
+    proCloseX.textContent = "ок";
+
+    yesBtn.onclick = ()=> {
+      proBody.textContent =
+        "Похвально конечно, но продукт распространяется бесплатно. Если очень хочется, то можете задонатить на карту сбербанка: 2202206736083473";
+      proActions.innerHTML = "";
+      const ok = document.createElement("button");
+      ok.className = "btn";
+      ok.textContent = "ок";
+      ok.onclick = ()=>{
+        hideProModal();
+        applyPendingToggle();
+      };
+      proActions.appendChild(ok);
+    };
+
+    noBtn.onclick = ()=> {
+      proBody.textContent =
+        "Продукт распространяется бесплатно, но если очень хочется, то можете задонатить на карту сбербанка: 2202206736083473";
+      proActions.innerHTML = "";
+      const ok = document.createElement("button");
+      ok.className = "btn";
+      ok.textContent = "ок";
+      ok.onclick = ()=>{
+        hideProModal();
+        applyPendingToggle();
+      };
+      proActions.appendChild(ok);
+    };
+
+    showProModal();
+  }
+
+  function applyPendingToggle(){
+    if(pendingToggleTarget === null) return;
+    const next = pendingToggleTarget;
+    pendingToggleTarget = null;
+
+    multiToggle.dataset.on = String(next);
+    multiToggle.setAttribute("aria-checked", String(next));
+    setMode(next);
+  }
+
+  function toggleMultiWithProPrompt(){
+    const next = !multiMode;
+
+    // Только при ПЕРВОМ включении (нажатие, когда сейчас OFF и хотят ON)
+    if(!proPromptedOnce && next === true){
+      proPromptedOnce = true;
+      openProFlowThenToggle(true);
+      return;
+    }
+
+    // обычное переключение
+    multiToggle.dataset.on = String(next);
+    multiToggle.setAttribute("aria-checked", String(next));
+    setMode(next);
+  }
+
+  multiToggle.addEventListener("click", toggleMultiWithProPrompt);
+  multiToggle.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      toggleMultiWithProPrompt();
+    }
+  });
+
+  // --- Clouds render ---
   function renderCloud(list, targetEl, type){
     targetEl.innerHTML = "";
     list.forEach(item=>{
       const btn = document.createElement("button");
       btn.className = `node ${type}`;
-      btn.textContent = item.label;
       btn.dataset.id = item.id;
       btn.dataset.type = type;
-      btn.addEventListener("click", ()=> selectState(item, btn, type));
+      btn.dataset.active = "false";
+      btn.dataset.selected = "false";
+      btn.innerHTML = `${item.label}<span class="checkdot"></span>`;
+      btn.addEventListener("click", ()=> onNodeClick(item, btn, type));
       targetEl.appendChild(btn);
     });
   }
 
-  function selectState(item, btn, type){
-    // toggle active style
-    document.querySelectorAll("button.node").forEach(b=> b.dataset.active = "false");
-    btn.dataset.active = "true";
-    activeBtn = btn;
+  function onNodeClick(item, btn, type){
+    if(!multiMode){
+      document.querySelectorAll("button.node").forEach(b=> b.dataset.active = "false");
+      btn.dataset.active = "true";
 
-    cardTitle.textContent = item.label;
-    cardChip.textContent = (type === "bad") ? "УБРАТЬ" : "ВЫЗВАТЬ";
-    cardChip.style.borderColor = (type === "bad") ? "rgba(125,211,252,.35)" : "rgba(167,243,208,.35)";
-    cardChip.style.color = (type === "bad") ? "rgba(125,211,252,.95)" : "rgba(167,243,208,.95)";
+      cardTitle.textContent = item.label;
+      cardDesc.textContent = (type === "bad")
+        ? "Под эти ощущения чаще всего подходят:"
+        : "Чтобы усилить это состояние, попробуй:";
 
-    const header = (type === "bad")
-      ? "Под эти ощущения чаще всего подходят:"
-      : "Чтобы усилить это состояние, попробуй:";
+      teaList.innerHTML = "";
+      item.teas.slice(0,4).forEach(t=>{
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="k">
+            <span>${t.name}</span>
+            <span class="tag">${t.tag}</span>
+          </div>
+          <div class="muted">${t.brew}</div>
+        `;
+        teaList.appendChild(li);
+      });
+      return;
+    }
 
-    cardDesc.textContent = header;
+    const set = (type === "bad") ? selectedBad : selectedGood;
+    const isSelected = btn.dataset.selected === "true";
+
+    if(isSelected){
+      set.delete(item.id);
+      btn.dataset.selected = "false";
+    } else {
+      if(set.size >= 5){
+        showLimitModal();
+        return;
+      }
+      set.add(item.id);
+      btn.dataset.selected = "true";
+    }
+
+    renderSelectedChips();
+    renderTeaForMultiSelection();
+    updateCounter();
+  }
+
+  function renderSelectedChips(){
+    selectedBadChips.innerHTML = "";
+    [...selectedBad].map(id=>badById[id]?.label).filter(Boolean).forEach(label=>{
+      const s = document.createElement("span");
+      s.className = "stateChip bad";
+      s.textContent = label;
+      selectedBadChips.appendChild(s);
+    });
+    if(selectedBad.size === 0){
+      const t = document.createElement("span");
+      t.className = "muted";
+      t.textContent = "Ничего не выбрано";
+      selectedBadChips.appendChild(t);
+    }
+
+    selectedGoodChips.innerHTML = "";
+    [...selectedGood].map(id=>goodById[id]?.label).filter(Boolean).forEach(label=>{
+      const s = document.createElement("span");
+      s.className = "stateChip good";
+      s.textContent = label;
+      selectedGoodChips.appendChild(s);
+    });
+    if(selectedGood.size === 0){
+      const t = document.createElement("span");
+      t.className = "muted";
+      t.textContent = "Ничего не выбрано";
+      selectedGoodChips.appendChild(t);
+    }
+  }
+
+  function aggregateTeas(states){
+    const score = new Map();
+    states.forEach(st=>{
+      st.teas.slice(0,4).forEach(t=>{
+        const cur = score.get(t.key);
+        if(cur) cur.count += 1;
+        else score.set(t.key, {tea: t, count: 1});
+      });
+    });
+    return [...score.values()].sort((a,b)=> (b.count - a.count) || a.tea.name.localeCompare(b.tea.name));
+  }
+
+  function renderTeaForMultiSelection(){
+    if(selectedBad.size === 0 && selectedGood.size === 0){
+      teaList.innerHTML = "";
+      cardTitle.textContent = "Выбирай состояния (до 5 + до 5)";
+      cardDesc.textContent = "Отмечай состояния слева/справа — подбор чая будет собираться справа автоматически.";
+      return;
+    }
+
+    cardTitle.textContent = "Подбор под выбранные состояния";
+    cardDesc.textContent = "Выше — выбранные состояния. Ниже — чаи, которые чаще всего подходят под эту комбинацию.";
+
+    const badSelectedStates = [...selectedBad].map(id=>badById[id]).filter(Boolean);
+    const goodSelectedStates = [...selectedGood].map(id=>goodById[id]).filter(Boolean);
+    const merged = aggregateTeas([...badSelectedStates, ...goodSelectedStates]);
 
     teaList.innerHTML = "";
-    item.teas.slice(0,4).forEach(t=>{
+    merged.slice(0,10).forEach(({tea, count})=>{
       const li = document.createElement("li");
       li.innerHTML = `
         <div class="k">
-          <span>${t.name}</span>
-          <span class="tag">${t.tag}</span>
+          <span>${tea.name}</span>
+          <span class="tag">${tea.tag} • совп.: ${count}</span>
         </div>
-        <div class="muted">${t.brew}</div>
+        <div class="muted">${tea.brew}</div>
       `;
       teaList.appendChild(li);
     });
   }
 
-  function clearSelection(){
+  // Buttons
+  document.getElementById("clearBtn").addEventListener("click", ()=>{
+    if(multiMode) return;
     document.querySelectorAll("button.node").forEach(b=> b.dataset.active = "false");
-    activeBtn = null;
-    cardTitle.textContent = "Выбери состояние";
-    cardChip.textContent = "Подсказка";
-    cardChip.style.color = "var(--muted)";
-    cardChip.style.borderColor = "var(--border)";
-    cardDesc.textContent = "Нажми на любую “пилюлю” слева/справа. Я покажу 3–4 варианта чая и небольшой режим пролива.";
+    resetCardToIdle();
     teaList.innerHTML = "";
-  }
+  });
+
+  document.getElementById("clearBadBtn").addEventListener("click", ()=>{
+    selectedBad.forEach(id=>{
+      const btn = document.querySelector(`button.node.bad[data-id="${id}"]`);
+      if(btn) btn.dataset.selected = "false";
+    });
+    selectedBad.clear();
+    renderSelectedChips();
+    renderTeaForMultiSelection();
+    updateCounter();
+  });
+
+  document.getElementById("clearGoodBtn").addEventListener("click", ()=>{
+    selectedGood.forEach(id=>{
+      const btn = document.querySelector(`button.node.good[data-id="${id}"]`);
+      if(btn) btn.dataset.selected = "false";
+    });
+    selectedGood.clear();
+    renderSelectedChips();
+    renderTeaForMultiSelection();
+    updateCounter();
+  });
+
+  document.getElementById("clearAllBtn").addEventListener("click", ()=>{
+    selectedBad.forEach(id=>{
+      const btn = document.querySelector(`button.node.bad[data-id="${id}"]`);
+      if(btn) btn.dataset.selected = "false";
+    });
+    selectedGood.forEach(id=>{
+      const btn = document.querySelector(`button.node.good[data-id="${id}"]`);
+      if(btn) btn.dataset.selected = "false";
+    });
+    selectedBad.clear();
+    selectedGood.clear();
+    renderSelectedChips();
+    renderTeaForMultiSelection();
+    updateCounter();
+  });
 
   function pickRandom(which){
     const arr = (which === "bad") ? badStates : goodStates;
     const idx = Math.floor(Math.random()*arr.length);
     const item = arr[idx];
     const btn = document.querySelector(`button.node.${which}[data-id="${item.id}"]`);
-    if (btn) selectState(item, btn, which);
-  }
+    if(!btn) return;
 
-  document.getElementById("clearBtn").addEventListener("click", clearSelection);
+    if(!multiMode){
+      onNodeClick(item, btn, which);
+      return;
+    }
+
+    const set = (which === "bad") ? selectedBad : selectedGood;
+    if(set.size >= 5){
+      showLimitModal();
+      return;
+    }
+    if(btn.dataset.selected !== "true"){
+      set.add(item.id);
+      btn.dataset.selected = "true";
+      renderSelectedChips();
+      renderTeaForMultiSelection();
+      updateCounter();
+    }
+  }
   document.getElementById("randomBadBtn").addEventListener("click", ()=> pickRandom("bad"));
   document.getElementById("randomGoodBtn").addEventListener("click", ()=> pickRandom("good"));
 
   // Init
   renderCloud(badStates, badCloud, "bad");
   renderCloud(goodStates, goodCloud, "good");
+  updateCounter();
+  resetCardToIdle();
 </script>
 </body>
 </html>
