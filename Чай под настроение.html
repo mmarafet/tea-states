@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Чай → Состояния (интерактивная карта)</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --card:#121824;
+      --muted:#8ea1b3;
+      --text:#e8eef5;
+      --accent:#7dd3fc;
+      --accent2:#a7f3d0;
+      --border:rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(125, 211, 252, .12), transparent 55%),
+                  radial-gradient(900px 700px at 90% 20%, rgba(167, 243, 208, .10), transparent 50%),
+                  var(--bg);
+      color: var(--text);
+    }
+    header{
+      padding: 20px 18px 8px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1{
+      margin:0 0 6px;
+      font-size: 20px;
+      letter-spacing: .2px;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 18px 24px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 14px;
+    }
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns: 1fr; }
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 800px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panel .head{
+      padding: 14px 14px 10px;
+      display:flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+    }
+    .panel .head .title{
+      font-weight: 650;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .panel .head .hint{
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .panel .body{
+      padding: 12px;
+    }
+
+    .legend{
+      display:flex; gap:8px; flex-wrap: wrap;
+      margin: 0 0 10px;
+    }
+    .pill{
+      font-size: 12px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,.02);
+    }
+
+    /* "Диаграмма" — облако кнопок */
+    .cloud{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 2px;
+    }
+    button.node{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1;
+      transition: transform .06s ease, border-color .15s ease, background .15s ease;
+      user-select: none;
+    }
+    button.node:hover{ border-color: rgba(125, 211, 252, .45); }
+    button.node:active{ transform: translateY(1px); }
+    button.node.bad[data-active="true"]{
+      border-color: rgba(125, 211, 252, .75);
+      background: rgba(125, 211, 252, .12);
+    }
+    button.node.good[data-active="true"]{
+      border-color: rgba(167, 243, 208, .75);
+      background: rgba(167, 243, 208, .10);
+    }
+
+    /* Правая карточка */
+    .side{
+      position: sticky;
+      top: 14px;
+      align-self: start;
+      height: fit-content;
+    }
+    @media (max-width: 980px){
+      .side{ position: static; }
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .top{
+      padding: 14px;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255,255,255,.02);
+    }
+    .chip{
+      font-size: 12px;
+      border-radius: 999px;
+      padding: 5px 9px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,.02);
+      white-space: nowrap;
+    }
+    .card h2{
+      margin:0;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+    .card .content{
+      padding: 14px;
+    }
+    .muted{ color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .list{ margin: 10px 0 0; padding: 0; list-style: none; }
+    .list li{
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,.02);
+    }
+    .list li .k{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap:10px;
+      margin-bottom: 4px;
+      font-weight: 650;
+      font-size: 13px;
+    }
+    .tag{
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(0,0,0,.10);
+      white-space: nowrap;
+    }
+    .btnrow{
+      display:flex; gap: 8px; flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .ghost{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-size: 12px;
+    }
+    .ghost:hover{ border-color: rgba(255,255,255,.18); }
+    .note{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .divider{
+      height:1px;
+      background: var(--border);
+      margin: 12px 0;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Чай → Состояния: две диаграммы (20 → 20)</h1>
+  <p class="sub">
+    Слева — “есть сейчас” (что хочется убрать), справа — “хочу получить” (что хочется вызвать).
+    Нажми на состояние — справа появятся 3–4 подходящих вида чая (и как пить, чтобы это работало).
+  </p>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+    <section class="panel" id="panelBad">
+      <div class="head">
+        <div class="title">Состояния сейчас (убрать)</div>
+        <div class="hint">20 шт.</div>
+      </div>
+      <div class="body">
+        <div class="legend">
+          <span class="pill">Нажми: покажу чай + режим пролива</span>
+        </div>
+        <div class="cloud" id="badCloud"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panelGood">
+      <div class="head">
+        <div class="title">Состояния хочу (вызвать)</div>
+        <div class="hint">20 шт.</div>
+      </div>
+      <div class="body">
+        <div class="legend">
+          <span class="pill">Вечером выбирай темнее/ферментированнее</span>
+          <span class="pill">Утром — “зеленее/светлее”</span>
+        </div>
+        <div class="cloud" id="goodCloud"></div>
+      </div>
+    </section>
+  </div>
+
+  <aside class="side">
+    <div class="card" id="infoCard">
+      <div class="top">
+        <h2 id="cardTitle">Выбери состояние</h2>
+        <span class="chip" id="cardChip">Подсказка</span>
+      </div>
+      <div class="content">
+        <p class="muted" id="cardDesc">
+          Нажми на любую “пилюлю” слева/справа. Я покажу 3–4 варианта чая и небольшой режим пролива.
+        </p>
+
+        <ul class="list" id="teaList"></ul>
+
+        <div class="divider"></div>
+
+        <p class="muted"><b>Быстрая настройка пролива:</b><br/>
+          120–150 мл гайвань/чайник • 4–6 г (вечером 3–5 г) • короткие проливы 5–15 сек, далее по вкусу.
+        </p>
+
+        <div class="btnrow">
+          <button class="ghost" id="clearBtn">Сбросить выбор</button>
+          <button class="ghost" id="randomBadBtn">Случайное “убрать”</button>
+          <button class="ghost" id="randomGoodBtn">Случайное “вызвать”</button>
+        </div>
+
+        <div class="note">
+          ⚠️ Не медицинский совет. Если есть проблемы ЖКТ/сон/давление — подбирай крепость и время аккуратно.
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+  // Унифицированные "виды чая" (можно менять формулировки)
+  const TEA = {
+    shu: {name:"Шу пуэр", tag:"↓ заземляет", brew:"4–5 г / 120–150 мл • 6–8 проливов • не крепко вечером"},
+    chaTou: {name:"Лао Ча Тоу (пуэрные “камушки”)", tag:"↓ мягко успокаивает", brew:"5–6 г • выдерживает много проливов • вечерний фаворит"},
+    liuBao: {name:"Лю Бао (хэй ча)", tag:"↓ стабилизирует", brew:"4–6 г • 6–10 проливов • хорошо после ужина"},
+    fuZhuan: {name:"Фу Чжуань (хэй ча, “золотые цветы”)", tag:"↓ ровный фон", brew:"4–6 г • 6–10 проливов • мягко и длительно"},
+    agedWhite: {name:"Выдержанный белый (Лао Бай Ча)", tag:"~ тихий", brew:"4–5 г • 5–8 проливов • мягко, почти без “удара”"},
+    white: {name:"Белый чай (Бай Му Дань / Инь Чжэнь)", tag:"↑ мягко", brew:"4–5 г • 5–7 проливов • не кипяток"},
+    hongCha: {name:"Красный чай (Хун Ча: Дянь Хун/Цзинь Цзюнь Мэй)", tag:"→ тёплый фокус", brew:"4–6 г • 4–7 проливов • бодрит мягко"},
+    green: {name:"Зелёный (Лунцзин/Аньцзи Бай Ча/Билочунь)", tag:"↑↑ ясность", brew:"3–4 г • 70–85°C • короткие проливы"},
+    lightOolong: {name:"Светлый улун (Те Гуань Инь / Бао Чжун)", tag:"↑ настроение", brew:"5–6 г • 85–95°C • 6–10 проливов"},
+    darkOolong: {name:"Тёмный улун (Уи: Да Хун Пао/Жоу Гуй)", tag:"→/↓ глубина", brew:"5–6 г • 95–100°C • 6–10 проливов"},
+    sheng: {name:"Шэн пуэр (сырой)", tag:"↑↑ бодрит", brew:"4–6 г • короткие проливы • лучше до 14:00"},
+    yancha: {name:"Яньча (утёсные улуны Уи)", tag:"→ глубокий фокус", brew:"5–6 г • кипяток • короткие проливы"},
+    tieLuoHan: {name:"Лю Бау / Хэй Ча (альтернатива пуэрам)", tag:"↓", brew:"Если шу “слишком бодрит” — бери хэй ча"}
+  };
+
+  // 20 состояний "убрать"
+  const badStates = [
+    {id:"bad1",  label:"Физическая усталость", teas:[TEA.shu, TEA.liuBao, TEA.hongCha, TEA.agedWhite]},
+    {id:"bad2",  label:"Ментальная перегруженность", teas:[TEA.shu, TEA.agedWhite, TEA.liuBao, TEA.darkOolong]},
+    {id:"bad3",  label:"Раздражительность", teas:[TEA.agedWhite, TEA.chaTou, TEA.liuBao, TEA.shu]},
+    {id:"bad4",  label:"Тревожность", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
+    {id:"bad5",  label:"Сонливость утром", teas:[TEA.green, TEA.sheng, TEA.lightOolong, TEA.hongCha]},
+    {id:"bad6",  label:"Туман в голове", teas:[TEA.green, TEA.lightOolong, TEA.sheng, TEA.hongCha]},
+    {id:"bad7",  label:"Вялость и инертность", teas:[TEA.hongCha, TEA.green, TEA.darkOolong, TEA.sheng]},
+    {id:"bad8",  label:"Расфокус", teas:[TEA.darkOolong, TEA.hongCha, TEA.shu, TEA.yancha]},
+    {id:"bad9",  label:"Переедание / тяжесть", teas:[TEA.liuBao, TEA.fuZhuan, TEA.shu, TEA.darkOolong]},
+    {id:"bad10", label:"Холод в теле", teas:[TEA.hongCha, TEA.shu, TEA.darkOolong, TEA.liuBao]},
+    {id:"bad11", label:"Перегрев / “внутренний жар”", teas:[TEA.white, TEA.agedWhite, TEA.green, TEA.lightOolong]},
+    {id:"bad12", label:"Суета в голове", teas:[TEA.agedWhite, TEA.chaTou, TEA.liuBao, TEA.shu]},
+    {id:"bad13", label:"Нервное напряжение", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
+    {id:"bad14", label:"Прокрастинация", teas:[TEA.hongCha, TEA.darkOolong, TEA.green, TEA.sheng]},
+    {id:"bad15", label:"Послеобеденный спад", teas:[TEA.darkOolong, TEA.hongCha, TEA.shu, TEA.liuBao]},
+    {id:"bad16", label:"Низкая мотивация", teas:[TEA.hongCha, TEA.yancha, TEA.sheng, TEA.lightOolong]},
+    {id:"bad17", label:"Раздутый живот", teas:[TEA.liuBao, TEA.fuZhuan, TEA.shu, TEA.darkOolong]},
+    {id:"bad18", label:"Плохое настроение", teas:[TEA.lightOolong, TEA.hongCha, TEA.green, TEA.white]},
+    {id:"bad19", label:"Усталость глаз/экраны", teas:[TEA.agedWhite, TEA.white, TEA.liuBao, TEA.shu]},
+    {id:"bad20", label:"Бессонная голова вечером", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
+  ];
+
+  // 20 состояний "вызвать"
+  const goodStates = [
+    {id:"good1",  label:"Сосредоточенность", teas:[TEA.yancha, TEA.darkOolong, TEA.hongCha, TEA.shu]},
+    {id:"good2",  label:"Ясность", teas:[TEA.green, TEA.sheng, TEA.lightOolong, TEA.white]},
+    {id:"good3",  label:"Спокойствие", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
+    {id:"good4",  label:"Мягкая бодрость", teas:[TEA.hongCha, TEA.lightOolong, TEA.green, TEA.sheng]},
+    {id:"good5",  label:"Тёплая устойчивость", teas:[TEA.shu, TEA.liuBao, TEA.fuZhuan, TEA.hongCha]},
+    {id:"good6",  label:"Творческий поток", teas:[TEA.lightOolong, TEA.sheng, TEA.green, TEA.hongCha]},
+    {id:"good7",  label:"Ровное настроение", teas:[TEA.agedWhite, TEA.hongCha, TEA.liuBao, TEA.lightOolong]},
+    {id:"good8",  label:"Внимательность", teas:[TEA.darkOolong, TEA.yancha, TEA.hongCha, TEA.shu]},
+    {id:"good9",  label:"Заземление", teas:[TEA.chaTou, TEA.shu, TEA.liuBao, TEA.fuZhuan]},
+    {id:"good10", label:"Лёгкость", teas:[TEA.white, TEA.green, TEA.lightOolong, TEA.agedWhite]},
+    {id:"good11", label:"Тёплая энергия", teas:[TEA.hongCha, TEA.darkOolong, TEA.shu, TEA.liuBao]},
+    {id:"good12", label:"Чистая голова", teas:[TEA.green, TEA.sheng, TEA.white, TEA.lightOolong]},
+    {id:"good13", label:"Собранность без стресса", teas:[TEA.hongCha, TEA.darkOolong, TEA.shu, TEA.agedWhite]},
+    {id:"good14", label:"Уверенность", teas:[TEA.yancha, TEA.darkOolong, TEA.hongCha, TEA.sheng]},
+    {id:"good15", label:"Медитативность", teas:[TEA.agedWhite, TEA.chaTou, TEA.liuBao, TEA.white]},
+    {id:"good16", label:"Выносливость (спокойная)", teas:[TEA.shu, TEA.liuBao, TEA.fuZhuan, TEA.hongCha]},
+    {id:"good17", label:"Коммуникабельность", teas:[TEA.lightOolong, TEA.hongCha, TEA.green, TEA.white]},
+    {id:"good18", label:"Восстановление", teas:[TEA.agedWhite, TEA.chaTou, TEA.liuBao, TEA.shu]},
+    {id:"good19", label:"Тишина внутри", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
+    {id:"good20", label:"Готовность ко сну", teas:[TEA.chaTou, TEA.agedWhite, TEA.liuBao, TEA.shu]},
+  ];
+
+  const badCloud  = document.getElementById("badCloud");
+  const goodCloud = document.getElementById("goodCloud");
+
+  const cardTitle = document.getElementById("cardTitle");
+  const cardChip  = document.getElementById("cardChip");
+  const cardDesc  = document.getElementById("cardDesc");
+  const teaList   = document.getElementById("teaList");
+
+  let activeBtn = null;
+
+  function renderCloud(list, targetEl, type){
+    targetEl.innerHTML = "";
+    list.forEach(item=>{
+      const btn = document.createElement("button");
+      btn.className = `node ${type}`;
+      btn.textContent = item.label;
+      btn.dataset.id = item.id;
+      btn.dataset.type = type;
+      btn.addEventListener("click", ()=> selectState(item, btn, type));
+      targetEl.appendChild(btn);
+    });
+  }
+
+  function selectState(item, btn, type){
+    // toggle active style
+    document.querySelectorAll("button.node").forEach(b=> b.dataset.active = "false");
+    btn.dataset.active = "true";
+    activeBtn = btn;
+
+    cardTitle.textContent = item.label;
+    cardChip.textContent = (type === "bad") ? "УБРАТЬ" : "ВЫЗВАТЬ";
+    cardChip.style.borderColor = (type === "bad") ? "rgba(125,211,252,.35)" : "rgba(167,243,208,.35)";
+    cardChip.style.color = (type === "bad") ? "rgba(125,211,252,.95)" : "rgba(167,243,208,.95)";
+
+    const header = (type === "bad")
+      ? "Под эти ощущения чаще всего подходят:"
+      : "Чтобы усилить это состояние, попробуй:";
+
+    cardDesc.textContent = header;
+
+    teaList.innerHTML = "";
+    item.teas.slice(0,4).forEach(t=>{
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div class="k">
+          <span>${t.name}</span>
+          <span class="tag">${t.tag}</span>
+        </div>
+        <div class="muted">${t.brew}</div>
+      `;
+      teaList.appendChild(li);
+    });
+  }
+
+  function clearSelection(){
+    document.querySelectorAll("button.node").forEach(b=> b.dataset.active = "false");
+    activeBtn = null;
+    cardTitle.textContent = "Выбери состояние";
+    cardChip.textContent = "Подсказка";
+    cardChip.style.color = "var(--muted)";
+    cardChip.style.borderColor = "var(--border)";
+    cardDesc.textContent = "Нажми на любую “пилюлю” слева/справа. Я покажу 3–4 варианта чая и небольшой режим пролива.";
+    teaList.innerHTML = "";
+  }
+
+  function pickRandom(which){
+    const arr = (which === "bad") ? badStates : goodStates;
+    const idx = Math.floor(Math.random()*arr.length);
+    const item = arr[idx];
+    const btn = document.querySelector(`button.node.${which}[data-id="${item.id}"]`);
+    if (btn) selectState(item, btn, which);
+  }
+
+  document.getElementById("clearBtn").addEventListener("click", clearSelection);
+  document.getElementById("randomBadBtn").addEventListener("click", ()=> pickRandom("bad"));
+  document.getElementById("randomGoodBtn").addEventListener("click", ()=> pickRandom("good"));
+
+  // Init
+  renderCloud(badStates, badCloud, "bad");
+  renderCloud(goodStates, goodCloud, "good");
+</script>
+</body>
+</html>
