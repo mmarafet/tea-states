@@ -28,10 +28,25 @@
       --modalBg: rgba(255,255,255,.92);
       --modalBg2: rgba(255,255,255,.86);
 
+      /* Selection colors */
+      --selBadBg: rgba(2,132,199,.14);
+      --selBadBorder: rgba(2,132,199,.55);
+      --selGoodBg: rgba(13,148,136,.14);
+      --selGoodBorder: rgba(13,148,136,.55);
+
+      --chipBadBg: rgba(2,132,199,.10);
+      --chipGoodBg: rgba(13,148,136,.10);
+
+      /* Right card persistent “greenish” mode */
       --keepGreenBg1: rgba(13,148,136,.10);
       --keepGreenBg2: rgba(13,148,136,.06);
       --keepGreenBorder: rgba(13,148,136,.45);
       --keepGreenShadow: 0 0 0 6px rgba(13,148,136,.10), 0 14px 30px rgba(15,23,42,.12);
+
+      /* Tooltip */
+      --tipBg: rgba(15,23,42,.92);
+      --tipText: #ffffff;
+      --tipBorder: rgba(255,255,255,.10);
     }
 
     html[data-theme="dark"]{
@@ -56,10 +71,23 @@
       --modalBg: rgba(12,16,22,.92);
       --modalBg2: rgba(12,16,22,.86);
 
+      /* CONTRAST selection colors for dark theme (request #1) */
+      --selBadBg: rgba(56,189,248,.22);
+      --selBadBorder: rgba(56,189,248,.72);
+      --selGoodBg: rgba(52,211,153,.22);
+      --selGoodBorder: rgba(52,211,153,.72);
+
+      --chipBadBg: rgba(56,189,248,.14);
+      --chipGoodBg: rgba(52,211,153,.14);
+
       --keepGreenBg1: rgba(167, 243, 208, .12);
       --keepGreenBg2: rgba(167, 243, 208, .08);
       --keepGreenBorder: rgba(167, 243, 208, .35);
       --keepGreenShadow: 0 0 0 6px rgba(167,243,208,.10), 0 14px 30px rgba(0,0,0,.35);
+
+      --tipBg: rgba(12,16,22,.96);
+      --tipText: #e8eef5;
+      --tipBorder: rgba(255,255,255,.10);
     }
 
     *{ box-sizing:border-box; }
@@ -88,7 +116,7 @@
       color: var(--muted);
       font-size: 13px;
       line-height: 1.45;
-      max-width: 820px;
+      max-width: 900px;
     }
 
     .topRight{
@@ -151,7 +179,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-    @media (max-width: 800px){
+    @media (max-width: 980px){
       .left{ grid-template-columns: 1fr; }
     }
 
@@ -176,10 +204,8 @@
       40%  { box-shadow: 0 0 0 10px rgba(13,148,136,0.20), var(--shadow); }
       100% { box-shadow: var(--keepGreenShadow); }
     }
-    html[data-theme="dark"] @keyframes greenFlash {
-      0%   { box-shadow: 0 0 0 0 rgba(167,243,208,0.0), var(--shadow); }
-      40%  { box-shadow: 0 0 0 10px rgba(167,243,208,0.18), var(--shadow); }
-      100% { box-shadow: var(--keepGreenShadow); }
+    html[data-theme="dark"] .card.flashGreen{
+      animation: greenFlash 900ms ease-out forwards;
     }
     .card.flashGreen{
       animation: greenFlash 900ms ease-out forwards;
@@ -240,6 +266,7 @@
     html[data-theme="dark"] .node:hover{ border-color: rgba(255,255,255,.20); }
     .node:active{ transform: translateY(1px); }
 
+    /* Single-mode active */
     .node[data-active="true"]{
       border-color: rgba(15,23,42,.35);
       background: rgba(15,23,42,.06);
@@ -248,19 +275,22 @@
       border-color: rgba(255,255,255,.35);
       background: rgba(255,255,255,.07);
     }
-    .node.bad[data-active="true"]{ border-color: rgba(2,132,199,.55); background: rgba(2,132,199,.10); }
-    .node.good[data-active="true"]{ border-color: rgba(13,148,136,.55); background: rgba(13,148,136,.10); }
 
-    .node[data-selected="true"]{
-      border-color: rgba(15,23,42,.35);
-      background: rgba(15,23,42,.08);
+    /* PRO-mode selected (request #1) */
+    .node.bad[data-selected="true"]{
+      border-color: var(--selBadBorder);
+      background: var(--selBadBg);
     }
-    html[data-theme="dark"] .node[data-selected="true"]{
-      border-color: rgba(255,255,255,.35);
-      background: rgba(255,255,255,.08);
+    .node.good[data-selected="true"]{
+      border-color: var(--selGoodBorder);
+      background: var(--selGoodBg);
     }
-    .node.bad[data-selected="true"]{ border-color: rgba(2,132,199,.75); background: rgba(2,132,199,.14); }
-    .node.good[data-selected="true"]{ border-color: rgba(13,148,136,.75); background: rgba(13,148,136,.14); }
+
+    /* Make dark theme selection more contrasty by bumping text a bit */
+    html[data-theme="dark"] .node.bad[data-selected="true"],
+    html[data-theme="dark"] .node.good[data-selected="true"]{
+      filter: saturate(1.05);
+    }
 
     .checkdot{
       display:none;
@@ -275,7 +305,7 @@
       box-shadow: 0 0 0 2px rgba(255,255,255,.25);
     }
     html[data-theme="dark"] .checkdot{
-      background: rgba(255,255,255,.65);
+      background: rgba(255,255,255,.75);
       box-shadow: 0 0 0 2px rgba(0,0,0,.25);
     }
     .node[data-selected="true"] .checkdot{ display:block; }
@@ -337,6 +367,36 @@
     }
     .miniBtn:hover{ background: var(--btnBgHover); }
 
+    .primaryBtn{
+      border: 1px solid var(--accentBorder);
+      background: rgba(13,148,136,.14);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    html[data-theme="dark"] .primaryBtn{
+      background: rgba(125,211,252,.14);
+      border-color: rgba(125,211,252,.28);
+    }
+    .primaryBtn:hover{ filter: brightness(1.05); }
+
+    .dangerBtn{
+      border: 1px solid rgba(244,63,94,.28);
+      background: rgba(244,63,94,.10);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .dangerBtn:hover{ filter: brightness(1.05); }
+
+    /* Selected state chips in right block (request #2) */
     .stateChips{
       display:flex;
       flex-wrap: wrap;
@@ -348,13 +408,21 @@
       padding: 6px 9px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: rgba(255,255,255,.03);
       color: var(--text);
+      background: rgba(255,255,255,.03);
+      user-select:none;
     }
     html[data-theme="light"] .stateChip{ background: rgba(15,23,42,.03); }
-    .stateChip.bad{ border-color: rgba(2,132,199,.25); }
-    .stateChip.good{ border-color: rgba(13,148,136,.25); }
+    .stateChip.bad{
+      border-color: var(--selBadBorder);
+      background: var(--chipBadBg);
+    }
+    .stateChip.good{
+      border-color: var(--selGoodBorder);
+      background: var(--chipGoodBg);
+    }
 
+    /* Tea list */
     .list{ margin: 10px 0 0; padding: 0; list-style: none; }
     .list li{
       padding: 10px 10px;
@@ -401,12 +469,12 @@
     html[data-theme="dark"] .tag{ background: rgba(0,0,0,.12); }
 
     .buyLine{
-      margin-top: 6px;
+      margin-top: 8px;
       font-size: 12px;
       color: var(--muted);
       display:flex;
-      gap: 8px;
-      align-items: baseline;
+      gap: 10px;
+      align-items: center;
       flex-wrap: wrap;
     }
     .buyLink{
@@ -415,19 +483,50 @@
       border-bottom: 1px dashed rgba(15,23,42,.22);
       cursor: pointer;
     }
-    html[data-theme="dark"] .buyLink{
-      border-bottom: 1px dashed rgba(255,255,255,.22);
-    }
+    html[data-theme="dark"] .buyLink{ border-bottom: 1px dashed rgba(255,255,255,.22); }
     .buyLink:hover{ border-bottom-color: rgba(15,23,42,.55); }
     html[data-theme="dark"] .buyLink:hover{ border-bottom-color: rgba(255,255,255,.55); }
 
-    /* AI assistant block (moved above states) */
-    .aiTop{
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 18px 12px;
+    .teaPills{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
     }
-    .nlpCard{
+    .pillRow{
+      display:flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .pillLabel{
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .pillState{
+      font-size: 11px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      user-select:none;
+      cursor: default;
+    }
+    html[data-theme="light"] .pillState{ background: rgba(15,23,42,.03); }
+    .pillState.bad{
+      border-color: var(--selBadBorder);
+      background: var(--chipBadBg);
+    }
+    .pillState.good{
+      border-color: var(--selGoodBorder);
+      background: var(--chipGoodBg);
+    }
+
+    /* AI panel now becomes a normal panel (request #8: not after the 3rd block) */
+    .nlpCard{ grid-column: 1 / -1; }
+    .nlpInner{
       padding: 12px;
       display:flex;
       align-items:flex-start;
@@ -435,10 +534,7 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-    .nlpLeft{
-      flex: 1 1 520px;
-      min-width: 260px;
-    }
+    .nlpLeft{ flex: 1 1 560px; min-width: 260px; }
     .nlpTitle{ font-weight: 900; font-size: 13px; margin: 0 0 8px; }
     .nlpRow{ display:flex; gap: 10px; flex-wrap: wrap; align-items: center; }
     .nlpInput{
@@ -457,22 +553,6 @@
       border-color: var(--accentBorder);
       box-shadow: 0 0 0 4px var(--accent);
     }
-    .primaryBtn{
-      border: 1px solid var(--accentBorder);
-      background: rgba(13,148,136,.14);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 12px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-    html[data-theme="dark"] .primaryBtn{
-      background: rgba(125,211,252,.14);
-      border-color: rgba(125,211,252,.28);
-    }
-    .primaryBtn:hover{ filter: brightness(1.05); }
     .nlpNote{ margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.4; }
 
     /* Bottom area */
@@ -531,16 +611,10 @@
     }
     .counter{ color: var(--muted); font-size: 12px; white-space: nowrap; }
 
-    /* Footer fineprint + About link */
+    /* Fineprint + (request #7) About moved into PRO block */
     .footerCard{ padding: 12px 14px; }
-    .fineTopRow{
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
     .fineprint{ color: var(--muted); font-size: 12px; line-height: 1.45; }
+
     .aboutLink{
       font-size: 12px;
       color: var(--text);
@@ -549,6 +623,8 @@
       text-decoration: none;
       user-select:none;
       white-space: nowrap;
+      display:inline-block;
+      margin-top: 6px;
     }
     html[data-theme="dark"] .aboutLink{ border-bottom-color: rgba(255,255,255,.22); }
     .aboutLink:hover{ border-bottom-color: rgba(15,23,42,.55); }
@@ -566,7 +642,7 @@
       padding: 16px;
     }
     .modal{
-      width: min(740px, 100%);
+      width: min(820px, 100%);
       border-radius: 16px;
       border: 1px solid var(--border);
       background: linear-gradient(180deg, var(--modalBg), var(--modalBg2));
@@ -591,21 +667,8 @@
       font-size: 13px;
       line-height: 1.6;
     }
-    .modalGrid{ display:grid; grid-template-columns: 1fr; gap: 10px; }
+    .modalGrid{ display:grid; grid-template-columns: 1fr; gap: 12px; }
     .modalBlockTitle{ font-weight: 900; margin: 0 0 6px; font-size: 13px; }
-    .pillWrap{ display:flex; gap: 6px; flex-wrap: wrap; }
-    .pillState{
-      font-size: 12px;
-      padding: 6px 9px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      user-select:none;
-    }
-    html[data-theme="light"] .pillState{ background: rgba(15,23,42,.03); }
-    .pillState.bad{ border-color: rgba(2,132,199,.25); }
-    .pillState.good{ border-color: rgba(13,148,136,.25); }
 
     .modalActions{
       display:flex;
@@ -616,17 +679,127 @@
       background: rgba(255,255,255,.02);
       flex-wrap: wrap;
     }
-    .dangerBtn{
-      border: 1px solid rgba(244,63,94,.28);
-      background: rgba(244,63,94,.10);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-size: 12px;
-      white-space: nowrap;
+
+    /* Tea modal extras (request #9) */
+    .teaHero{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap: 12px;
+      align-items: start;
     }
-    .dangerBtn:hover{ filter: brightness(1.05); }
+    @media (max-width: 560px){
+      .teaHero{ grid-template-columns: 1fr; }
+    }
+    .teaImg{
+      width: 160px;
+      height: 160px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      object-fit: cover;
+      background: rgba(255,255,255,.03);
+    }
+    @media (max-width: 560px){
+      .teaImg{ width: 100%; height: 200px; }
+    }
+
+    .classTable{
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+    }
+    html[data-theme="light"] .classTable{ background: rgba(15,23,42,.02); }
+    .classTable td{
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .classTable tr:last-child td{ border-bottom: none; }
+    .classK{
+      width: 36%;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    /* Tooltip bubble (request #4) */
+    .tooltip{
+      position: fixed;
+      z-index: 999;
+      display:none;
+      max-width: min(360px, calc(100vw - 24px));
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: var(--tipBg);
+      color: var(--tipText);
+      border: 1px solid var(--tipBorder);
+      box-shadow: 0 16px 36px rgba(0,0,0,.35);
+      font-size: 12px;
+      line-height: 1.35;
+      pointer-events: none;
+      transform: translate(10px, 10px);
+    }
+    .tooltip b{ font-weight: 900; }
+
+    /* ================
+       Mobile wizard (request #3)
+       ================ */
+    .desktopOnly{ display: block; }
+    .mobileOnly{ display: none; }
+
+    @media (max-width: 760px){
+      .desktopOnly{ display:none; }
+      .mobileOnly{ display:block; }
+
+      .mobileWrap{
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 18px 18px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .stepTop{
+        display:flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .steps{
+        display:flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .stepDot{
+        font-size: 12px;
+        padding: 6px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.03);
+        color: var(--muted);
+      }
+      html[data-theme="light"] .stepDot{ background: rgba(15,23,42,.03); }
+      .stepDot[data-on="true"]{
+        color: var(--text);
+        border-color: var(--accentBorder);
+        background: var(--accent);
+      }
+      .stepNav{
+        display:flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .node.nodeBig{
+        font-size: 14px;
+        padding: 10px 12px;
+      }
+    }
   </style>
 </head>
 
@@ -635,7 +808,7 @@
   <div>
     <h1 id="uiTitle">Чай → Состояния</h1>
     <p class="sub" id="uiSubtitle">
-      Нажми на состояние — справа появятся рекомендации. В режиме PRO можно выбрать до 5 состояний из каждого списка (всего до 10).
+      В “Один выбор” — клик по состоянию покажет 3–4 чая. В “PRO” — можно выбрать до 5 “убрать” и до 5 “вызвать”, справа соберётся общий подбор.
     </p>
   </div>
 
@@ -648,24 +821,29 @@
   </div>
 </header>
 
-<!-- AI assistant moved above states -->
-<div class="aiTop">
-  <section class="nlpCard">
-    <div class="nlpLeft">
-      <div class="nlpTitle" id="uiNlpTitle">Опиши своё состояние своими словами и я подберу чаи</div>
-      <div class="nlpRow">
-        <input class="nlpInput" id="nlpInput" type="text" placeholder="Например: «после обеда клонит в сон, голова ватная, хочется собраться без напряжения»" />
-        <button class="primaryBtn" id="nlpBtn" type="button">Подобрать чаи</button>
-      </div>
-      <div class="nlpNote" id="uiNlpNote">
-        Работает локально в браузере: по ключевым словам определяется до 5 “убрать” и до 5 “вызвать”, затем включается PRO и показывается аргументация.
-      </div>
-    </div>
-  </section>
-</div>
-
-<div class="wrap">
+<!-- DESKTOP LAYOUT -->
+<div class="wrap desktopOnly">
   <div class="left">
+    <!-- AI block moved into left column (NOT after recommendations) (request #8) -->
+    <section class="nlpCard">
+      <div class="head">
+        <div class="title" id="uiNlpTitle">Быстрый подбор по описанию</div>
+        <div class="hint" id="uiNlpHint">локально в браузере</div>
+      </div>
+      <div class="nlpInner">
+        <div class="nlpLeft">
+          <div class="nlpRow">
+            <input class="nlpInput" id="nlpInput" type="text"
+              placeholder="Например: «после обеда клонит в сон, голова ватная, хочется собраться без напряжения»" />
+            <button class="primaryBtn" id="nlpBtn" type="button">Подобрать</button>
+          </div>
+          <div class="nlpNote" id="uiNlpNote">
+            По ключевым словам определяется до 5 “убрать” и до 5 “вызвать”, затем включается PRO и показывается “почему так”.
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="panel">
       <div class="head">
         <div class="title" id="uiBadTitle">Состояния сейчас (убрать)</div>
@@ -702,7 +880,7 @@
       </div>
       <div class="cardBody">
         <p class="muted" id="cardDesc">
-          В “Один выбор” — клик по состоянию покажет 3–4 чая для него. В “PRO” — справа соберётся общий подбор под выбранные состояния.
+          В “Один выбор” — клик по состоянию покажет 3–4 чая. В “PRO” — справа соберётся общий подбор под выбранные состояния.
         </p>
 
         <div id="reasoningBox" style="display:none;">
@@ -735,7 +913,7 @@
           </p>
 
           <div class="sectionTitle">
-            <span id="uiTeaPick">Чайный подбор</span>
+            <span id="uiTeaPick">Подбор под выбранные состояния</span>
             <button class="miniBtn" id="clearAllBtn" type="button">сбросить всё</button>
           </div>
         </div>
@@ -752,16 +930,136 @@
   </aside>
 </div>
 
-<div class="below">
-  <!-- Fineprint ABOVE PRO controls -->
+<!-- MOBILE WIZARD -->
+<div class="mobileOnly">
+  <div class="mobileWrap">
+    <section class="controls">
+      <div class="controlsLeft">
+        <div class="toggleWrap">
+          <div class="toggle" id="multiToggleMobile" data-on="false" role="switch" aria-checked="false" tabindex="0">
+            <div class="toggleKnob"></div>
+          </div>
+          <div>
+            <div style="font-weight:900;" id="uiProTitleMobile">Выбрать несколько состояний PRO</div>
+            <div class="counter" id="counterTextMobile">Убрать: 0/5 • Вызвать: 0/5</div>
+            <a class="aboutLink" id="aboutLinkMobile" href="javascript:void(0)">О сайте</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="body">
+        <div class="stepTop">
+          <div class="steps" aria-label="steps">
+            <span class="stepDot" id="stepDot0" data-on="true">0 · Описание</span>
+            <span class="stepDot" id="stepDot1" data-on="false">1 · Убрать</span>
+            <span class="stepDot" id="stepDot2" data-on="false">2 · Вызвать</span>
+            <span class="stepDot" id="stepDot3" data-on="false">3 · Подбор</span>
+          </div>
+          <div class="stepNav">
+            <button class="miniBtn" id="prevStepBtn" type="button">назад</button>
+            <button class="primaryBtn" id="nextStepBtn" type="button">дальше</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="nlpCard" id="mobileStep0">
+      <div class="head">
+        <div class="title">Быстрый подбор по описанию</div>
+        <div class="hint">шаг 0</div>
+      </div>
+      <div class="nlpInner">
+        <div class="nlpLeft">
+          <div class="nlpRow">
+            <input class="nlpInput" id="nlpInputMobile" type="text"
+              placeholder="Например: «после обеда клонит в сон, голова ватная…»" />
+            <button class="primaryBtn" id="nlpBtnMobile" type="button">Подобрать</button>
+          </div>
+          <div class="nlpNote">
+            Можно пропустить и выбрать руками.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="mobileStep1" style="display:none;">
+      <div class="head">
+        <div class="title">Состояния сейчас (убрать)</div>
+        <div class="hint">шаг 1</div>
+      </div>
+      <div class="body">
+        <div class="legend"><span class="pill">В PRO: до 5</span></div>
+        <div class="cloud" id="badCloudMobile"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="mobileStep2" style="display:none;">
+      <div class="head">
+        <div class="title">Состояния хочу (вызвать)</div>
+        <div class="hint">шаг 2</div>
+      </div>
+      <div class="body">
+        <div class="legend">
+          <span class="pill">В PRO: до 5</span>
+        </div>
+        <div class="cloud" id="goodCloudMobile"></div>
+      </div>
+    </section>
+
+    <section class="card" id="mobileStep3" style="display:none;">
+      <div class="cardTop">
+        <h2>Подбор под выбранные состояния</h2>
+        <span class="chip" id="cardChipMobile">PRO</span>
+      </div>
+      <div class="cardBody">
+        <div class="sectionTitle">
+          <span>Добавлено: “убрать”</span>
+          <button class="miniBtn" id="clearBadBtnMobile" type="button">очистить</button>
+        </div>
+        <div class="stateChips" id="selectedBadChipsMobile"></div>
+
+        <div class="sectionTitle">
+          <span>Добавлено: “вызвать”</span>
+          <button class="miniBtn" id="clearGoodBtnMobile" type="button">очистить</button>
+        </div>
+        <div class="stateChips" id="selectedGoodChipsMobile"></div>
+
+        <div id="reasoningBoxMobile" style="display:none;">
+          <div class="divider"></div>
+          <div class="sectionTitle">
+            <span>Почему так</span>
+            <button class="miniBtn" id="hideWhyBtnMobile" type="button">скрыть</button>
+          </div>
+          <div class="muted" id="reasoningTextMobile"></div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="sectionTitle">
+          <span>Чайный подбор</span>
+          <button class="miniBtn" id="clearAllBtnMobile" type="button">сбросить всё</button>
+        </div>
+        <ul class="list" id="teaListMobile"></ul>
+      </div>
+    </section>
+
+    <section class="footerCard">
+      <div class="fineprint" id="uiFineprintMobile">
+        ℹ️ Не медицинский совет. Реакция на чай индивидуальна; учитывайте кофеин, крепость, время суток и противопоказания.
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="below desktopOnly">
   <section class="footerCard">
-    <div class="fineTopRow">
-      <div class="fineprint" id="uiFineprint">ℹ️ Не медицинский совет. Реакция на чай индивидуальна; учитывайте кофеин, крепость, время суток и противопоказания. При заболеваниях, беременности/лактации или приёме лекарств — консультируйтесь со специалистом.</div>
-      <a class="aboutLink" id="aboutLink" href="javascript:void(0)">О сайте</a>
+    <div class="fineprint" id="uiFineprint">
+      ℹ️ Не медицинский совет. Реакция на чай индивидуальна; учитывайте кофеин, крепость, время суток и противопоказания.
+      При заболеваниях, беременности/лактации или приёме лекарств — консультируйтесь со специалистом.
     </div>
   </section>
 
-  <!-- PRO controls: only toggle (no extra buttons) -->
   <section class="controls" id="controlsPanel">
     <div class="controlsLeft">
       <div class="toggleWrap">
@@ -771,11 +1069,16 @@
         <div>
           <div style="font-weight:900;" id="uiProTitle">Выбрать несколько состояний PRO</div>
           <div class="counter" id="counterText">Убрать: 0/5 • Вызвать: 0/5</div>
+          <!-- request #7 -->
+          <a class="aboutLink" id="aboutLink" href="javascript:void(0)">О сайте</a>
         </div>
       </div>
     </div>
   </section>
 </div>
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip"></div>
 
 <!-- Modal: selection limit -->
 <div class="modalOverlay" id="limitModal">
@@ -785,12 +1088,12 @@
       <button class="miniBtn" id="closeLimitBtn" type="button">ок</button>
     </div>
     <div class="modalBody" id="uiLimitBody">
-      До 5 состояний из каждого списка (всего до 10шт), мой друг.
+      До 5 состояний из каждого списка (всего до 10 шт).
     </div>
   </div>
 </div>
 
-<!-- Modal: PRO info (returned when clicking PRO toggle to enable) -->
+<!-- Modal: PRO (request #6: restore old “purchase PRO” dialog) -->
 <div class="modalOverlay" id="proModal">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modalTop">
@@ -798,12 +1101,11 @@
       <button class="miniBtn" id="proModalCloseX" type="button">✕</button>
     </div>
     <div class="modalBody" id="uiProModalBody">
-      В PRO ты можешь выбрать несколько состояний сразу: до 5 из “убрать” и до 5 из “вызвать”.
-      Справа соберётся общий чайный подбор под комбинацию.
+      Вы точно хотите приобрести версию PRO?
     </div>
-    <div class="modalActions">
-      <button class="miniBtn" id="proModalCancel" type="button">Отмена</button>
-      <button class="primaryBtn" id="proModalEnable" type="button">Включить PRO</button>
+    <div class="modalActions" id="proModalActions">
+      <button class="miniBtn" id="proModalNo" type="button">нет</button>
+      <button class="primaryBtn" id="proModalYes" type="button">да</button>
     </div>
   </div>
 </div>
@@ -817,20 +1119,12 @@
     </div>
     <div class="modalBody" id="uiAboutBody">
       Данный сайт использует рекомендации, сформированные с помощью модели искусственного интеллекта GPT-5.2.
-      Алгоритм анализа опирается на обобщение данных из открытых научных источников, мета-обзоров, традиционных систем
-      классификации чая (включая китайскую чайную традицию), а также современных исследований, посвящённых химическому составу чая
-      (кофеин, L-теанин, полифенолы) и их возможному влиянию на бодрствование, внимание, расслабление и субъективное самочувствие.
+      Алгоритм анализа опирается на обобщение данных из открытых источников, традиционные системы классификации чая,
+      а также современные исследования, посвящённые химическому составу чая (кофеин, L-теанин, полифенолы) и их
+      возможному влиянию на бодрствование, внимание, расслабление и субъективное самочувствие.
       <br/><br/>
-      Представленные соответствия не являются произвольными и не созданы «на пустом месте», однако они не гарантируют конкретного результата
-      для конкретного человека. Индивидуальная реакция на чай может существенно отличаться в зависимости от физиологических особенностей,
-      состояния нервной системы, наличия заболеваний, приёма лекарственных средств, времени суток, способа заваривания и дозировки.
-      <br/><br/>
-      Информация на сайте не является медицинской консультацией, не предназначена для диагностики, лечения или профилактики заболеваний
-      и не должна использоваться для замены рекомендаций врача. При наличии хронических заболеваний, беременности, лактации, нарушений сна,
-      сердечно-сосудистых состояний или повышенной чувствительности к кофеину рекомендуется проконсультироваться со специалистом.
-      <br/><br/>
-      Используя сайт, пользователь подтверждает, что осознаёт экспериментальный и рекомендательный характер информации и принимает решения
-      об употреблении чая самостоятельно, принимая на себя всю ответственность за возможные последствия.
+      Информация не является медицинской консультацией. Индивидуальная реакция на чай может отличаться в зависимости
+      от состояния, дозировки, времени суток и способа заваривания.
     </div>
   </div>
 </div>
@@ -844,8 +1138,16 @@
     </div>
     <div class="modalBody">
       <div class="modalGrid">
+        <div class="teaHero">
+          <img class="teaImg" id="teaModalImg" alt="tea" />
+          <div>
+            <div class="muted" id="teaModalDesc"></div>
+          </div>
+        </div>
+
         <div>
-          <div class="muted" id="teaModalDesc"></div>
+          <div class="modalBlockTitle">Классификация</div>
+          <table class="classTable" id="teaModalClass"></table>
         </div>
 
         <div>
@@ -860,12 +1162,12 @@
 
         <div>
           <div class="modalBlockTitle" id="teaModalGivesTitle">Что обычно даёт</div>
-          <div class="pillWrap" id="teaModalGives"></div>
+          <div class="pillRow" id="teaModalGives"></div>
         </div>
 
         <div>
           <div class="modalBlockTitle" id="teaModalWhenTitle">Когда рекомендуют</div>
-          <div class="pillWrap" id="teaModalWhen"></div>
+          <div class="pillRow" id="teaModalWhen"></div>
         </div>
 
         <div>
@@ -879,7 +1181,7 @@
 
 <script>
   // =========================
-  // i18n: RU + EN
+  // i18n: RU + EN (kept, minimal updates)
   // =========================
   const LANGS = [
     { id:"ru", label:"Русский" },
@@ -889,7 +1191,7 @@
   const UI = {
     ru: {
       title:"Чай → Состояния",
-      subtitle:"Нажми на состояние — справа появятся рекомендации. В режиме PRO можно выбрать до 5 состояний из каждого списка (всего до 10).",
+      subtitle:"В “Один выбор” — клик по состоянию покажет 3–4 чая. В “PRO” — можно выбрать до 5 “убрать” и до 5 “вызвать”, справа соберётся общий подбор.",
       langLabel:"Язык",
       themeLight:"☀️ Светлая тема",
       themeDark:"🌙 Тёмная тема",
@@ -901,12 +1203,12 @@
       cardIdleTitle:"Выбери состояние",
       cardModeSingle:"Один выбор",
       cardModePro:"PRO",
-      cardDesc:"В “Один выбор” — клик по состоянию покажет 3–4 чая для него. В “PRO” — справа соберётся общий подбор под выбранные состояния.",
+      cardDesc:"В “Один выбор” — клик по состоянию покажет 3–4 чая. В “PRO” — справа соберётся общий подбор под выбранные состояния.",
 
       why:"Почему так",
       hide:"скрыть",
 
-      addedRemove:"Добавлено: “убрать”", addedGet:"Добавлено: “вызвать”", teaPick:"Чайный подбор",
+      addedRemove:"Добавлено: “убрать”", addedGet:"Добавлено: “вызвать”", teaPick:"Подбор под выбранные состояния",
       clear:"очистить", resetAll:"сбросить всё",
       multiLine:"Выше — выбранные состояния. Ниже — чаи, которые чаще всего подходят под эту комбинацию.",
 
@@ -915,15 +1217,11 @@
       proTitle:"Выбрать несколько состояний PRO",
       counter:(a,b)=>`Убрать: ${a}/5 • Вызвать: ${b}/5`,
 
-      proModalTitle:"Режим PRO",
-      proModalBody:"В PRO ты можешь выбрать несколько состояний сразу: до 5 из “убрать” и до 5 из “вызвать”. Справа соберётся общий чайный подбор под комбинацию.",
-      proModalEnable:"Включить PRO",
-      proModalCancel:"Отмена",
-
-      nlpTitle:"Опиши своё состояние своими словами и я подберу чаи",
+      nlpTitle:"Быстрый подбор по описанию",
+      nlpHint:"локально в браузере",
       nlpPlaceholder:"Например: «после обеда клонит в сон, голова ватная, хочется собраться без напряжения»",
-      nlpBtn:"Подобрать чаи",
-      nlpNote:"Работает локально в браузере: по ключевым словам определяется до 5 “убрать” и до 5 “вызвать”, затем включается PRO и показывается аргументация.",
+      nlpBtn:"Подобрать",
+      nlpNote:"По ключевым словам определяется до 5 “убрать” и до 5 “вызвать”, затем включается PRO и показывается “почему так”.",
 
       prompts:{
         bad:"Под эти ощущения чаще всего подходят:",
@@ -936,19 +1234,22 @@
       about:"О сайте",
 
       aboutTitle:"О сайте",
-      aboutBody:`Данный сайт использует рекомендации, сформированные с помощью модели искусственного интеллекта GPT-5.2. Алгоритм анализа опирается на обобщение данных из открытых научных источников, мета-обзоров, традиционных систем классификации чая (включая китайскую чайную традицию), а также современных исследований, посвящённых химическому составу чая (кофеин, L-теанин, полифенолы) и их возможному влиянию на бодрствование, внимание, расслабление и субъективное самочувствие.
+      aboutBody:`Данный сайт использует рекомендации, сформированные с помощью модели искусственного интеллекта GPT-5.2. Алгоритм анализа опирается на обобщение данных из открытых источников, традиционные системы классификации чая, а также современные исследования, посвящённые химическому составу чая (кофеин, L-теанин, полифенолы) и их возможному влиянию на бодрствование, внимание, расслабление и субъективное самочувствие.
 
-Представленные соответствия не являются произвольными и не созданы «на пустом месте», однако они не гарантируют конкретного результата для конкретного человека. Индивидуальная реакция на чай может существенно отличаться в зависимости от физиологических особенностей, состояния нервной системы, наличия заболеваний, приёма лекарственных средств, времени суток, способа заваривания и дозировки.
-
-Информация на сайте не является медицинской консультацией, не предназначена для диагностики, лечения или профилактики заболеваний и не должна использоваться для замены рекомендаций врача. При наличии хронических заболеваний, беременности, лактации, нарушений сна, сердечно-сосудистых состояний или повышенной чувствительности к кофеину рекомендуется проконсультироваться со специалистом.
-
-Используя сайт, пользователь подтверждает, что осознаёт экспериментальный и рекомендательный характер информации и принимает решения об употреблении чая самостоятельно, принимая на себя всю ответственность за возможные последствия.`,
+Информация не является медицинской консультацией. Индивидуальная реакция на чай может отличаться в зависимости от состояния, дозировки, времени суток и способа заваривания.`,
 
       limitTitle:"Лимит выбора",
-      limitBody:"До 5 состояний из каждого списка (всего до 10шт), мой друг.",
+      limitBody:"До 5 состояний из каждого списка (всего до 10 шт).",
       ok:"ок",
 
       buy:"купить",
+
+      proModalTitle:"Режим PRO",
+      proModalQuestion:"Вы точно хотите приобрести версию PRO?",
+      proNo:"нет",
+      proYes:"да",
+      proNoText:"Продукт распространяется бесплатно, но если очень хочется, то можете задонатить на карту сбербанка: 2202206736083473",
+      proYesText:"Похвально конечно, но продукт распространяется бесплатно. Если очень хочется, то можете задонатить на карту сбербанка: 2202206736083473",
 
       teaModal:{
         originTitle:"Происхождение",
@@ -956,12 +1257,13 @@
         givesTitle:"Что обычно даёт",
         whenTitle:"Когда рекомендуют",
         brewTitle:"Заваривание",
+        classTitle:"Классификация"
       }
     },
 
     en: {
       title:"Tea → States",
-      subtitle:"Click a state — recommendations appear on the right. In PRO mode you can pick up to 5 states from each list (10 total).",
+      subtitle:"Single mode: click a state to see 3–4 teas. PRO mode: pick up to 5 “reduce” and 5 “evoke” and get an aggregated list.",
       langLabel:"Language",
       themeLight:"☀️ Light theme",
       themeDark:"🌙 Dark theme",
@@ -973,12 +1275,12 @@
       cardIdleTitle:"Pick a state",
       cardModeSingle:"Single",
       cardModePro:"PRO",
-      cardDesc:"Single mode: click a state to see 3–4 teas. PRO mode aggregates recommendations for selected states.",
+      cardDesc:"Single: click a state to see 3–4 teas. PRO aggregates recommendations for your selection.",
 
       why:"Why",
       hide:"hide",
 
-      addedRemove:"Selected: “reduce”", addedGet:"Selected: “evoke”", teaPick:"Tea recommendations",
+      addedRemove:"Selected: “reduce”", addedGet:"Selected: “evoke”", teaPick:"Recommendations for selected states",
       clear:"clear", resetAll:"reset all",
       multiLine:"Above — selected states. Below — teas that most often fit this combination.",
 
@@ -987,15 +1289,11 @@
       proTitle:"Select multiple states PRO",
       counter:(a,b)=>`Reduce: ${a}/5 • Evoke: ${b}/5`,
 
-      proModalTitle:"PRO mode",
-      proModalBody:"In PRO you can select multiple states: up to 5 “reduce” and up to 5 “evoke”. The right panel will aggregate tea suggestions for the combination.",
-      proModalEnable:"Enable PRO",
-      proModalCancel:"Cancel",
-
-      nlpTitle:"Describe your state in your own words and I’ll pick teas",
+      nlpTitle:"Quick pick by description",
+      nlpHint:"runs locally",
       nlpPlaceholder:"E.g. “after lunch I get sleepy, brain fog, want calm focus without stress”",
-      nlpBtn:"Pick teas",
-      nlpNote:"Runs locally in your browser: keywords map to up to 5 “reduce” + 5 “evoke”, then PRO turns on with reasoning.",
+      nlpBtn:"Pick",
+      nlpNote:"Keyword matcher selects up to 5 reduce + 5 evoke, then turns PRO on and shows reasoning.",
 
       prompts:{
         bad:"These teas often fit this feeling:",
@@ -1004,23 +1302,24 @@
         proDesc:"Below are teas that most often fit this combination."
       },
 
-      fineprint:"ℹ️ Not medical advice. Tea effects are individual; consider caffeine, strength, timing, and contraindications. If you have conditions, are pregnant/breastfeeding, or take medication — consult a professional.",
+      fineprint:"ℹ️ Not medical advice. Tea effects are individual; consider caffeine, strength, timing, and contraindications.",
       about:"About",
 
       aboutTitle:"About",
-      aboutBody:`This site uses recommendations generated with the GPT-5.2 AI model. The analysis is based on aggregations of open scientific sources, meta-reviews, traditional tea classification systems (including Chinese tea tradition), and modern research on tea chemistry (caffeine, L-theanine, polyphenols) and their possible influence on alertness, attention, relaxation, and subjective well-being.
-
-These correspondences are not arbitrary, but they also do not guarantee a specific outcome for any particular person. Individual response to tea can vary greatly depending on physiology, nervous system state, medical conditions, medications, time of day, brewing method, and dosage.
-
-This information is not medical advice and is not intended for diagnosis, treatment, or prevention of disease and should not replace a clinician’s guidance. If you have chronic conditions, are pregnant/breastfeeding, have sleep or cardiovascular issues, or are sensitive to caffeine, consider consulting a professional.
-
-By using the site, you acknowledge the experimental and advisory nature of the information and take full responsibility for your own decisions.`,
+      aboutBody:`This site uses AI-generated recommendations (GPT-5.2). The mapping is based on open sources, traditional tea classification and modern tea chemistry research. It is not medical advice.`,
 
       limitTitle:"Selection limit",
-      limitBody:"Up to 5 states from each list (10 total), my friend.",
+      limitBody:"Up to 5 states from each list (10 total).",
       ok:"OK",
 
       buy:"buy",
+
+      proModalTitle:"PRO mode",
+      proModalQuestion:"Do you want to purchase PRO?",
+      proNo:"no",
+      proYes:"yes",
+      proNoText:"This product is free, but if you really want, you can donate to: 2202206736083473",
+      proYesText:"Nice, but the product is free. If you really want, you can donate to: 2202206736083473",
 
       teaModal:{
         originTitle:"Origin",
@@ -1028,6 +1327,7 @@ By using the site, you acknowledge the experimental and advisory nature of the i
         givesTitle:"Typically gives",
         whenTitle:"Often recommended when",
         brewTitle:"Brewing",
+        classTitle:"Classification"
       }
     }
   };
@@ -1035,127 +1335,439 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   // =========================
   // Tea dictionary + metadata
   // =========================
+  function commonsFileUrl(fileName){
+    return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName).replaceAll("%2F","/")}`;
+  }
+
   const TEA = {
     shu:        {key:"shu",        q:"шу пуэр чай",        name:{ru:"Шу пуэр", en:"Shu pu-erh"}, tag:{ru:"↓ заземляет", en:"↓ grounding"}, brew:{ru:"4–5 г / 120–150 мл • 6–8 проливов • вечером не крепко", en:"4–5 g / 120–150 ml • 6–8 infusions • keep light in the evening"} },
     chaTou:     {key:"chaTou",     q:"лао ча тоу пуэр",    name:{ru:"Лао Ча Тоу (пуэрные “камушки”)", en:"Lao Cha Tou (pu-erh nuggets)"}, tag:{ru:"↓ мягко успокаивает", en:"↓ gentle calm"}, brew:{ru:"5–6 г • держит много проливов • поздним вечером — топ", en:"5–6 g • many infusions • great late evening (light)"} },
     liuBao:     {key:"liuBao",     q:"лю бао хэй ча",      name:{ru:"Лю Бао (хэй ча)", en:"Liu Bao (hei cha)"}, tag:{ru:"↓ стабилизирует", en:"↓ stabilizes"}, brew:{ru:"4–6 г • 6–10 проливов • хорошо после еды", en:"4–6 g • 6–10 infusions • great after food"} },
     fuZhuan:    {key:"fuZhuan",    q:"фу чжуань чай",      name:{ru:"Фу Чжуань (хэй ча)", en:"Fu Zhuan (hei cha)"}, tag:{ru:"↓ ровный фон", en:"↓ steady baseline"}, brew:{ru:"4–6 г • 6–10 проливов • мягко и длительно", en:"4–6 g • 6–10 infusions • smooth and long"} },
     agedWhite:  {key:"agedWhite",  q:"выдержанный белый чай лао бай ча", name:{ru:"Выдержанный белый (Лао Бай Ча)", en:"Aged white tea"}, tag:{ru:"~ тихий", en:"~ gentle"}, brew:{ru:"4–5 г • 5–8 проливов • мягко, чисто", en:"4–5 g • 5–8 infusions • soft & clean"} },
-    white:      {key:"white",      q:"белый чай бай му дань инь чжэнь",  name:{ru:"Белый чай (Бай Му Дань / Инь Чжэнь)", en:"White tea"}, tag:{ru:"↑ мягко", en:"↑ soft lift"}, brew:{ru:"4–5 г • 80–90°C • короткие проливы", en:"4–5 g • 80–90°C • short infusions"} },
-    hongCha:    {key:"hongCha",    q:"красный чай хун ча", name:{ru:"Красный чай (Хун Ча)", en:"Black tea (hong cha)"}, tag:{ru:"→ тёплый фокус", en:"→ warm focus"}, brew:{ru:"4–6 г • 4–7 проливов • бодрит мягко", en:"4–6 g • 4–7 infusions • gentle energy"} },
-    green:      {key:"green",      q:"зелёный чай лунцзин", name:{ru:"Зелёный (Лунцзин и др.)", en:"Green tea"}, tag:{ru:"↑↑ ясность", en:"↑↑ clarity"}, brew:{ru:"3–4 г • 70–85°C • не передерживать", en:"3–4 g • 70–85°C • don’t oversteep"} },
-    lightOolong:{key:"lightOolong",q:"те гуань инь улун",  name:{ru:"Светлый улун (Те Гуань Инь)", en:"Light oolong"}, tag:{ru:"↑ настроение", en:"↑ mood"}, brew:{ru:"5–6 г • 85–95°C • 6–10 проливов", en:"5–6 g • 85–95°C • 6–10 infusions"} },
-    darkOolong: {key:"darkOolong", q:"да хун пао улун",    name:{ru:"Тёмный улун (Уи: Да Хун Пао)", en:"Dark oolong (Wuyi)"}, tag:{ru:"→/↓ глубина", en:"→/↓ depth"}, brew:{ru:"5–6 г • 95–100°C • 6–10 проливов", en:"5–6 g • 95–100°C • 6–10 infusions"} },
+    white:      {key:"white",      q:"белый чай инь чжэнь",  name:{ru:"Белый чай (Инь Чжэнь)", en:"White tea (Silver Needle)"}, tag:{ru:"↑ мягко", en:"↑ soft lift"}, brew:{ru:"4–5 г • 80–90°C • короткие проливы", en:"4–5 g • 80–90°C • short infusions"} },
+    hongCha:    {key:"hongCha",    q:"красный чай хун ча", name:{ru:"Красный чай (Дянь Хун и др.)", en:"Black tea (hong cha)"}, tag:{ru:"→ тёплый фокус", en:"→ warm focus"}, brew:{ru:"4–6 г • 4–7 проливов • бодрит мягко", en:"4–6 g • 4–7 infusions • gentle energy"} },
+    green:      {key:"green",      q:"зелёный чай лунцзин", name:{ru:"Зелёный (Лунцзин и др.)", en:"Green tea (Longjing etc.)"}, tag:{ru:"↑↑ ясность", en:"↑↑ clarity"}, brew:{ru:"3–4 г • 70–85°C • не передерживать", en:"3–4 g • 70–85°C • don’t oversteep"} },
+    lightOolong:{key:"lightOolong",q:"те гуань инь улун",  name:{ru:"Светлый улун (Те Гуань Инь)", en:"Light oolong (Tie Guan Yin)"}, tag:{ru:"↑ настроение", en:"↑ mood"}, brew:{ru:"5–6 г • 85–95°C • 6–10 проливов", en:"5–6 g • 85–95°C • 6–10 infusions"} },
+    darkOolong: {key:"darkOolong", q:"да хун пао улун",    name:{ru:"Тёмный улун (Да Хун Пао)", en:"Dark oolong (Da Hong Pao)"}, tag:{ru:"→/↓ глубина", en:"→/↓ depth"}, brew:{ru:"5–6 г • 95–100°C • 6–10 проливов", en:"5–6 g • 95–100°C • 6–10 infusions"} },
     sheng:      {key:"sheng",      q:"шен пуэр чай",       name:{ru:"Шэн пуэр (сырой)", en:"Sheng pu-erh"}, tag:{ru:"↑↑ бодрит", en:"↑↑ energizing"}, brew:{ru:"4–6 г • короткие проливы • лучше до 14:00", en:"4–6 g • short infusions • best before 2pm"} },
     yancha:     {key:"yancha",     q:"яньча уишань улун",  name:{ru:"Яньча (утёсные улуны Уи)", en:"Yancha (Wuyi rock oolong)"}, tag:{ru:"→ глубокий фокус", en:"→ deep focus"}, brew:{ru:"5–6 г • кипяток • короткие проливы", en:"5–6 g • boiling water • short infusions"} }
   };
 
-  // IMPORTANT: These are short, “safe” descriptions: no hard claims, and “altitude” is given as typical ranges.
+  // request #9: images from open sources + classification fields
+  const TEA_ASSETS = {
+    shu:        { img: commonsFileUrl("Da_Yi_Gong_Tuo_Pu-erh_shou_cha,_2010.jpg"), credit: "Wikimedia Commons" },
+    chaTou:     { img: commonsFileUrl("110601_204646.jpg"), credit: "Wikimedia Commons" },
+    liuBao:     { img: commonsFileUrl("Liu_Bao_tea_20141011.jpg"), credit: "Wikimedia Commons" },
+    fuZhuan:    { img: commonsFileUrl("Brick_tea_(Old_Fort_Erie).jpg"), credit: "Wikimedia Commons" },
+    agedWhite:  { img: commonsFileUrl("Shou_Mei_tea.JPG"), credit: "Wikimedia Commons" },
+    white:      { img: commonsFileUrl("Silver_needle_white_tea.jpg"), credit: "Wikimedia Commons" },
+    hongCha:    { img: commonsFileUrl("Dianhong_Yunnan_black_tea.JPG"), credit: "Wikimedia Commons" },
+    green:      { img: commonsFileUrl("Longjing_tea.jpg"), credit: "Wikimedia Commons" },
+    lightOolong:{ img: commonsFileUrl("Tieguanyin2.jpg"), credit: "Wikimedia Commons" },
+    darkOolong: { img: commonsFileUrl("Da_Hong_Pao_Tea.JPG"), credit: "Wikimedia Commons" },
+    sheng:      { img: commonsFileUrl("Pu-erh_tea_from_Yunnan_Sourcing.jpg"), credit: "Wikimedia Commons" },
+    yancha:     { img: commonsFileUrl("Wuyi_cliff_tea.jpg"), credit: "Wikimedia Commons" }
+  };
+
+  // “Safe” origin+facts (kept from your version, shortened where possible)
   const TEA_META = {
     shu: {
-      firstMention:{ ru:"Как отдельная категория «шу» оформился в конце XX века (технология ускоренной ферментации).", en:"As a distinct “shu” category it formed in the late 20th century (accelerated fermentation process)." },
-      geography:{ ru:"Юньнань, Китай (традиционно — Пуэр/Сишуанбаньна и соседние районы).", en:"Yunnan, China (often Pu’er/Xishuangbanna and nearby areas)." },
-      altitude:{ ru:"Обычно сырьё встречается от ~800 до ~2000 м (зависит от региона и конкретного сада).", en:"Leaf material often comes from ~800–2000 m (varies by region and garden)." },
-      facts:{ ru:["Технология «водуй» придумана, чтобы приблизить вкус выдержанного пуэра за месяцы/годы, а не десятилетия.","Крепкая заварка может заметно бодрить, хотя профиль часто воспринимается как «заземляющий».","Ароматика у шу часто уходит в древесно-ореховые, шоколадные, «землистые» оттенки."],
-             en:["The “wo dui” process was created to emulate aged pu-erh flavor in months/years rather than decades.","Brewed strong it can be quite energizing, even if the feel is often described as grounding.","Aromas commonly lean woody/nutty, cocoa-like, and earthy."] }
+      origin:{ ru:"Юньнань, Китай. «Шу» — технология ускоренной ферментации (водуй).", en:"Yunnan, China. “Shu” uses accelerated fermentation (wo dui)." },
+      facts:{ ru:["Крепкая заварка может бодрить, хотя профиль часто воспринимается как заземляющий.","Ароматика часто древесно-ореховая/шоколадная/землистая."],
+             en:["Brewed strong it can be energizing, even if it feels grounding.","Often woody/nutty/cocoa/earthy aromas."] }
     },
-    chaTou: {
-      firstMention:{ ru:"«Ча тоу» связывают с пуэрным производством (уплотнившиеся фрагменты) и особенно полюбили в конце XX — начале XXI века.", en:"“Cha tou” is tied to pu-erh production (compressed nuggets) and became especially popular in the late 20th–early 21st century." },
-      geography:{ ru:"Юньнань, Китай (встречается у разных пуэрных фабрик/мастерских).", en:"Yunnan, China (produced by various pu-erh makers)." },
-      altitude:{ ru:"Как и у пуэра: часто ~800–2000 м (в зависимости от сырья).", en:"Similar to pu-erh: often ~800–2000 m depending on leaf origin." },
-      facts:{ ru:["«Камушки» часто выдерживают много проливов и постепенно раскрываются.","Из-за плотности их удобно заваривать в дорожном формате.","Профиль обычно мягче и «ровнее», если не завышать дозировку."],
-             en:["Nuggets can handle many infusions and open gradually.","Their density makes them travel-friendly for gongfu brewing.","The feel is often smoother and steadier when not overdosed."] }
+    chaTou:{
+      origin:{ ru:"Юньнань, Китай. Плотные «камушки» из пуэрного производства.", en:"Yunnan, China. Dense nuggets from pu-erh processing." },
+      facts:{ ru:["Долго держит проливы и раскрывается постепенно.","Удобен в дорожном формате."],
+             en:["Handles many infusions and opens gradually.","Travel-friendly."] }
     },
-    liuBao: {
-      firstMention:{ ru:"Лю Бао описывают как исторически известный хэй ча из Гуанси; в источниках упоминают торговые поставки «в южные моря» в прошлом.", en:"Liu Bao is a historically known Guangxi hei cha; sources often mention its old trade routes to Southeast Asia." },
-      geography:{ ru:"Гуанси, Китай (уезд Цанъу / окрестности Учжоу).", en:"Guangxi, China (Cangwu / Wuzhou area)." },
-      altitude:{ ru:"Часто ~200–1200 м (в зависимости от конкретной местности).", en:"Often ~200–1200 m depending on the exact locale." },
-      facts:{ ru:["Часто любят за «тёплый» профиль и комфорт после еды.","У выдержанных партий может проявляться камфорность/сухофрукты.","Вкус обычно становится глубже и чище по мере выдержки."],
-             en:["Often appreciated for a warm, post-meal friendly profile.","Aged batches may show camphor/dried-fruit notes.","Flavor can become deeper and cleaner with aging."] }
+    liuBao:{
+      origin:{ ru:"Гуанси, Китай (Цанъу / Учжоу). Традиционный хэй ча.", en:"Guangxi, China (Cangwu/Wuzhou). Traditional hei cha." },
+      facts:{ ru:["Часто выбирают после еды.","Выдержка добавляет глубину и чистоту."],
+             en:["Often chosen after food.","Aging can add depth and cleanliness."] }
     },
-    fuZhuan: {
-      firstMention:{ ru:"Фу Чжуань относят к традициям хэй ча центрального Китая; известен как «кирпичный чай» с долгой историей.", en:"Fu Zhuan is part of central-China hei cha traditions, known as a “brick tea” with a long history." },
-      geography:{ ru:"Хунань / Шэньси (встречаются разные стили производства).", en:"Hunan / Shaanxi (multiple regional styles exist)." },
-      altitude:{ ru:"Часто ~300–1500 м (зависит от источника сырья).", en:"Often ~300–1500 m depending on leaf origin." },
-      facts:{ ru:["Иногда обсуждают «золотой цветок» как традиционную особенность некоторых партий.","Может давать очень ровное состояние без резких пиков.","Хорошо «держит» термос/дорожное заваривание (в лёгкой крепости)."],
-             en:["Some batches are known for the traditional “golden flower” characteristic.","Often feels very even without sharp peaks.","Works well in thermos/travel brewing when kept light."] }
+    fuZhuan:{
+      origin:{ ru:"Китай (Хунань/Шэньси — разные стили). Хэй ча в формате кирпича.", en:"China (Hunan/Shaanxi styles). Hei cha in brick form." },
+      facts:{ ru:["Многие любят за ровный «длинный фон».","Умеренная крепость особенно комфортна."],
+             en:["Often valued for long, even baseline.","Best kept moderate."] }
     },
-    agedWhite: {
-      firstMention:{ ru:"Выдерживание белого чая стало популярным в последние десятилетия, хотя белые чаи как категория известны давно.", en:"Aging white tea became widely popular in recent decades, while white tea as a category is much older." },
-      geography:{ ru:"Фуцзянь, Китай (часто Фудин/Чжэнхэ и окрестности).", en:"Fujian, China (often Fuding/Zhenghe areas)." },
-      altitude:{ ru:"Часто ~200–1200 м (зависит от гор/долин конкретного региона).", en:"Often ~200–1200 m depending on local terrain." },
-      facts:{ ru:["Со временем аромат может смещаться в мёд/сухофрукты/тёплые травы.","Многие любят его вечером из-за мягкости (если заваривать не крепко).","Старение может сделать вкус более округлым и «спокойным»."],
-             en:["With age, aromas can move toward honey, dried fruit, and warm herbs.","Often enjoyed in the evening for its gentleness when brewed lightly.","Aging can make the taste rounder and calmer."] }
+    agedWhite:{
+      origin:{ ru:"Фуцзянь, Китай. Выдержанный белый (часто Шоу Мэй/Бай Му Дань).", en:"Fujian, China. Aged white (often Shou Mei/Bai Mu Dan)." },
+      facts:{ ru:["С возрастом уходит в мёд/сухофрукты/тёплые травы.","Вечером обычно комфортен при лёгкой крепости."],
+             en:["With age can move toward honey/dried fruit/warm herbs.","Often comfortable in the evening when brewed lightly."] }
     },
-    white: {
-      firstMention:{ ru:"Белые чаи традиционно связывают с Фуцзяном; в современном виде стили вроде Бай Хао Инь Чжэнь стали широко узнаваемы в XIX–XX вв.", en:"White teas are strongly associated with Fujian; styles like Silver Needle became widely recognized in the 19th–20th centuries." },
-      geography:{ ru:"Фуцзянь, Китай (часто Фудин/Чжэнхэ).", en:"Fujian, China (often Fuding/Zhenghe)." },
-      altitude:{ ru:"Часто ~200–1200 м.", en:"Often ~200–1200 m." },
-      facts:{ ru:["Белый чай легко «перекалить» — лучше умеренная температура и короткие проливы.","Хорошо показывает нюансы воды: мягкая вода часто даёт более сладкий вкус.","От сорта (Инь Чжэнь vs Бай Му Дань) зависит плотность и аромат."],
-             en:["White tea can be easily overcooked—use moderate temps and short infusions.","It reflects water quality strongly; softer water often tastes sweeter.","Cultivar/style (Silver Needle vs Bai Mu Dan) changes body and aroma."] }
+    white:{
+      origin:{ ru:"Фуцзянь, Китай. Белый чай (Инь Чжэнь).", en:"Fujian, China. White tea (Silver Needle)." },
+      facts:{ ru:["Лучше умеренная температура и короткие проливы.","Чувствителен к воде — мягкая вода часто «сластит»."],
+             en:["Moderate temps + short steeps are best.","Water quality matters a lot; softer water can taste sweeter."] }
     },
-    hongCha: {
-      firstMention:{ ru:"Красные чаи (по китайской классификации) активно развивались в XVIII–XIX вв. с ростом экспортной торговли.", en:"Chinese ‘red teas’ expanded strongly in the 18th–19th centuries alongside export trade." },
-      geography:{ ru:"Китай (Фуцзянь, Юньнань, Аньхой и др. — много региональных стилей).", en:"China (Fujian, Yunnan, Anhui, etc.—many regional styles)." },
-      altitude:{ ru:"Очень вариативно: от низких холмов до горных садов ~200–2000 м.", en:"Very variable: from low hills to mountain gardens ~200–2000 m." },
-      facts:{ ru:["Часто воспринимается как «тёплая бодрость» без резкой нервозности.","Даёт широкий спектр от карамели/хлеба до какао/специй.","Один и тот же чай меняется по вкусу при разной температуре воды."],
-             en:["Often feels like ‘warm energy’ without sharp jitteriness.","Flavor ranges from caramel/bread to cocoa/spice.","The same tea can shift notably with water temperature changes."] }
+    hongCha:{
+      origin:{ ru:"Китай (много региональных стилей). «Красный» по китайской классификации.", en:"China (many regional styles). Called “red tea” in Chinese." },
+      facts:{ ru:["Обычно воспринимается как «тёплая бодрость».","Диапазон вкусов: карамель/хлеб → какао/специи."],
+             en:["Often felt as “warm energy”.","Flavor range: caramel/bread → cocoa/spice."] }
     },
-    green: {
-      firstMention:{ ru:"Зелёные чаи имеют очень древнюю историю в Китае; многие известные стили стандартизировались в разные эпохи, включая поздние имперские периоды.", en:"Green tea has a very long history in China; many famous styles were standardized across different eras." },
-      geography:{ ru:"Китай (Чжэцзян, Цзянсу, Аньхой и др.).", en:"China (Zhejiang, Jiangsu, Anhui, etc.)." },
-      altitude:{ ru:"Часто ~200–1500 м (в зависимости от провинции и конкретной горы).", en:"Often ~200–1500 m depending on province and mountain." },
-      facts:{ ru:["Зелёный чай сильно зависит от свежести: с возрастом аромат «тускнеет».","Передержка даёт горечь — лучше короткие экспозиции.","Утром может быть ярко активирующим, особенно на пустой желудок."],
-             en:["Freshness matters a lot: aroma can dull as it ages.","Oversteeping easily turns bitter—keep exposures short.","Morning brewing can be very activating, especially on an empty stomach."] }
+    green:{
+      origin:{ ru:"Китай (в т.ч. Чжэцзян). Зелёный чай (пример: Лунцзин).", en:"China (incl. Zhejiang). Green tea (e.g., Longjing)." },
+      facts:{ ru:["Сильно зависит от свежести.","Передержка быстро даёт горечь."],
+             en:["Freshness matters a lot.","Oversteeping turns bitter quickly."] }
     },
-    lightOolong: {
-      firstMention:{ ru:"Светлые улуны (в т.ч. Те Гуань Инь) получили широкую известность в XIX–XX вв., хотя улуновые традиции старше.", en:"Light oolongs (incl. Tie Guan Yin) became widely known in the 19th–20th centuries, though oolong traditions are older." },
-      geography:{ ru:"Фуцзянь (Аньси) и Тайвань (разные школы светлого улуна).", en:"Fujian (Anxi) and Taiwan (different light-oolong schools)." },
-      altitude:{ ru:"Часто ~300–1800 м (особенно у тайваньских горных улунов).", en:"Often ~300–1800 m (especially Taiwan high-mountain oolongs)." },
-      facts:{ ru:["Аромат часто цветочный/сливочный, с сильной «возвратной сладостью».","Сильно раскрывается в проливах: первые 2–3 могут отличаться от 6–8.","Хорошо подходит для дневной коммуникации и лёгкого тонуса."],
-             en:["Often floral/creamy with strong lingering sweetness.","Infusions evolve a lot: early steeps differ from later ones.","Nice for daytime sociability and a light uplift."] }
+    lightOolong:{
+      origin:{ ru:"Фуцзянь (Аньси) / Тайвань. Светлые улуны.", en:"Fujian (Anxi) / Taiwan. Light oolongs." },
+      facts:{ ru:["Часто цветочно-сливочный профиль и «возвратная сладость».","Сильно меняется по проливам."],
+             en:["Often floral/creamy with lingering sweetness.","Evolves a lot across infusions."] }
     },
-    darkOolong: {
-      firstMention:{ ru:"Уишаньские улуны известны давно; классические «утёсные» стили фиксировались традицией на протяжении веков.", en:"Wuyi oolongs have a long history; classic ‘rock tea’ styles were shaped over centuries." },
-      geography:{ ru:"Фуцзянь, Уишань (Уи) и родственные регионы обжарки.", en:"Fujian, Wuyi Mountains (Wuyi) and related roast styles." },
-      altitude:{ ru:"Часто ~300–1200 м (в пределах уишаньского массива и окрестностей).", en:"Often ~300–1200 m within Wuyi mountain areas." },
-      facts:{ ru:["Обжарка играет ключевую роль: от неё зависит «глубина» и согревающий эффект.","Многие уишаньские улуны любят короткие проливы и кипяток.","Хорошо держит фокус, но в поздний вечер лучше уменьшать дозу."],
-             en:["Roast level is crucial—it drives depth and warming feel.","Many Wuyi oolongs like boiling water and short infusions.","Great for focus, but reduce dose late in the day."] }
+    darkOolong:{
+      origin:{ ru:"Фуцзянь, Уи. Тёмные улуны/обжарка.", en:"Fujian, Wuyi. Dark/roasted oolongs." },
+      facts:{ ru:["Обжарка даёт глубину и согревающий тон.","Любит кипяток и короткие проливы."],
+             en:["Roast adds depth and warming tone.","Likes boiling water and short infusions."] }
     },
-    sheng: {
-      firstMention:{ ru:"Шэн пуэр — традиционная форма пуэра; выдерживание шэна как культуры сильно развилось в XX–XXI вв.", en:"Sheng pu-erh is the traditional form; aging culture expanded strongly in the 20th–21st centuries." },
-      geography:{ ru:"Юньнань, Китай (разные горы/уезды: от Сишуанбаньна до Линьцан и др.).", en:"Yunnan, China (many mountains/counties: Xishuangbanna, Lincang, etc.)." },
-      altitude:{ ru:"Часто ~800–2200 м (у горных садов выше).", en:"Often ~800–2200 m (higher for mountain gardens)." },
-      facts:{ ru:["Может быть «острым» по ощущению при тревожности — важны дозировка и еда.","Выдержка обычно смягчает углы и добавляет глубину.","Первые проливы часто самые яркие и «пробуждающие»."],
-             en:["Can feel sharp if you’re anxious—dose and food matter.","Aging often rounds edges and adds depth.","First infusions are often the most vivid and awakening."] }
+    sheng:{
+      origin:{ ru:"Юньнань, Китай. Традиционный «сырой» пуэр.", en:"Yunnan, China. Traditional raw pu-erh." },
+      facts:{ ru:["Может быть резковат для тревожных — важна дозировка.","Выдержка обычно смягчает углы."],
+             en:["Can feel sharp if you’re anxious—dose matters.","Aging often rounds edges."] }
     },
-    yancha: {
-      firstMention:{ ru:"Термин «яньча» связан с уишаньской традицией; многие «утёсные» стили имеют легендарные истории и давнюю репутацию.", en:"“Yancha” is tied to Wuyi tradition; many rock-tea styles carry long-standing reputations and legends." },
-      geography:{ ru:"Фуцзянь, Уишань (скальные/горные терруары).", en:"Fujian, Wuyi Mountains (rocky mountain terroirs)." },
-      altitude:{ ru:"Часто ~300–1200 м (в пределах уишаньского массива).", en:"Often ~300–1200 m in Wuyi areas." },
-      facts:{ ru:["«Минеральность» — один из типичных описателей вкуса у яньча.","Очень чувствителен к воде и времени пролива.","Даёт эффект «собранной внимательности» у многих людей."],
-             en:["‘Minerality’ is a common descriptor for yancha taste.","Very sensitive to water quality and infusion timing.","Often associated with a ‘collected attentiveness’ feel."] }
+    yancha:{
+      origin:{ ru:"Фуцзянь, Уи. «Утёсные» улуны (яньча).", en:"Fujian, Wuyi. Rock oolongs (yancha)." },
+      facts:{ ru:["Часто описывают «минеральность».","Очень чувствителен к воде и таймингу."],
+             en:["Often described as mineral.","Very sensitive to water and timing."] }
     }
   };
 
-  // Tea details: description + pills (states it "gives" and "recommended when")
+  // Classification (request #9)
+  const TEA_CLASS = {
+    shu:{
+      ru:{
+        fermentation:"Высокая (ускоренная ферментация / пост-ферментация)",
+        processing:"Водуй (ускоренное брожение), пресс/рассыпной",
+        material:"Крупный лист и почки Camellia sinensis var. assamica; весенний/осенний сбор зависит от партии",
+        region:"Юньнань (разные уезды/горы)",
+        profile:"Древесный, ореховый, какао, «землистый», иногда сухофрукты",
+        texture:"Плотный, бархатистый, тёплый настой",
+        effect:"Ровная собранность, «заземление»; при крепости — бодрит",
+        aging:"Обычно 1–10+ лет (зависит от конкретного пуэра)",
+        format:"Блин/кирпич/точа/рассыпной",
+        storage:"Сухо, без запахов, 18–25°C, умеренная вентиляция"
+      },
+      en:{
+        fermentation:"High (accelerated fermentation / post-fermented)",
+        processing:"Wo dui, often pressed or loose",
+        material:"Large-leaf material (assamica); harvest depends on batch",
+        region:"Yunnan (various counties/mountains)",
+        profile:"Woody, nutty, cocoa, earthy, sometimes dried fruit",
+        texture:"Dense, velvety, warm liquor",
+        effect:"Steady composure/grounding; strong brew can energize",
+        aging:"Often 1–10+ years (batch dependent)",
+        format:"Cake/brick/tuo/loose",
+        storage:"Dry, odor-free, 18–25°C, moderate airflow"
+      }
+    },
+    chaTou:{
+      ru:{
+        fermentation:"Высокая (как у шу-пуэра в большинстве случаев)",
+        processing:"Плотные «камушки»; обычно прессованные фрагменты/нuggets",
+        material:"Пуэрное сырьё, уплотнившееся при производстве",
+        region:"Юньнань",
+        profile:"Древесный, карамельный, ореховый, «тёплый»",
+        texture:"Очень ровный, плотный, долго держит проливы",
+        effect:"Мягкое успокоение + стабильность",
+        aging:"Часто 1–10+ лет (встречаются выдержанные)",
+        format:"Нuggets (камушки)",
+        storage:"Как пуэр: сухо, без запахов, умеренная вентиляция"
+      },
+      en:{
+        fermentation:"High (often similar to shu pu-erh)",
+        processing:"Dense nuggets (cha tou)",
+        material:"Pu-erh material compacted during processing",
+        region:"Yunnan",
+        profile:"Woody, caramel, nutty, warm",
+        texture:"Very even and long-lasting across infusions",
+        effect:"Gentle calm + steady baseline",
+        aging:"Often 1–10+ years",
+        format:"Nuggets",
+        storage:"Like pu-erh: dry, odor-free, moderate airflow"
+      }
+    },
+    liuBao:{
+      ru:{
+        fermentation:"Пост-ферментация (хэй ча)",
+        processing:"Хэй ча: ферментация/сушка; часто выдерживают",
+        material:"Листовое сырьё; партии различаются по сбору",
+        region:"Гуанси (Цанъу/Учжоу)",
+        profile:"Тёплый древесный, сухофрукты, иногда камфора",
+        texture:"Гладкий, округлый настой",
+        effect:"Стабилизация, комфорт после еды",
+        aging:"Часто выдерживают 1–15+ лет",
+        format:"Рассыпной/кирпич/корзины и др.",
+        storage:"Сухо, без резких запахов; терпит умеренную вентиляцию"
+      },
+      en:{
+        fermentation:"Post-fermented (hei cha)",
+        processing:"Hei-cha fermentation + drying; often aged",
+        material:"Leaf material varies by batch",
+        region:"Guangxi (Cangwu/Wuzhou)",
+        profile:"Warm woody, dried fruit, sometimes camphor",
+        texture:"Smooth, rounded liquor",
+        effect:"Stability, post-meal comfort",
+        aging:"Often aged 1–15+ years",
+        format:"Loose/brick/etc.",
+        storage:"Dry, odor-free; moderate airflow"
+      }
+    },
+    fuZhuan:{
+      ru:{
+        fermentation:"Пост-ферментация (хэй ча)",
+        processing:"Кирпичный хэй ча; общее созревание/выдержка",
+        material:"Листовое сырьё; зависит от производителя",
+        region:"Китай (часто Хунань/Шэньси стилевые школы)",
+        profile:"Хлебные/солодовые, орех, сухофрукты, «тёплая сладость»",
+        texture:"Ровный, «длинный» настой",
+        effect:"Спокойный фон, мягкая устойчивость",
+        aging:"Часто 1–10+ лет",
+        format:"Кирпич (fu brick)",
+        storage:"Сухо, без запахов, не перегревать"
+      },
+      en:{
+        fermentation:"Post-fermented (hei cha)",
+        processing:"Brick hei cha; matured/aged",
+        material:"Leaf material depends on maker",
+        region:"China (often Hunan/Shaanxi schools)",
+        profile:"Bready/malty, nutty, dried fruit, warm sweetness",
+        texture:"Even, long liquor",
+        effect:"Calm baseline, gentle steadiness",
+        aging:"Often 1–10+ years",
+        format:"Brick",
+        storage:"Dry, odor-free, avoid heat"
+      }
+    },
+    agedWhite:{
+      ru:{
+        fermentation:"Лёгкая естественная (выдержка/окисление со временем)",
+        processing:"Белый чай: подвяливание + сушка; далее выдержка",
+        material:"Почки/лист (часто Шоу Мэй/Бай Му Дань)",
+        region:"Фуцзянь (Фудин/Чжэнхэ — зависит от партии)",
+        profile:"Мёд, сухофрукты, тёплые травы",
+        texture:"Мягкий, округлый",
+        effect:"Тишина, снижение «шума», мягкая ясность",
+        aging:"Обычно 2–15+ лет",
+        format:"Рассыпной/прессованный блин/кирпич",
+        storage:"Сухо, без запахов; стабильная температура"
+      },
+      en:{
+        fermentation:"Light natural (aging/slow oxidation)",
+        processing:"White tea: wither + dry, then aged",
+        material:"Buds/leaves (often Shou Mei/Bai Mu Dan)",
+        region:"Fujian (batch dependent)",
+        profile:"Honey, dried fruit, warm herbs",
+        texture:"Soft, rounded",
+        effect:"Inner quiet, lower mental noise, gentle clarity",
+        aging:"Often 2–15+ years",
+        format:"Loose or pressed",
+        storage:"Dry, odor-free, stable temperature"
+      }
+    },
+    white:{
+      ru:{
+        fermentation:"Минимальная",
+        processing:"Белый чай: подвяливание + сушка",
+        material:"Почки (Инь Чжэнь) / ранний сбор",
+        region:"Фуцзянь",
+        profile:"Цветочно-медовый, свежий, тонкий",
+        texture:"Лёгкий, шелковистый",
+        effect:"Мягкая бодрость и ясность",
+        aging:"Свежий (0–2 года) или выдержанный (зависит от партии)",
+        format:"Рассыпной",
+        storage:"Сухо, без запахов; беречь от влаги"
+      },
+      en:{
+        fermentation:"Minimal",
+        processing:"Wither + dry",
+        material:"Buds (Silver Needle), early harvest",
+        region:"Fujian",
+        profile:"Floral-honey, fresh, delicate",
+        texture:"Light, silky",
+        effect:"Gentle lift and clarity",
+        aging:"Fresh or aged (batch dependent)",
+        format:"Loose",
+        storage:"Dry, odor-free; avoid moisture"
+      }
+    },
+    hongCha:{
+      ru:{
+        fermentation:"Окисление высокое (красный/black tea)",
+        processing:"Завяливание → скручивание → окисление → сушка",
+        material:"Почки+лист (часто весна)",
+        region:"Китай (пример: Юньнань — Дянь Хун)",
+        profile:"Карамель, хлеб, какао, специи",
+        texture:"Плотный, тёплый",
+        effect:"Тёплая энергия, собранность",
+        aging:"Обычно свежий 0–3 года (часто пьют свежим)",
+        format:"Рассыпной",
+        storage:"Сухо, без запахов; герметичнее, чем пуэры"
+      },
+      en:{
+        fermentation:"High oxidation",
+        processing:"Wither → roll → oxidize → dry",
+        material:"Buds + leaf (often spring)",
+        region:"China (e.g., Yunnan Dianhong)",
+        profile:"Caramel, bread, cocoa, spice",
+        texture:"Full, warm",
+        effect:"Warm energy, composed focus",
+        aging:"Often enjoyed fresh (0–3 years)",
+        format:"Loose",
+        storage:"Dry, odor-free; more airtight than pu-erh"
+      }
+    },
+    green:{
+      ru:{
+        fermentation:"Нет (фиксация зелени)",
+        processing:"Ша цин (прожарка/пропаривание) → формовка → сушка",
+        material:"Молодой лист/почки",
+        region:"Китай (пример: Чжэцзян — Лунцзин)",
+        profile:"Орехово-травяной, свежий",
+        texture:"Лёгкий, чистый",
+        effect:"Ясность, включение, бодрость",
+        aging:"Лучше свежий (0–12 месяцев)",
+        format:"Рассыпной",
+        storage:"Герметично, прохладно, без света/влаги"
+      },
+      en:{
+        fermentation:"None (green fixation)",
+        processing:"Kill-green → shape → dry",
+        material:"Young leaves/buds",
+        region:"China (e.g., Zhejiang Longjing)",
+        profile:"Nutty-green, fresh",
+        texture:"Light, clean",
+        effect:"Clarity and activation",
+        aging:"Best fresh (0–12 months)",
+        format:"Loose",
+        storage:"Airtight, cool, dark, dry"
+      }
+    },
+    lightOolong:{
+      ru:{
+        fermentation:"Низкая/средняя (частичное окисление)",
+        processing:"Частичное окисление, скручивание/формовка, иногда лёгкая обжарка",
+        material:"Лист (часто весенний)",
+        region:"Фуцзянь (Аньси) / Тайвань",
+        profile:"Цветочный, сливочный, «возвратная сладость»",
+        texture:"Сочный, ароматный",
+        effect:"Настроение, лёгкая собранность",
+        aging:"Обычно свежий (0–2 года), бывает выдержка/обжарка",
+        format:"Скрученный лист",
+        storage:"Сухо, без запахов; беречь аромат"
+      },
+      en:{
+        fermentation:"Low/medium (partial oxidation)",
+        processing:"Partial oxidation, shaping; sometimes light roast",
+        material:"Leaf (often spring)",
+        region:"Fujian (Anxi) / Taiwan",
+        profile:"Floral, creamy, lingering sweetness",
+        texture:"Juicy, aromatic",
+        effect:"Mood lift, light composure",
+        aging:"Often fresh; some styles are aged/roasted",
+        format:"Rolled leaf",
+        storage:"Dry, odor-free; protect aroma"
+      }
+    },
+    darkOolong:{
+      ru:{
+        fermentation:"Средняя (частичное окисление)",
+        processing:"Частичное окисление + обжарка (ключевой фактор)",
+        material:"Лист",
+        region:"Фуцзянь (Уи)",
+        profile:"Жареные ноты, какао, печёные фрукты, минералы",
+        texture:"Плотный, согревающий",
+        effect:"Глубина, фокус, «плотная собранность»",
+        aging:"Бывает «отлежка» после обжарки; иногда выдерживают",
+        format:"Полосатый лист",
+        storage:"Сухо, без запахов; стабильная температура"
+      },
+      en:{
+        fermentation:"Medium (partial oxidation)",
+        processing:"Partial oxidation + roast (key driver)",
+        material:"Leaf",
+        region:"Fujian (Wuyi)",
+        profile:"Roasty, cocoa, baked fruit, mineral",
+        texture:"Dense, warming",
+        effect:"Depth and focus",
+        aging:"Often rested post-roast; some aged",
+        format:"Strip leaf",
+        storage:"Dry, odor-free; stable temp"
+      }
+    },
+    sheng:{
+      ru:{
+        fermentation:"Низкая (естественное созревание при выдержке)",
+        processing:"Шэн: фиксирование/скручивание/сушка, затем выдержка",
+        material:"Крупнолистовое сырьё (assamica)",
+        region:"Юньнань",
+        profile:"Травянистый/фруктовый/цветочный (зависит от горы и возраста)",
+        texture:"От лёгкого до плотного",
+        effect:"Чистая бодрость и фокус (может быть «острым» при крепости)",
+        aging:"0–30+ лет",
+        format:"Блины/точи/кирпичи/рассыпной",
+        storage:"Сухо, без запахов; умеренная вентиляция"
+      },
+      en:{
+        fermentation:"Low (natural aging over time)",
+        processing:"Sheng: process then age",
+        material:"Large-leaf assamica",
+        region:"Yunnan",
+        profile:"Green/fruity/floral depending on terroir and age",
+        texture:"From light to full",
+        effect:"Clean energy and focus (can feel sharp if strong)",
+        aging:"0–30+ years",
+        format:"Cakes/tuo/bricks/loose",
+        storage:"Dry, odor-free; moderate airflow"
+      }
+    },
+    yancha:{
+      ru:{
+        fermentation:"Средняя (частичное окисление)",
+        processing:"Частичное окисление + обжарка (утёсные улуны)",
+        material:"Лист",
+        region:"Фуцзянь (Уи)",
+        profile:"Минеральность, печёные фрукты, жареные ноты",
+        texture:"Собранный, «суховатый» но глубоко ароматный",
+        effect:"Глубокий фокус и внимательность",
+        aging:"От свежих до «отлежавшихся» после обжарки",
+        format:"Полосатый лист",
+        storage:"Сухо, без запахов; беречь от влаги"
+      },
+      en:{
+        fermentation:"Medium (partial oxidation)",
+        processing:"Partial oxidation + roast (rock oolong)",
+        material:"Leaf",
+        region:"Fujian (Wuyi)",
+        profile:"Mineral, baked fruit, roast",
+        texture:"Collected, aromatic",
+        effect:"Deep focus and attentiveness",
+        aging:"Fresh to rested post-roast",
+        format:"Strip leaf",
+        storage:"Dry, odor-free; avoid moisture"
+      }
+    }
+  };
+
+  // Tea details: description + states (kept)
   const TEA_DETAILS = {
-    shu: { desc:{ru:"Плотный ферментированный пуэр: часто ощущается как «ровный фундамент» и мягкая собранность. Может быть бодрящим, если заварить крепко.", en:"A fully fermented pu-erh that often feels like a “steady base” with calm composure. Can be energizing if brewed strong."}, gives:["good5","good9","good13","good16"], when:["bad1","bad2","bad9","bad10","bad12"] },
-    chaTou:{ desc:{ru:"Пуэрные «камушки»: обычно мягче по нервной системе, длиннее «держит» состояние. Хорош для спокойного вечера (если не крепить).", en:"Pu-erh nuggets: often gentler, with a long-lasting steady effect. Great for an evening session (keep it light)."}, gives:["good3","good9","good15","good19","good20"], when:["bad4","bad12","bad13","bad20"] },
-    liuBao:{ desc:{ru:"Хэй ча из Гуанси: тёплый, устойчивый профиль. Часто выбирают после еды и для «собрать голову без рывка».", en:"Hei cha from Guangxi: warm and steady. Often chosen after food and for “focused stability without a spike”."}, gives:["good5","good7","good9","good16"], when:["bad1","bad2","bad9","bad17","bad10"] },
-    fuZhuan:{ desc:{ru:"Хэй ча (часто обсуждают «золотой цветок»): ровное, мягкое сопровождение, когда нужен спокойный фон и длительная стабильность.", en:"Hei cha often associated with a smooth, steady background—useful when you want long, even stability."}, gives:["good5","good7","good16","good18"], when:["bad9","bad17","bad2","bad1"] },
-    agedWhite:{ desc:{ru:"Выдержанный белый: мягко «очищает голову», снижает суету, часто воспринимается как тёплая тишина без тяжести.", en:"Aged white: often felt as gentle clarity with inner quiet—less mental noise, without heaviness."}, gives:["good3","good12","good15","good19","good20"], when:["bad3","bad4","bad11","bad12","bad20"] },
-    white:{ desc:{ru:"Свежий белый: лёгкий, деликатный, часто даёт мягкую ясность и настроение без лишнего давления.", en:"Fresh white tea: light and delicate—often a gentle lift and clarity without pressure."}, gives:["good10","good2","good7","good4"], when:["bad11","bad18","bad19"] },
-    hongCha:{ desc:{ru:"Красный чай (хун ча): «тёплая бодрость» и собранность, особенно когда нужно включиться без резкого скачка.", en:"Black tea (hong cha): “warm energy” and composed focus—good when you want to switch on without a sharp spike."}, gives:["good4","good11","good13","good1"], when:["bad7","bad14","bad15","bad16","bad10"] },
-    green:{ desc:{ru:"Зелёный: яркая ясность и бодрость. Хорош утром и до обеда, но при тревожности может быть слишком активным.", en:"Green tea: bright clarity and energy. Great in the morning; may feel too activating if you’re anxious."}, gives:["good2","good12","good8","good4"], when:["bad5","bad6","bad7","bad15"] },
-    lightOolong:{ desc:{ru:"Светлый улун: часто улучшает настроение и даёт лёгкую собранность. Комфортен для дневной работы.", en:"Light oolong: often lifts mood and gives light composure—comfortable for daytime work."}, gives:["good6","good7","good13","good4"], when:["bad6","bad18","bad8","bad15"] },
-    darkOolong:{ desc:{ru:"Тёмный улун (Уи): глубина и концентрация, «плотный» фокус. Уместен днём, вечером — аккуратно с крепостью.", en:"Dark oolong (Wuyi): depth and concentration—often a “dense focus”. Use carefully in the evening (strength matters)."}, gives:["good1","good8","good14","good11"], when:["bad8","bad14","bad15","bad2"] },
-    sheng:{ desc:{ru:"Шэн пуэр: чистая бодрость и фокус, но может быть «острым» для тревожных/чувствительных. Лучше до 14:00.", en:"Sheng pu-erh: clean energy and focus, but can feel sharp for anxious/sensitive people. Best before 2pm."}, gives:["good2","good1","good4","good14"], when:["bad5","bad6","bad7","bad16"] },
-    yancha:{ desc:{ru:"Яньча: собранность и глубокая внимательность. Часто выбирают, когда нужно «включить мозг» и держать линию.", en:"Yancha: composed focus and deep attentiveness—often chosen when you want “brain on” for a sustained stretch."}, gives:["good1","good8","good13","good14"], when:["bad8","bad14","bad2","bad16"] }
+    shu: { desc:{ru:"Плотный ферментированный пуэр: часто ощущается как «ровный фундамент» и мягкая собранность. Может бодрить, если заварить крепко.", en:"A fully fermented pu-erh often felt as a steady base with calm composure. Can energize if brewed strong."}, gives:["good5","good9","good13","good16"], when:["bad1","bad2","bad9","bad10","bad12"] },
+    chaTou:{ desc:{ru:"Пуэрные «камушки»: обычно мягче по нервной системе, долго держит состояние. Хорош для спокойного вечера (если не крепить).", en:"Pu-erh nuggets: often gentler and long-lasting. Great for evening (keep it light)."}, gives:["good3","good9","good15","good19","good20"], when:["bad4","bad12","bad13","bad20"] },
+    liuBao:{ desc:{ru:"Хэй ча из Гуанси: тёплый, устойчивый профиль. Часто выбирают после еды и для «собрать голову без рывка».", en:"Hei cha from Guangxi: warm and steady. Often after food and for stable focus."}, gives:["good5","good7","good9","good16"], when:["bad1","bad2","bad9","bad17","bad10"] },
+    fuZhuan:{ desc:{ru:"Кирпичный хэй ча: ровное мягкое сопровождение, когда нужен спокойный фон и длительная стабильность.", en:"Brick hei cha: smooth steady background when you want long even stability."}, gives:["good5","good7","good16","good18"], when:["bad9","bad17","bad2","bad1"] },
+    agedWhite:{ desc:{ru:"Выдержанный белый: мягко снижает суету и даёт тёплую тишину без тяжести.", en:"Aged white: often lowers mental noise and gives warm inner quiet."}, gives:["good3","good12","good15","good19","good20"], when:["bad3","bad4","bad11","bad12","bad20"] },
+    white:{ desc:{ru:"Свежий белый: деликатная ясность и мягкий подъём без давления.", en:"Fresh white: delicate clarity with gentle lift."}, gives:["good10","good2","good7","good4"], when:["bad11","bad18","bad19"] },
+    hongCha:{ desc:{ru:"Красный чай: «тёплая бодрость» и собранность, когда нужно включиться без резкого скачка.", en:"Black/red tea: warm energy and composed focus without a harsh spike."}, gives:["good4","good11","good13","good1"], when:["bad7","bad14","bad15","bad16","bad10"] },
+    green:{ desc:{ru:"Зелёный: яркая ясность. Хорош утром и до обеда, но при тревожности может быть слишком активным.", en:"Green tea: bright clarity. Great early; may be too activating if anxious."}, gives:["good2","good12","good8","good4"], when:["bad5","bad6","bad7","bad15"] },
+    lightOolong:{ desc:{ru:"Светлый улун: настроение + лёгкая собранность. Комфортен для дневной работы.", en:"Light oolong: mood lift and light composure—comfortable for daytime."}, gives:["good6","good7","good13","good4"], when:["bad6","bad18","bad8","bad15"] },
+    darkOolong:{ desc:{ru:"Тёмный улун: глубина и концентрация. Днём — отлично, вечером — аккуратно с крепостью.", en:"Dark oolong: depth and concentration. Great daytime; go easy at night."}, gives:["good1","good8","good14","good11"], when:["bad8","bad14","bad15","bad2"] },
+    sheng:{ desc:{ru:"Шэн пуэр: чистая бодрость и фокус. Лучше до 14:00 и с умеренной дозировкой.", en:"Sheng pu-erh: clean energy and focus. Best before 2pm and moderate dose."}, gives:["good2","good1","good4","good14"], when:["bad5","bad6","bad7","bad16"] },
+    yancha:{ desc:{ru:"Яньча: собранность и глубокая внимательность. Когда нужно «включить мозг» и держать линию.", en:"Yancha: composed deep focus—when you need sustained attentiveness."}, gives:["good1","good8","good13","good14"], when:["bad8","bad14","bad2","bad16"] }
   };
 
   // =========================
-  // State texts (20 + 20)
+  // States (20 + 20)
   // =========================
   const STATE_TEXT = {
     bad1:{ru:"Физическая усталость",en:"Physical fatigue"},
@@ -1340,6 +1952,43 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   }
 
   // =========================
+  // Reasons for pills (request #4)
+  // =========================
+  const TEA_REASON_BASE = {
+    shu:        {ru:"Плотный тёплый профиль + ферментация обычно дают ровный фон.", en:"Dense warm profile + fermentation often feels steady."},
+    chaTou:     {ru:"Мягкая экстракция и «длинные проливы» дают спокойную стабильность.", en:"Gentle extraction and long infusions feel steady."},
+    liuBao:     {ru:"Тёплый хэй ча: часто воспринимается как стабилизирующий и «собирающий».", en:"Warm hei cha often feels stabilizing and collecting."},
+    fuZhuan:    {ru:"Ровный кирпичный хэй ча: хорош как спокойный фон без пиков.", en:"Even brick hei cha: calm baseline without spikes."},
+    agedWhite:  {ru:"Выдержанный белый обычно мягче и «тише» по ощущениям.", en:"Aged white is often softer and quieter."},
+    white:      {ru:"Деликатный белый: лёгкая ясность при умеренной крепости.", en:"Delicate white: gentle clarity when moderate."},
+    hongCha:    {ru:"Красный чай: тёплая энергия и включение без резкого рывка (если не крепить).", en:"Red/black tea: warm energy without a harsh spike if moderate."},
+    green:      {ru:"Зелёный: быстрый старт ясности, но чувствителен к дозировке.", en:"Green: quick clarity but dose-sensitive."},
+    lightOolong:{ru:"Светлый улун: аромат и «собранность» часто улучшают настроение.", en:"Light oolong: aroma and composure often lift mood."},
+    darkOolong: {ru:"Тёмный улун: глубина и фокус; крепость важна.", en:"Dark oolong: depth and focus; strength matters."},
+    sheng:      {ru:"Шэн: чистое включение и фокус; лучше умеренно.", en:"Sheng: clean activation and focus; keep moderate."},
+    yancha:     {ru:"Яньча: «собранная внимательность» и глубина вкуса.", en:"Yancha: collected attentiveness and depth."}
+  };
+
+  const STATE_HINT = {
+    bad4:{ru:"При тревоге обычно выбирают более ровные и тёплые профили, без резких пиков.", en:"For anxiety, steadier warm profiles are usually preferred."},
+    bad12:{ru:"При «суете в голове» помогает ровный темп и мягкая крепость.", en:"For racing thoughts, a steady baseline and moderate strength helps."},
+    bad6:{ru:"При «тумане» чаще нужны более «проясняющие» чаи и короткие проливы.", en:"For brain fog, more clarifying teas and short steeps are common."},
+    bad15:{ru:"Послеобеденный спад часто лучше поднимать тёплым включением без перегруза.", en:"Afternoon slump is often lifted by warm activation without overload."},
+    good1:{ru:"Для концентрации важна «собранность» без лишнего шума.", en:"For concentration, composed focus without noise matters."},
+    good3:{ru:"Для спокойствия — ровный фон и отсутствие резких скачков.", en:"For calm—an even baseline without spikes."},
+    good20:{ru:"Для сна — мягкая крепость, тёплый и «тихий» профиль.", en:"For sleep—light strength and a quiet warm profile."},
+  };
+
+  function reasonFor(teaKey, stateId){
+    const base = TEA_REASON_BASE[teaKey]?.[lang] || TEA_REASON_BASE[teaKey]?.en || "";
+    const hint = STATE_HINT[stateId]?.[lang] || STATE_HINT[stateId]?.en || "";
+    const stateName = TState(stateId, lang);
+    const teaName = TEA[teaKey]?.name?.[lang] || TEA[teaKey]?.name?.en || teaKey;
+    const core = hint ? `${base} ${hint}` : base;
+    return `<b>${teaName}</b> → <b>${stateName}</b><br/>${escapeHtml(core)}`;
+  }
+
+  // =========================
   // Ozon link helper
   // =========================
   function ozonSearchUrl(q){
@@ -1351,6 +2000,8 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   // =========================
   const badCloud  = document.getElementById("badCloud");
   const goodCloud = document.getElementById("goodCloud");
+  const badCloudMobile  = document.getElementById("badCloudMobile");
+  const goodCloudMobile = document.getElementById("goodCloudMobile");
 
   const rightCard = document.getElementById("rightCard");
 
@@ -1378,11 +2029,14 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   const closeLimitBtn  = document.getElementById("closeLimitBtn");
 
   const proModal = document.getElementById("proModal");
-  const proModalEnable = document.getElementById("proModalEnable");
-  const proModalCancel = document.getElementById("proModalCancel");
+  const proModalNo = document.getElementById("proModalNo");
+  const proModalYes = document.getElementById("proModalYes");
   const proModalCloseX = document.getElementById("proModalCloseX");
+  const proModalActions = document.getElementById("proModalActions");
+  const proModalBody = document.getElementById("uiProModalBody");
 
   const aboutLink = document.getElementById("aboutLink");
+  const aboutLinkMobile = document.getElementById("aboutLinkMobile");
   const aboutModal = document.getElementById("aboutModal");
   const aboutCloseBtn = document.getElementById("aboutCloseBtn");
 
@@ -1391,12 +2045,44 @@ By using the site, you acknowledge the experimental and advisory nature of the i
 
   const nlpInput = document.getElementById("nlpInput");
   const nlpBtn   = document.getElementById("nlpBtn");
+  const nlpInputMobile = document.getElementById("nlpInputMobile");
+  const nlpBtnMobile   = document.getElementById("nlpBtnMobile");
+
+  // mobile wizard
+  const stepDot0 = document.getElementById("stepDot0");
+  const stepDot1 = document.getElementById("stepDot1");
+  const stepDot2 = document.getElementById("stepDot2");
+  const stepDot3 = document.getElementById("stepDot3");
+  const prevStepBtn = document.getElementById("prevStepBtn");
+  const nextStepBtn = document.getElementById("nextStepBtn");
+
+  const mobileStep0 = document.getElementById("mobileStep0");
+  const mobileStep1 = document.getElementById("mobileStep1");
+  const mobileStep2 = document.getElementById("mobileStep2");
+  const mobileStep3 = document.getElementById("mobileStep3");
+
+  const multiToggleMobile = document.getElementById("multiToggleMobile");
+  const counterTextMobile = document.getElementById("counterTextMobile");
+
+  const selectedBadChipsMobile = document.getElementById("selectedBadChipsMobile");
+  const selectedGoodChipsMobile = document.getElementById("selectedGoodChipsMobile");
+  const teaListMobile = document.getElementById("teaListMobile");
+
+  const clearBadBtnMobile  = document.getElementById("clearBadBtnMobile");
+  const clearGoodBtnMobile = document.getElementById("clearGoodBtnMobile");
+  const clearAllBtnMobile  = document.getElementById("clearAllBtnMobile");
+
+  const reasoningBoxMobile = document.getElementById("reasoningBoxMobile");
+  const reasoningTextMobile = document.getElementById("reasoningTextMobile");
+  const hideWhyBtnMobile = document.getElementById("hideWhyBtnMobile");
 
   // tea modal
   const teaModal = document.getElementById("teaModal");
   const teaModalCloseBtn = document.getElementById("teaModalCloseBtn");
   const teaModalTitle = document.getElementById("teaModalTitle");
+  const teaModalImg = document.getElementById("teaModalImg");
   const teaModalDesc = document.getElementById("teaModalDesc");
+  const teaModalClass = document.getElementById("teaModalClass");
   const teaModalOriginTitle = document.getElementById("teaModalOriginTitle");
   const teaModalOrigin = document.getElementById("teaModalOrigin");
   const teaModalFactsTitle = document.getElementById("teaModalFactsTitle");
@@ -1407,6 +2093,9 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   const teaModalGives = document.getElementById("teaModalGives");
   const teaModalWhen = document.getElementById("teaModalWhen");
   const teaModalBrew = document.getElementById("teaModalBrew");
+
+  // tooltip
+  const tooltip = document.getElementById("tooltip");
 
   // =========================
   // App state
@@ -1427,15 +2116,14 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   closeLimitBtn.addEventListener("click", ()=>closeModal(limitModal));
   limitModal.addEventListener("click", (e)=>{ if(e.target === limitModal) closeModal(limitModal); });
 
-  proModalCancel.addEventListener("click", ()=>{ pendingEnablePro = false; closeModal(proModal); });
-  proModalCloseX.addEventListener("click", ()=>{ pendingEnablePro = false; closeModal(proModal); });
-  proModal.addEventListener("click", (e)=>{ if(e.target === proModal) { pendingEnablePro = false; closeModal(proModal); } });
+  proModalCloseX.addEventListener("click", ()=>{ pendingEnablePro=false; closeModal(proModal); resetProModalView(); });
+  proModal.addEventListener("click", (e)=>{ if(e.target === proModal) { pendingEnablePro=false; closeModal(proModal); resetProModalView(); } });
 
   teaModalCloseBtn.addEventListener("click", ()=>closeModal(teaModal));
   teaModal.addEventListener("click", (e)=>{ if(e.target === teaModal) closeModal(teaModal); });
 
-  // About modal
   aboutLink.addEventListener("click", ()=> openModal(aboutModal));
+  aboutLinkMobile.addEventListener("click", ()=> openModal(aboutModal));
   aboutCloseBtn.addEventListener("click", ()=> closeModal(aboutModal));
   aboutModal.addEventListener("click", (e)=>{ if(e.target === aboutModal) closeModal(aboutModal); });
 
@@ -1456,7 +2144,9 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   }
 
   function updateCounter(){
-    counterText.textContent = UI[lang].counter(selectedBad.size, selectedGood.size);
+    const txt = UI[lang].counter(selectedBad.size, selectedGood.size);
+    counterText.textContent = txt;
+    counterTextMobile.textContent = txt;
   }
 
   function resetSingleView(){
@@ -1467,21 +2157,29 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     hideReasoning();
   }
 
-  function showReasoning(text){
-    if(!text || !text.trim()){
+  function showReasoning(html){
+    if(!html || !html.trim()){
       hideReasoning();
+      hideReasoningMobile();
       return;
     }
-    lastReasoning = text;
-    reasoningText.innerHTML = text;
+    lastReasoning = html;
+
+    reasoningText.innerHTML = html;
     reasoningBox.style.display = "block";
     hideWhyBtn.textContent = UI[lang].hide;
     document.getElementById("uiWhy").textContent = UI[lang].why;
+
+    reasoningTextMobile.innerHTML = html;
+    reasoningBoxMobile.style.display = "block";
+    hideWhyBtnMobile.textContent = UI[lang].hide;
   }
   function hideReasoning(){ reasoningBox.style.display = "none"; }
+  function hideReasoningMobile(){ reasoningBoxMobile.style.display = "none"; }
   hideWhyBtn.addEventListener("click", ()=> hideReasoning());
+  hideWhyBtnMobile.addEventListener("click", ()=> hideReasoningMobile());
 
-  function renderPills(target, ids, kind){
+  function renderStatePills(target, ids, kind, teaKey){
     target.innerHTML = "";
     if(!ids || !ids.length){
       const s = document.createElement("span");
@@ -1494,26 +2192,73 @@ By using the site, you acknowledge the experimental and advisory nature of the i
       const p = document.createElement("span");
       p.className = `pillState ${kind}`;
       p.textContent = TState(id, lang);
+      // request #4: tea-specific tooltip on hover
+      if(teaKey){
+        p.dataset.tip = reasonFor(teaKey, id);
+      }
       target.appendChild(p);
     });
+  }
+
+  function renderClassTable(teaKey){
+    const cls = TEA_CLASS[teaKey]?.[lang] || TEA_CLASS[teaKey]?.en;
+    if(!cls){
+      teaModalClass.innerHTML = "";
+      return;
+    }
+    const rows = [
+      ["Степень ферментации", cls.fermentation],
+      ["Тип обработки", cls.processing],
+      ["Сырьё и сбор", cls.material],
+      ["Регион", cls.region],
+      ["Вкус-ароматический профиль", cls.profile],
+      ["Текстура настоя", cls.texture],
+      ["Эффект", cls.effect],
+      ["Степень выдержки", cls.aging],
+      ["Форма и формат", cls.format],
+      ["Хранение", cls.storage],
+    ];
+    const rowsEn = [
+      ["Fermentation level", cls.fermentation],
+      ["Processing type", cls.processing],
+      ["Material & harvest", cls.material],
+      ["Region", cls.region],
+      ["Flavor/aroma profile", cls.profile],
+      ["Liquor texture", cls.texture],
+      ["Effect", cls.effect],
+      ["Aging", cls.aging],
+      ["Form & format", cls.format],
+      ["Storage", cls.storage],
+    ];
+    const useRows = (lang === "ru") ? rows : rowsEn;
+    teaModalClass.innerHTML = useRows.map(([k,v])=>`
+      <tr>
+        <td class="classK">${escapeHtml(k)}</td>
+        <td>${escapeHtml(v || "—")}</td>
+      </tr>
+    `).join("");
   }
 
   function openTeaDetails(teaKey){
     const tea = TEA[teaKey];
     const det = TEA_DETAILS[teaKey];
     const meta = TEA_META[teaKey];
+    const asset = TEA_ASSETS[teaKey];
 
     teaModalTitle.textContent = tea ? teaName(tea) : "Tea";
     teaModalDesc.textContent = det?.desc?.[lang] || det?.desc?.en || "";
 
+    // image (request #9)
+    teaModalImg.src = asset?.img || "";
+    teaModalImg.alt = tea ? teaName(tea) : "Tea";
+
+    // classification (request #9)
+    renderClassTable(teaKey);
+
     teaModalOriginTitle.textContent = UI[lang].teaModal.originTitle;
     teaModalFactsTitle.textContent  = UI[lang].teaModal.factsTitle;
 
-    const originParts = [];
-    if(meta?.firstMention?.[lang] || meta?.firstMention?.en) originParts.push(meta.firstMention[lang] || meta.firstMention.en);
-    if(meta?.geography?.[lang] || meta?.geography?.en) originParts.push(meta.geography[lang] || meta.geography.en);
-    if(meta?.altitude?.[lang] || meta?.altitude?.en) originParts.push(meta.altitude[lang] || meta.altitude.en);
-    teaModalOrigin.textContent = originParts.join(" ");
+    teaModalOrigin.textContent = meta?.origin?.[lang] || meta?.origin?.en || "—";
 
     const factsArr = meta?.facts?.[lang] || meta?.facts?.en || [];
     teaModalFacts.innerHTML = factsArr.length
@@ -1524,8 +2269,9 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     teaModalWhenTitle.textContent  = UI[lang].teaModal.whenTitle;
     teaModalBrewTitle.textContent  = UI[lang].teaModal.brewTitle;
 
-    renderPills(teaModalGives, det?.gives || [], "good");
-    renderPills(teaModalWhen,  det?.when  || [], "bad");
+    // request #4: tooltips here too
+    renderStatePills(teaModalGives, det?.gives || [], "good", teaKey);
+    renderStatePills(teaModalWhen,  det?.when  || [], "bad", teaKey);
 
     teaModalBrew.textContent = tea ? teaBrew(tea) : "";
 
@@ -1541,13 +2287,70 @@ By using the site, you acknowledge the experimental and advisory nature of the i
   }
 
   // =========================
+  // Tooltip behavior (request #4)
+  // =========================
+  function showTip(html, x, y){
+    tooltip.innerHTML = html;
+    tooltip.style.display = "block";
+    const pad = 12;
+    const maxX = window.innerWidth - pad;
+    const maxY = window.innerHeight - pad;
+    const rect = tooltip.getBoundingClientRect();
+    let nx = x + 12;
+    let ny = y + 12;
+    if(nx + rect.width > maxX) nx = maxX - rect.width;
+    if(ny + rect.height > maxY) ny = maxY - rect.height;
+    tooltip.style.left = `${Math.max(pad, nx)}px`;
+    tooltip.style.top  = `${Math.max(pad, ny)}px`;
+  }
+  function hideTip(){
+    tooltip.style.display = "none";
+    tooltip.innerHTML = "";
+  }
+
+  // pointer-friendly tooltips:
+  document.addEventListener("pointermove", (e)=>{
+    if(tooltip.style.display === "block"){
+      showTip(tooltip.innerHTML, e.clientX, e.clientY);
+    }
+  });
+
+  document.addEventListener("pointerover", (e)=>{
+    const el = e.target.closest && e.target.closest("[data-tip]");
+    if(!el) return;
+    // show on hover for mouse, on tap for touch
+    const isTouch = matchMedia("(pointer: coarse)").matches;
+    if(isTouch) return;
+    showTip(el.dataset.tip, e.clientX, e.clientY);
+  });
+
+  document.addEventListener("pointerout", (e)=>{
+    const el = e.target.closest && e.target.closest("[data-tip]");
+    if(!el) return;
+    const isTouch = matchMedia("(pointer: coarse)").matches;
+    if(isTouch) return;
+    hideTip();
+  });
+
+  document.addEventListener("click", (e)=>{
+    const el = e.target.closest && e.target.closest("[data-tip]");
+    if(!el) return;
+    const isTouch = matchMedia("(pointer: coarse)").matches;
+    if(!isTouch) return;
+    const rect = el.getBoundingClientRect();
+    showTip(el.dataset.tip, rect.left + rect.width/2, rect.top + rect.height/2);
+    setTimeout(hideTip, 1800);
+  });
+
+  // =========================
   // Render clouds
   // =========================
-  function renderCloud(list, targetEl, type){
+  function renderCloud(list, targetEl, type, big=false){
+    if(!targetEl) return;
     targetEl.innerHTML = "";
     list.forEach(item=>{
       const btn = document.createElement("button");
-      btn.className = `node ${type}`;
+      btn.className = `node ${type}` + (big ? " nodeBig" : "");
       btn.dataset.id = item.id;
       btn.dataset.type = type;
       btn.dataset.active = "false";
@@ -1558,36 +2361,40 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     });
   }
 
-  function renderSelectedChips(){
-    selectedBadChips.innerHTML = "";
-    if(selectedBad.size === 0){
-      const t = document.createElement("span");
-      t.className = "muted";
-      t.textContent = "—";
-      selectedBadChips.appendChild(t);
-    } else {
-      [...selectedBad].forEach(id=>{
-        const s = document.createElement("span");
-        s.className = "stateChip bad";
-        s.textContent = TState(id, lang);
-        selectedBadChips.appendChild(s);
-      });
-    }
+  function selectStateBtn(id, type){
+    document.querySelectorAll(`.node.${type}[data-id="${id}"]`).forEach(btn=>{
+      btn.dataset.selected = "true";
+    });
+  }
 
-    selectedGoodChips.innerHTML = "";
-    if(selectedGood.size === 0){
-      const t = document.createElement("span");
-      t.className = "muted";
-      t.textContent = "—";
-      selectedGoodChips.appendChild(t);
-    } else {
-      [...selectedGood].forEach(id=>{
+  function clearSelectionsUI(){
+    document.querySelectorAll(".node").forEach(b=>{
+      b.dataset.selected = "false";
+      b.dataset.active = "false";
+    });
+  }
+
+  function renderSelectedChips(){
+    function fill(container, ids, kind){
+      container.innerHTML = "";
+      if(ids.size === 0){
+        const t = document.createElement("span");
+        t.className = "muted";
+        t.textContent = "—";
+        container.appendChild(t);
+        return;
+      }
+      [...ids].forEach(id=>{
         const s = document.createElement("span");
-        s.className = "stateChip good";
+        s.className = `stateChip ${kind}`;
         s.textContent = TState(id, lang);
-        selectedGoodChips.appendChild(s);
+        container.appendChild(s);
       });
     }
+    fill(selectedBadChips, selectedBad, "bad");
+    fill(selectedGoodChips, selectedGood, "good");
+    fill(selectedBadChipsMobile, selectedBad, "bad");
+    fill(selectedGoodChipsMobile, selectedGood, "good");
   }
 
   function aggregateTeas(states){
@@ -1602,12 +2409,16 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     return [...score.values()].sort((a,b)=> (b.count - a.count) || teaName(a.tea).localeCompare(teaName(b.tea)));
   }
 
-  async function renderTeaList(items){
-    teaList.innerHTML = "";
+  async function renderTeaList(items, targetUl){
+    targetUl.innerHTML = "";
     for(const it of items){
       const tea = it.tea;
       const count = it.count;
       const url = ozonSearchUrl(tea.q);
+
+      const det = TEA_DETAILS[tea.key];
+      const removes = (det?.when || []).slice(0,3);
+      const gives   = (det?.gives || []).slice(0,3);
 
       const li = document.createElement("li");
       li.innerHTML = `
@@ -1620,11 +2431,25 @@ By using the site, you acknowledge the experimental and advisory nature of the i
           <span class="tag">${escapeHtml(teaTag(tea))}${count ? ` • ${count}` : ""}</span>
         </div>
         <div class="muted">${escapeHtml(teaBrew(tea))}</div>
+
+        <!-- request #4: pills in right block with tea-specific explanations -->
+        <div class="teaPills">
+          <div class="pillRow">
+            <span class="pillLabel">${lang==="ru" ? "убирает:" : "reduces:"}</span>
+            ${removes.map(id=>`<span class="pillState bad" data-tip="${escapeHtml(reasonFor(tea.key, id))}">${escapeHtml(TState(id, lang))}</span>`).join("")}
+          </div>
+          <div class="pillRow">
+            <span class="pillLabel">${lang==="ru" ? "даёт:" : "gives:"}</span>
+            ${gives.map(id=>`<span class="pillState good" data-tip="${escapeHtml(reasonFor(tea.key, id))}">${escapeHtml(TState(id, lang))}</span>`).join("")}
+          </div>
+        </div>
+
         <div class="buyLine">
           <a class="buyLink" href="${url}" target="_blank" rel="noopener">${escapeHtml(UI[lang].buy)}</a>
+          <span class="muted" style="font-size:11px;">${escapeHtml(TEA_ASSETS[tea.key]?.credit || "")}</span>
         </div>
       `;
-      teaList.appendChild(li);
+      targetUl.appendChild(li);
 
       li.querySelector(`button[data-tea-key="${tea.key}"]`)
         .addEventListener("click", ()=> openTeaDetails(tea.key));
@@ -1636,6 +2461,7 @@ By using the site, you acknowledge the experimental and advisory nature of the i
       cardTitle.textContent = UI[lang].cardIdleTitle;
       cardDesc.textContent = UI[lang].cardDesc;
       teaList.innerHTML = "";
+      teaListMobile.innerHTML = "";
       if(lastReasoning) showReasoning(lastReasoning);
       return;
     }
@@ -1647,19 +2473,22 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     const goodSel = [...selectedGood].map(id=>goodById[id]).filter(Boolean);
 
     const merged = aggregateTeas([...badSel, ...goodSel]).slice(0,12);
-    void renderTeaList(merged);
+    void renderTeaList(merged, teaList);
+    void renderTeaList(merged, teaListMobile);
 
     if(lastReasoning) showReasoning(lastReasoning);
   }
 
   // =========================
-  // Mode switching
+  // Mode switching + PRO modal (request #6)
   // =========================
   function setMode(nextMulti){
     multiMode = nextMulti;
 
-    multiToggle.dataset.on = String(nextMulti);
-    multiToggle.setAttribute("aria-checked", String(nextMulti));
+    [multiToggle, multiToggleMobile].forEach(t=>{
+      t.dataset.on = String(nextMulti);
+      t.setAttribute("aria-checked", String(nextMulti));
+    });
 
     cardChip.textContent = nextMulti ? UI[lang].cardModePro : UI[lang].cardModeSingle;
 
@@ -1675,16 +2504,25 @@ By using the site, you acknowledge the experimental and advisory nature of the i
       multiBlocks.style.display = "none";
       resetSingleView();
       lastReasoning = "";
+      hideReasoningMobile();
+      hideReasoning();
     }
     updateCounter();
+  }
+
+  function resetProModalView(){
+    proModalActions.style.display = "flex";
+    proModalNo.style.display = "inline-flex";
+    proModalYes.style.display = "inline-flex";
+    proModalBody.textContent = UI[lang].proModalQuestion;
   }
 
   function requestEnablePro(){
     pendingEnablePro = true;
     document.getElementById("uiProModalTitle").textContent = UI[lang].proModalTitle;
-    document.getElementById("uiProModalBody").textContent = UI[lang].proModalBody;
-    proModalEnable.textContent = UI[lang].proModalEnable;
-    proModalCancel.textContent = UI[lang].proModalCancel;
+    resetProModalView();
+    proModalNo.textContent = UI[lang].proNo;
+    proModalYes.textContent = UI[lang].proYes;
     openModal(proModal);
   }
 
@@ -1696,23 +2534,53 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     }
   }
 
-  proModalEnable.addEventListener("click", ()=>{
-    closeModal(proModal);
-    if(!pendingEnablePro) return;
-    pendingEnablePro = false;
+  function proAnswer(isYes){
+    // enable PRO anyway, then show the “as was” message (request #6)
     setMode(true);
-  });
 
-  multiToggle.addEventListener("click", toggleModeWithModal);
-  multiToggle.addEventListener("keydown", (e)=>{
-    if(e.key === "Enter" || e.key === " "){
-      e.preventDefault();
-      toggleModeWithModal();
-    }
+    proModalActions.style.display = "flex";
+    proModalNo.style.display = "none";
+    proModalYes.style.display = "none";
+
+    proModalBody.textContent = isYes ? UI[lang].proYesText : UI[lang].proNoText;
+
+    // replace actions with single OK
+    proModalActions.innerHTML = `<button class="miniBtn" id="proOkBtn" type="button">${UI[lang].ok}</button>`;
+    document.getElementById("proOkBtn").addEventListener("click", ()=>{
+      closeModal(proModal);
+      // restore original buttons for next time
+      proModalActions.innerHTML = `
+        <button class="miniBtn" id="proModalNo" type="button">${UI[lang].proNo}</button>
+        <button class="primaryBtn" id="proModalYes" type="button">${UI[lang].proYes}</button>
+      `;
+      // re-bind (since we replaced DOM)
+      bindProButtons();
+    }, {once:true});
+  }
+
+  function bindProButtons(){
+    const no = document.getElementById("proModalNo");
+    const yes = document.getElementById("proModalYes");
+    no.addEventListener("click", ()=> proAnswer(false));
+    yes.addEventListener("click", ()=> proAnswer(true));
+  }
+
+  // initial binding
+  proModalNo.addEventListener("click", ()=> proAnswer(false));
+  proModalYes.addEventListener("click", ()=> proAnswer(true));
+
+  [multiToggle, multiToggleMobile].forEach(t=>{
+    t.addEventListener("click", toggleModeWithModal);
+    t.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        toggleModeWithModal();
+      }
+    });
   });
 
   // =========================
-  // Click handler
+  // Click handler (states)
   // =========================
   function onStateClick(item, btn, type){
     if(!multiMode){
@@ -1723,10 +2591,11 @@ By using the site, you acknowledge the experimental and advisory nature of the i
       cardDesc.textContent = (type === "bad") ? UI[lang].prompts.bad : UI[lang].prompts.good;
 
       const list = item.teas.slice(0,4).map(tea=>({tea, count:null}));
-      void renderTeaList(list);
+      void renderTeaList(list, teaList);
+      void renderTeaList(list, teaListMobile);
 
       if(lastReasoning) showReasoning(lastReasoning);
-      else hideReasoning();
+      else { hideReasoning(); hideReasoningMobile(); }
 
       return;
     }
@@ -1737,13 +2606,15 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     if(isSelected){
       set.delete(item.id);
       btn.dataset.selected = "false";
+      // mirror buttons (desktop+mobile)
+      document.querySelectorAll(`.node.${type}[data-id="${item.id}"]`).forEach(b=> b.dataset.selected="false");
     } else {
       if(set.size >= 5){
         openModal(limitModal);
         return;
       }
       set.add(item.id);
-      btn.dataset.selected = "true";
+      document.querySelectorAll(`.node.${type}[data-id="${item.id}"]`).forEach(b=> b.dataset.selected="true");
     }
 
     renderSelectedChips();
@@ -1751,31 +2622,51 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     updateCounter();
   }
 
-  // =========================
-  // Free-text “AI” button
-  // =========================
-  function clearSelectionsUI(){
-    document.querySelectorAll(".node").forEach(b=>{
-      b.dataset.selected = "false";
-      b.dataset.active = "false";
-    });
+  // Clear buttons
+  function clearBad(){
+    selectedBad.clear();
+    document.querySelectorAll(`.node.bad`).forEach(b=> b.dataset.selected="false");
+    renderSelectedChips();
+    renderMultiRecommendations();
+    updateCounter();
   }
-
-  function selectState(id, type){
-    const btn = document.querySelector(`.node.${type}[data-id="${id}"]`);
-    if(btn) btn.dataset.selected = "true";
+  function clearGood(){
+    selectedGood.clear();
+    document.querySelectorAll(`.node.good`).forEach(b=> b.dataset.selected="false");
+    renderSelectedChips();
+    renderMultiRecommendations();
+    updateCounter();
   }
+  function clearAll(){
+    selectedBad.clear();
+    selectedGood.clear();
+    document.querySelectorAll(`.node`).forEach(b=> b.dataset.selected="false");
+    renderSelectedChips();
+    renderMultiRecommendations();
+    updateCounter();
+    lastReasoning = "";
+    hideReasoning();
+    hideReasoningMobile();
+  }
+  clearBadBtn.addEventListener("click", clearBad);
+  clearGoodBtn.addEventListener("click", clearGood);
+  clearAllBtn.addEventListener("click", clearAll);
+  clearBadBtnMobile.addEventListener("click", clearBad);
+  clearGoodBtnMobile.addEventListener("click", clearGood);
+  clearAllBtnMobile.addEventListener("click", clearAll);
 
+  // =========================
+  // Free-text “AI” button (desktop+mobile)
+  // =========================
   function buildReasoningText(inputText, analyzed){
     const esc = escapeHtml;
     const lines = [];
-
     lines.push(`<div><b>${lang==="ru" ? "Твой текст:" : "Your text:"}</b> ${esc(inputText)}</div>`);
 
     if(analyzed.bad.length === 0 && analyzed.good.length === 0){
       lines.push(`<div style="margin-top:6px;">${esc(lang==="ru"
-        ? "Не нашёл явных ключевых слов — попробуй описать конкретнее (сонливость, тревога, туман в голове, после обеда, раздражительность и т.д.)."
-        : "No strong keyword matches — try being more specific (sleepy, anxious, brain fog, after lunch, irritated, etc.).")}</div>`);
+        ? "Не нашёл явных ключевых слов — попробуй описать конкретнее (сонливость, тревога, туман, после обеда, раздражительность и т.д.)."
+        : "No strong keyword matches — try being more specific.")}</div>`);
       return lines.join("");
     }
 
@@ -1799,24 +2690,17 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     lines.push(`<div style="margin-top:8px; color:var(--muted); font-size:12px;">${
       esc(lang==="ru"
         ? "Локальный анализ по ключевым словам (словарь можно расширять прямо в коде)."
-        : "Local keyword-based matcher (you can expand the dictionary in the code).")
+        : "Local keyword matcher (dictionary can be extended in code).")
     }</div>`);
 
     return lines.join("");
   }
 
-  function ensureProOnForAI(){
-    if(multiMode) return;
-    setMode(true);
-  }
-
-  nlpBtn.addEventListener("click", ()=>{
-    const text = (nlpInput.value || "").trim();
-    if(!text) return;
-
+  function applyAI(text){
     const analyzed = analyzeFreeText(text);
+    // PRO on (without extra modal here)
+    if(!multiMode) setMode(true);
 
-    ensureProOnForAI();
     selectedBad.clear();
     selectedGood.clear();
     clearSelectionsUI();
@@ -1824,57 +2708,74 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     analyzed.bad.forEach(x=> selectedBad.add(x.id));
     analyzed.good.forEach(x=> selectedGood.add(x.id));
 
-    [...selectedBad].slice(0,5).forEach(id=>selectState(id, "bad"));
-    [...selectedGood].slice(0,5).forEach(id=>selectState(id, "good"));
+    [...selectedBad].slice(0,5).forEach(id=> selectStateBtn(id, "bad"));
+    [...selectedGood].slice(0,5).forEach(id=> selectStateBtn(id, "good"));
 
     renderSelectedChips();
     updateCounter();
 
     lastReasoning = buildReasoningText(text, analyzed);
-
-    const totalStates = analyzed.bad.length + analyzed.good.length;
-
-    if(totalStates === 1){
-      const one = analyzed.bad[0]?.id || analyzed.good[0]?.id;
-      const isBad = !!analyzed.bad[0];
-
-      cardChip.textContent = UI[lang].cardModePro;
-      cardTitle.textContent = TState(one, lang);
-      cardDesc.textContent = isBad ? UI[lang].prompts.bad : UI[lang].prompts.good;
-
-      const item = isBad ? badById[one] : goodById[one];
-      const list = item.teas.slice(0,4).map(tea=>({tea, count:null}));
-      void renderTeaList(list);
-
-      multiBlocks.style.display = "block";
-      showReasoning(lastReasoning);
-
-      highlightRightCard();
-      return;
-    }
-
-    multiBlocks.style.display = "block";
     renderMultiRecommendations();
     showReasoning(lastReasoning);
 
     highlightRightCard();
+
+    // jump mobile to step 3
+    if(isMobile()){
+      setStep(3);
+    }
+  }
+
+  nlpBtn.addEventListener("click", ()=>{
+    const text = (nlpInput.value || "").trim();
+    if(!text) return;
+    applyAI(text);
+  });
+  nlpInput.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter"){ e.preventDefault(); nlpBtn.click(); }
   });
 
-  nlpInput.addEventListener("keydown", (e)=>{
-    if(e.key === "Enter"){
-      e.preventDefault();
-      nlpBtn.click();
-    }
+  nlpBtnMobile.addEventListener("click", ()=>{
+    const text = (nlpInputMobile.value || "").trim();
+    if(!text) return;
+    applyAI(text);
+  });
+  nlpInputMobile.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter"){ e.preventDefault(); nlpBtnMobile.click(); }
+  });
+
+  // =========================
+  // Mobile wizard logic (request #3)
+  // =========================
+  function isMobile(){
+    return window.matchMedia("(max-width: 760px)").matches;
+  }
+  let step = 0;
+  function setStep(n){
+    step = Math.max(0, Math.min(3, n));
+    const dots = [stepDot0, stepDot1, stepDot2, stepDot3];
+    dots.forEach((d,i)=> d.dataset.on = String(i===step));
+
+    mobileStep0.style.display = (step===0) ? "" : "none";
+    mobileStep1.style.display = (step===1) ? "" : "none";
+    mobileStep2.style.display = (step===2) ? "" : "none";
+    mobileStep3.style.display = (step===3) ? "" : "none";
+
+    prevStepBtn.disabled = (step===0);
+    nextStepBtn.textContent = (step===3) ? (lang==="ru" ? "готово" : "done") : (lang==="ru" ? "дальше" : "next");
+  }
+
+  prevStepBtn.addEventListener("click", ()=> setStep(step-1));
+  nextStepBtn.addEventListener("click", ()=>{
+    if(step===0){ setStep(1); return; }
+    if(step===1){ setStep(2); return; }
+    if(step===2){ setStep(3); return; }
+    setStep(3);
   });
 
   // =========================
   // Language + theme
   // =========================
-  function detectLang(){
-    const raw = (navigator.language || "en").toLowerCase();
-    return raw.startsWith("ru") ? "ru" : "en";
-  }
-
   function applyThemeButtonLabel(){
     const theme = document.documentElement.getAttribute("data-theme") || "light";
     themeBtn.textContent = (theme === "light") ? UI[lang].themeLight : UI[lang].themeDark;
@@ -1890,6 +2791,25 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     const cur = document.documentElement.getAttribute("data-theme") || "light";
     setTheme(cur === "light" ? "dark" : "light");
   });
+
+  function fillLangSelect(){
+    langSelect.innerHTML = "";
+    LANGS.forEach(l=>{
+      const opt = document.createElement("option");
+      opt.value = l.id;
+      opt.textContent = l.label;
+      langSelect.appendChild(opt);
+    });
+  }
+
+  function setLang(next){
+    if(!UI[next]) return;
+    lang = next;
+    localStorage.setItem("tea_states_lang", lang);
+    langSelect.value = lang;
+    applyUI();
+  }
+  langSelect.addEventListener("change", ()=> setLang(langSelect.value));
 
   function applyUI(){
     const u = UI[lang];
@@ -1920,8 +2840,13 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     document.getElementById("uiBrewQuick").innerHTML = u.quickBrew;
 
     document.getElementById("uiProTitle").textContent = u.proTitle;
+    document.getElementById("uiProTitleMobile").textContent = u.proTitle;
+
     document.getElementById("uiFineprint").textContent = u.fineprint;
+    document.getElementById("uiFineprintMobile").textContent = u.fineprint;
+
     aboutLink.textContent = u.about;
+    aboutLinkMobile.textContent = u.about;
 
     document.getElementById("uiAboutTitle").textContent = u.aboutTitle;
     document.getElementById("uiAboutBody").textContent = u.aboutBody;
@@ -1931,14 +2856,15 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     closeLimitBtn.textContent = u.ok;
 
     document.getElementById("uiNlpTitle").textContent = u.nlpTitle;
+    document.getElementById("uiNlpHint").textContent = u.nlpHint;
     nlpInput.placeholder = u.nlpPlaceholder;
     nlpBtn.textContent = u.nlpBtn;
     document.getElementById("uiNlpNote").textContent = u.nlpNote;
 
+    // pro modal
     document.getElementById("uiProModalTitle").textContent = u.proModalTitle;
-    document.getElementById("uiProModalBody").textContent = u.proModalBody;
-    proModalEnable.textContent = u.proModalEnable;
-    proModalCancel.textContent = u.proModalCancel;
+    // if modal currently in question mode, update
+    resetProModalView();
 
     teaModalCloseBtn.textContent = u.ok;
     teaModalOriginTitle.textContent = u.teaModal.originTitle;
@@ -1947,17 +2873,22 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     teaModalWhenTitle.textContent   = u.teaModal.whenTitle;
     teaModalBrewTitle.textContent   = u.teaModal.brewTitle;
 
-    renderCloud(badStates, badCloud, "bad");
-    renderCloud(goodStates, goodCloud, "good");
+    renderCloud(badStates, badCloud, "bad", false);
+    renderCloud(goodStates, goodCloud, "good", false);
+    renderCloud(badStates, badCloudMobile, "bad", true);
+    renderCloud(goodStates, goodCloudMobile, "good", true);
+
+    // restore selected visuals after re-render
+    [...selectedBad].forEach(id=> selectStateBtn(id, "bad"));
+    [...selectedGood].forEach(id=> selectStateBtn(id, "good"));
+    renderSelectedChips();
 
     if(multiMode){
-      [...selectedBad].forEach(id=>selectState(id, "bad"));
-      [...selectedGood].forEach(id=>selectState(id, "good"));
-      renderSelectedChips();
       renderMultiRecommendations();
     } else {
       resetSingleView();
     }
+
     updateCounter();
     applyThemeButtonLabel();
 
@@ -1965,25 +2896,6 @@ By using the site, you acknowledge the experimental and advisory nature of the i
       showReasoning(lastReasoning);
     }
   }
-
-  function fillLangSelect(){
-    langSelect.innerHTML = "";
-    LANGS.forEach(l=>{
-      const opt = document.createElement("option");
-      opt.value = l.id;
-      opt.textContent = l.label;
-      langSelect.appendChild(opt);
-    });
-  }
-
-  function setLang(next){
-    if(!UI[next]) return;
-    lang = next;
-    localStorage.setItem("tea_states_lang", lang);
-    langSelect.value = lang;
-    applyUI();
-  }
-  langSelect.addEventListener("change", ()=> setLang(langSelect.value));
 
   // =========================
   // Init
@@ -1998,19 +2910,43 @@ By using the site, you acknowledge the experimental and advisory nature of the i
     const savedTheme = localStorage.getItem("tea_states_theme");
     setTheme(savedTheme || "light");
 
-    setMode(false);
+    // default: single on desktop, PRO on mobile wizard for usability
+    if(isMobile()){
+      setMode(true);
+      setStep(0);
+    } else {
+      setMode(false);
+    }
+
     applyUI();
   }
 
   init();
 
-  // Extra: Tea click wiring (delegation safe fallback)
+  // Wire tea click delegation
   document.addEventListener("click", (e)=>{
     const btn = e.target.closest && e.target.closest(".teaBtn");
     if(btn && btn.dataset && btn.dataset.teaKey){
       openTeaDetails(btn.dataset.teaKey);
     }
   });
+
+  // Re-bind pro buttons if replaced by OK flow
+  function rebindingSafety(){
+    // if actions got replaced, ignore
+    if(document.getElementById("proModalNo") && document.getElementById("proModalYes")){
+      // already bound initially
+      return;
+    }
+  }
+
+  // keep wizard sane on resize
+  window.addEventListener("resize", ()=>{
+    if(isMobile() && !multiMode){
+      setMode(true);
+    }
+  });
+
 </script>
 </body>
 </html>
