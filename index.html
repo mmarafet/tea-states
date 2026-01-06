@@ -1001,8 +1001,7 @@
         <span class="langLabel" id="uiLangLabel">Язык</span>
         <div class="langSelectWrap">
           <select class="langSelect" id="langSelect" aria-label="Language selector"></select>
-          <span class="langFlag" id="langFlag" aria-hidden="true">🇷🇺</span>
-        </div>
+</div>
       </div>
       <button class="themeBtn" id="themeBtn" type="button">☀️ Светлая тема</button>
     </div>
@@ -1284,8 +1283,8 @@
   // i18n: RU + EN
   // =========================
   const LANGS = [
-    { id:"ru", label:"Русский" },
-    { id:"en", label:"English" },
+    { id:"ru", label:"Русский RU" },
+    { id:"en", label:"English 🇬🇧" },
   ];
 
   const UI = {
@@ -2298,8 +2297,7 @@ const TEA_IMG = {
   const uiSoonBody = document.getElementById("uiSoonBody");
 
   const langSelect = document.getElementById("langSelect");
-  const langFlag   = document.getElementById("langFlag");
-  const themeBtn   = document.getElementById("themeBtn");
+const themeBtn   = document.getElementById("themeBtn");
 
   const nlpInput = document.getElementById("nlpInput");
   const nlpBtn   = document.getElementById("nlpBtn");
@@ -3456,9 +3454,7 @@ const meta = getMeta()[teaKey];
     if(!UI[next]) return;
     lang = next;
     localStorage.setItem("tea_states_lang", lang);
-    langSelect.value = lang;
-    if(langFlag){ langFlag.textContent = (lang==="ru") ? "🇷🇺" : "🇬🇧"; }
-    applyUI();
+    langSelect.value = lang;applyUI();
   }
   langSelect.addEventListener("change", ()=> setLang(langSelect.value));
 
@@ -3547,7 +3543,26 @@ const meta = getMeta()[teaKey];
   applyUI();
 }
 
-  init();
+  document.addEventListener('DOMContentLoaded', ()=>{
+    try{
+      init();
+    }catch(err){
+      console.error(err);
+      // Fallback: ensure UI renders even if init failed
+      try{
+        if(typeof fillLangSelect==='function' && typeof langSelect!=='undefined' && langSelect){ fillLangSelect(); }
+        if(typeof detectLang==='function'){ lang = (localStorage.getItem('tea_states_lang') || detectLang() || 'ru'); }
+        if(typeof langSelect!=='undefined' && langSelect){ langSelect.value = lang; }
+        const savedDomain = localStorage.getItem('tea_states_domain') || 'tea';
+        if(typeof setDomain==='function'){ setDomain(savedDomain); }
+        const savedTheme = localStorage.getItem('tea_states_theme') || 'light';
+        if(typeof setTheme==='function'){ setTheme(savedTheme); }
+        if(typeof applyUI==='function'){ applyUI(); }
+      }catch(e2){
+        console.error(e2);
+      }
+    }
+  });
 
   // Extra: product card opening (robust delegation)
   // - Clicking on the title opens the card
