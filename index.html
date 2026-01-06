@@ -2521,11 +2521,6 @@ const themeBtn   = document.getElementById("themeBtn");
     cardTitle.textContent = UI[lang].cardIdleTitle;
     cardDesc.textContent = UI[lang].cardDesc;
     teaList.innerHTML = "";
-    // Herbs in PRO: show blend card (collection) for 1 liter
-    if(domain==="herbs" && context && context.mode==="pro"){
-      const blendCard = renderHerbBlendCard(items);
-      if(blendCard) teaList.appendChild(blendCard);
-    }
     hideReasoning();
   }
 
@@ -2913,11 +2908,6 @@ const themeBtn   = document.getElementById("themeBtn");
       cardTitle.textContent = UI[lang].cardIdleTitle;
       cardDesc.textContent = UI[lang].cardDesc;
       teaList.innerHTML = "";
-    // Herbs in PRO: show blend card (collection) for 1 liter
-    if(domain==="herbs" && context && context.mode==="pro"){
-      const blendCard = renderHerbBlendCard(items);
-      if(blendCard) teaList.appendChild(blendCard);
-    }
       if(lastReasoning) showReasoning(lastReasoning);
       return;
     }
