@@ -740,47 +740,129 @@
     }
 
     /* Mobile step logic via body[data-mstep] */
-@media (max-width: 640px){
-  .mobileNav{ display:block; }
+    @media (max-width: 640px){
+      .mobileNav{ display:block; }
+      /* Step 1: show only PRO controls + fineprint + AI (optional hidden here) */
+      body[data-mstep="1"] .wrap{ display:none; }
+      body[data-mstep="1"] #aiBlock{ display:none; }
 
-  /* Mobile: one-column layout, no sticky gaps */
-  .wrap{
-    grid-template-columns: 1fr !important;
-    gap: 12px !important;
-    padding-top: 6px;
-  }
-  aside{ position: static !important; top: auto !important; }
+      /* Step 2: show only "bad" panel */
+      body[data-mstep="2"] aside{ display:none; }
+      body[data-mstep="2"] #goodPanel{ display:none; }
+      body[data-mstep="2"] #aiBlock{ display:none; }
 
-  /* STEP 1: show ONLY header area + PRO switch under header controls */
-  body[data-mstep="1"] .left{ display:none !important; }
-  body[data-mstep="1"] aside{ display:none !important; }
-  body[data-mstep="1"] #aiBlock{ display:none !important; }
-  body[data-mstep="1"] #uiFineprint{ display:none !important; }
-  body[data-mstep="1"] #controlsPanel{ display:block !important; margin-top: 8px !important; }
+      /* Step 3: show only "good" panel */
+      body[data-mstep="3"] aside{ display:none; }
+      body[data-mstep="3"] #badPanel{ display:none; }
+      body[data-mstep="3"] #aiBlock{ display:none; }
 
-  /* STEP 2: choose "remove" */
-  body[data-mstep="2"] #controlsPanel{ display:none !important; }
-  body[data-mstep="2"] #uiFineprint{ display:none !important; }
-  body[data-mstep="2"] #aiBlock{ display:none !important; }
-  body[data-mstep="2"] aside{ display:none !important; }
-  body[data-mstep="2"] #goodPanel{ display:none !important; }
+      /* Step 4: show only recommendations (right card) */
+      body[data-mstep="4"] .left{ display:none; }
 
-  /* STEP 3: choose "evoke" */
-  body[data-mstep="3"] #controlsPanel{ display:none !important; }
-  body[data-mstep="3"] #uiFineprint{ display:none !important; }
-  body[data-mstep="3"] #aiBlock{ display:none !important; }
-  body[data-mstep="3"] aside{ display:none !important; }
-  body[data-mstep="3"] #badPanel{ display:none !important; }
+      /* Make right card feel like “screen” */
+      .wrap{ padding-top: 6px; }
+      .card{ border-radius: 16px; }
+    }
 
-  /* STEP 4: show results */
-  body[data-mstep="4"] #controlsPanel{ display:none !important; }
-  body[data-mstep="4"] #uiFineprint{ display:none !important; }
-  body[data-mstep="4"] #aiBlock{ display:none !important; }
-  body[data-mstep="4"] .left{ display:none !important; }
+    /* Modals */
+    .modalOverlay{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal{
+      width: min(760px, 100%);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--modalBg), var(--modalBg2));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .modalTop{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(255,255,255,.02);
+    }
+    .modalTop strong{ font-size: 14px; letter-spacing:.2px; }
+    .modalBody{
+      padding: 14px;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.6;
+    }
 
-  .card{ border-radius: 16px; }
+    .modalActions{
+      display:flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      flex-wrap: wrap;
+    }
+
+    .modalTop{ flex: 0 0 auto; }
+    .modalBody{ flex: 1 1 auto; overflow: auto; }
+    .modalActions{ flex: 0 0 auto; }
+
+    .dangerBtn{
+      border: 1px solid var(--dangerBorder);
+      background: var(--dangerBg);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .dangerBtn:hover{ filter: brightness(1.05); }
+
+    /* Tea modal layout (desktop) */
+    .teaHead{
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+    }
+    .teaImg{
+      width: 92px;
+      height: 92px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      flex: 0 0 auto;
+    }
+    .teaTopMeta{
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    /* Tea modal: compact mobile header pills */
+    .teaMini{ display:none; margin-top: 8px; }
+    .teaMiniRow{ display:flex; gap: 8px; align-items:flex-start; margin-top: 6px; }
+    .miniLabel{ font-size: 11px; color: var(--muted); white-space: nowrap; padding-top: 2px; }
+    .pillWrap.mini{ gap: 6px; }
+    .pillState.mini{
+      font-size: 11px;
+      padding: 4px 7px;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 640px){
+      .teaMini{ display:block; }
+      /* hide heavy grid in compact mode so the card fits without scrolling */
 }
-
 
     .teaTopLine{
       display:flex;
@@ -1328,8 +1410,6 @@
         back:"Назад",
         next:"Далее",
         done:"Готово",
-        needRemove:"Выбери хотя бы одно состояние в «убрать».",
-        needEvoke:"Выбери хотя бы одно состояние в «вызвать».",
       }
     },
 
@@ -1454,8 +1534,6 @@ By using the site, you acknowledge the experimental/recommendation nature of the
         back:"Back",
         next:"Next",
         done:"Done",
-        needRemove:"Pick at least one state to remove.",
-        needEvoke:"Pick at least one state to evoke.",
       }
     }
   };
@@ -2273,10 +2351,6 @@ const themeBtn   = document.getElementById("themeBtn");
   let multiMode = false;
   const selectedBad  = new Set();
   const selectedGood = new Set();
-
-  // Mobile stepper: remember clicks in each list
-  let mobileBadPicked = false;
-  let mobileGoodPicked = false;
   let lastReasoning = "";
   let pendingEnablePro = false;
 
@@ -2933,10 +3007,6 @@ const themeBtn   = document.getElementById("themeBtn");
   // Click handler
   // =========================
   function onStateClick(item, btn, type){
-    if(isMobile()){
-      if(type === \"bad\") mobileBadPicked = true;
-      if(type === \"good\") mobileGoodPicked = true;
-    }
     if(!multiMode){
       document.querySelectorAll(".node").forEach(b=> b.dataset.active = "false");
       btn.dataset.active = "true";
@@ -3218,22 +3288,6 @@ const meta = getMeta()[teaKey];
     if(mstep > 1) setMobileStep(mstep - 1);
   });
   mNextBtn.addEventListener("click", ()=>{
-    if(mstep === 2){
-      if(!(mobileBadPicked || selectedBad.size > 0)){
-        showLimit(UI[lang].mobile.needRemove);
-        return;
-      }
-      setMobileStep(3);
-      return;
-    }
-    if(mstep === 3){
-      if(!(mobileGoodPicked || selectedGood.size > 0)){
-        showLimit(UI[lang].mobile.needEvoke);
-        return;
-      }
-      setMobileStep(4);
-      return;
-    }
     if(mstep < 4) setMobileStep(mstep + 1);
     else setMobileStep(1);
   });
