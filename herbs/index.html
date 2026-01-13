@@ -25,19 +25,19 @@
                   var(--bg);
       color:var(--text);
     }
-    .wrap{ max-width:var(--w); margin:0 auto; padding:18px 14px 34px; }
+    .wrap{ max-width:var(--w); margin:0 auto; padding:22px 14px 44px; }
     .top{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-    h1{ margin:0; font-size:20px; letter-spacing:.2px; }
+    h1{ margin:0; font-size:24px; letter-spacing:.2px; }
     .crumb{ color:var(--muted); font-size:13px; margin-top:6px; }
-    .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-      box-shadow:var(--shadow); padding:var(--pad); }
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:22px;
+      box-shadow:var(--shadow); padding:20px; }
     .stepper{ display:flex; gap:8px; align-items:center; justify-content:flex-end; flex-wrap:wrap; }
     .dot{ width:10px; height:10px; border-radius:99px; background:rgba(255,255,255,.18); border:1px solid var(--line); }
     @media (prefers-color-scheme: light){ .dot{ background:rgba(0,0,0,.10);} }
     .dot.on{ background:var(--accent); border-color:rgba(125,220,122,.35); }
     .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
     .btn{ border:1px solid var(--line); background:transparent; color:var(--text);
-      padding:10px 12px; border-radius:14px; cursor:pointer; font-weight:600; }
+      padding:12px 16px; border-radius:16px; cursor:pointer; font-weight:750; font-size:15px; }
     .btn.primary{ background:linear-gradient(180deg, rgba(125,220,122,.20), rgba(125,220,122,.08));
       border-color:rgba(125,220,122,.35); }
     .btn:disabled{ opacity:.45; cursor:not-allowed; }
@@ -45,19 +45,79 @@
     .seg .opt{ border:1px solid var(--line); background:var(--pill); color:var(--text);
       padding:10px 12px; border-radius:999px; cursor:pointer; font-weight:650; }
     .seg .opt.on{ outline:2px solid rgba(125,220,122,.55); }
-    .hint{ color:var(--muted); font-size:13px; line-height:1.4; }
+    
+    /* Rich tiles */
+    .tiles{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:6px; }
+    @media (min-width: 640px){ .tiles{ grid-template-columns:1fr 1fr; } }
+    .tile{
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:18px 18px 16px;
+      cursor:pointer;
+      overflow:hidden;
+      background:
+        radial-gradient(700px 220px at 20% 0%, rgba(125,220,122,.22), transparent 55%),
+        radial-gradient(560px 260px at 90% 30%, rgba(122,183,255,.22), transparent 58%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: 0 12px 34px rgba(0,0,0,.28);
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      min-height:128px;
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+    }
+    @media (prefers-color-scheme: light){
+      .tile{
+        background:
+          radial-gradient(700px 220px at 20% 0%, rgba(125,220,122,.18), transparent 55%),
+          radial-gradient(560px 260px at 90% 30%, rgba(122,183,255,.18), transparent 58%),
+          linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.00));
+        box-shadow: 0 18px 44px rgba(18,19,26,.10);
+      }
+    }
+    .tile:hover{ transform: translateY(-1px); box-shadow: 0 18px 46px rgba(0,0,0,.34); border-color: rgba(255,255,255,.18); }
+    @media (prefers-color-scheme: light){ .tile:hover{ box-shadow: 0 22px 52px rgba(18,19,26,.14); border-color: rgba(0,0,0,.14);} }
+    .tile:active{ transform: translateY(0); }
+    .tile.on{ outline: 3px solid rgba(125,220,122,.55); border-color: rgba(125,220,122,.45); }
+    .tileIcon{
+      width:54px;height:54px;border-radius:18px;
+      border:1px solid var(--line);
+      display:flex;align-items:center;justify-content:center;
+      font-size:26px;
+      background: rgba(0,0,0,.12);
+      flex:0 0 auto;
+    }
+    @media (prefers-color-scheme: light){ .tileIcon{ background: rgba(0,0,0,.04);} }
+    .tileTitle{ font-size:18px; font-weight:800; letter-spacing:.2px; margin-top:2px; }
+    .tileSub{ color:var(--muted); font-size:13px; line-height:1.45; margin-top:6px; }
+    .tileBadges{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .badge{
+      font-size:12px; font-weight:750;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+    }
+    @media (prefers-color-scheme: light){ .badge{ background: rgba(0,0,0,.03);} }
+    .badge.green{ border-color: rgba(125,220,122,.35); }
+    .badge.blue{ border-color: rgba(122,183,255,.45); }
+
+.hint{ color:var(--muted); font-size:13px; line-height:1.4; }
     .grid{ display:grid; grid-template-columns: 1fr; gap:12px; margin-top:12px; }
     .list{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
     .pill{ border:1px solid var(--line); background:var(--pill); color:var(--text);
-      padding:8px 10px; border-radius:999px; cursor:pointer; user-select:none; font-weight:600; }
+      padding:10px 14px; border-radius:999px; cursor:pointer; user-select:none; font-weight:750; font-size:14px;
+      transition: transform .08s ease, border-color .08s ease, background .08s ease; }
+    .pill:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.20); }
     .pill.bad.on{ background:rgba(255,110,110,.14); border-color:rgba(255,110,110,.35); }
     .pill.good.on{ background:rgba(122,183,255,.18); border-color:rgba(122,183,255,.45); }
     .note{ border-left:3px solid rgba(122,183,255,.55); padding-left:10px; color:var(--muted); font-size:13px; margin-top:10px; }
     .results h2{ margin:0 0 8px 0; font-size:16px; }
-    .item{ padding:10px 12px; border:1px solid var(--line); border-radius:14px; background:rgba(255,255,255,.03);
+    .item{ padding:14px 14px; border:1px solid var(--line); border-radius:14px; background:rgba(255,255,255,.03);
       display:flex; gap:10px; align-items:flex-start; justify-content:space-between; }
     @media (prefers-color-scheme: light){ .item{ background:rgba(0,0,0,.03);} }
-    .thumb{ width:44px; height:44px; border-radius:12px; border:1px solid var(--line); overflow:hidden; flex:0 0 auto; }
+    .thumb{ width:56px; height:56px; border-radius:12px; border:1px solid var(--line); overflow:hidden; flex:0 0 auto; }
 .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
 .item .leftcol{ min-width:0; }
     .item b{ display:block; }
@@ -451,14 +511,45 @@ document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeModal();
 /** ---------- UI Builders ---------- */
 function buildStep1(){
   const p = $("panel");
-  p.innerHTML = `
-    <div class="row" style="justify-content:flex-start;">
-      <div class="seg" role="tablist" aria-label="раздел">
-        <button class="opt ${domain==="tea"?"on":""}" id="domTea">🍵 Китайский чай</button>
-        <button class="opt ${domain==="herbs"?"on":""}" id="domHerb">🌿 Травы</button>
+  p.innerHTML = `    <div class="row" style="justify-content:flex-start;">
+      <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+        <div class="hint" style="font-size:14px;">Выбери, что подбирать. Дальше — состояния «убрать» и «вызвать», затем вывод.</div>
+
+        <div class="tiles" role="tablist" aria-label="раздел">
+          <div class="tile ${domain==="tea"?"on":""}" id="domTea" role="tab" aria-selected="${domain==="tea"?"true":"false"}">
+            <div class="tileIcon">🍵</div>
+            <div style="min-width:0;">
+              <div class="tileTitle">Китайский чай</div>
+              <div class="tileSub">Пуэры, улуны, зелёные, белые и красные. Проливом или в чайнике — под твой ритм дня.</div>
+              <div class="tileBadges">
+                <span class="badge green">ясность</span>
+                <span class="badge blue">фокус</span>
+                <span class="badge green">ровная энергия</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tile ${domain==="herbs"?"on":""}" id="domHerb" role="tab" aria-selected="${domain==="herbs"?"true":"false"}"
+               style="background:
+                radial-gradient(700px 220px at 18% 0%, rgba(125,220,122,.26), transparent 55%),
+                radial-gradient(560px 260px at 90% 35%, rgba(255,204,102,.18), transparent 58%),
+                linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));">
+            <div class="tileIcon">🌿</div>
+            <div style="min-width:0;">
+              <div class="tileTitle">Травы</div>
+              <div class="tileSub">Сборы и одиночные травы. Мягкая настройка состояния: спокойствие, тепло, лёгкость.</div>
+              <div class="tileBadges">
+                <span class="badge green">баланс</span>
+                <span class="badge blue">спокойствие</span>
+                <span class="badge green">заземление</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hint" style="margin-top:2px;">Шаг 2 и 3: можно выбрать несколько состояний (до ${MAX_MULTI}). Ничего выбирать тоже можно.</div>
       </div>
     </div>
-    <div class="hint">Шаг 2 и 3: можно выбрать несколько состояний (до ${MAX_MULTI}).</div>
   `;
   $("domTea").onclick = ()=>{ domain="tea"; render(); };
   $("domHerb").onclick = ()=>{ domain="herbs"; render(); };
