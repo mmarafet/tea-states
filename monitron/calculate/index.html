@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Калькуляторы для работы — Монитрон</title>
+  <title>Калькуляторы для работы — Расчёт объема жидкости</title>
   <style>
     :root{
       --bg:#0b0f19;
@@ -117,7 +117,7 @@
       transition: .15s ease;
       display:flex;
       align-items:center;
-      justify-content:space-between;
+      justify-content:flex-start;
       gap:12px;
     }
     .nav button:hover{ transform: translateY(-1px); }
@@ -125,7 +125,485 @@
       border-color: rgba(34,197,94,.55);
       box-shadow: 0 0 0 4px rgba(34,197,94,.12);
     }
+    .nav .nav-title{
+      width: 100%;
+      display:block;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
     .pill{
       font-size: 12px;
       color: var(--muted);
-      border:1px s
+      border:1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space:nowrap;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 520px){
+      .row{ grid-template-columns: 1fr; }
+    }
+    label{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+    input, select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      outline:none;
+    }
+    input:focus, select:focus{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 12px;
+      align-items:center;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: .15s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.primary{
+      border-color: rgba(34,197,94,.55);
+      background: linear-gradient(135deg, rgba(34,197,94,.28), rgba(34,197,94,.10));
+    }
+    .hint{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+    .result{
+      margin-top: 14px;
+      border-top:1px dashed var(--border);
+      padding-top: 14px;
+      display:grid;
+      gap: 10px;
+    }
+    .kv{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap:12px;
+      padding: 10px 12px;
+      border:1px solid var(--border);
+      border-radius: 14px;
+    }
+    .kv span{ color: var(--muted); font-size: 12px; }
+    .kv strong{ font-size: 15px; letter-spacing:.2px; }
+
+    /* ВЫДЕЛЕНИЕ "Общий объём" */
+    .kv.total{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.06));
+    }
+    .kv.total span{
+      color: var(--text);
+      font-weight: 700;
+    }
+    .kv.total strong{
+      font-size: 16px;
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(2,6,23,.85);
+      color: #fff;
+      border:1px solid rgba(255,255,255,.12);
+      padding: 10px 12px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition: .18s ease;
+      font-size: 13px;
+      max-width: calc(100% - 24px);
+    }
+    .toast.show{ opacity:1; transform: translateX(-50%) translateY(-4px); }
+    footer{
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align:center;
+    }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <h1>Калькуляторы для работы</h1>
+          <div class="subtitle">Суммарный объём жидкости: шланги + датчики (можно считать по отдельности).</div>
+        </div>
+      </div>
+      <div class="subtitle">Локально • один файл <span class="mono">index.html</span></div>
+    </header>
+
+    <div class="grid">
+      <!-- Левая навигация -->
+      <section class="card">
+        <div class="card-h">
+          <b>Калькуляторы</b>
+          <span class="pill">v0.4</span>
+        </div>
+        <div class="card-b">
+          <div class="nav">
+            <button class="active" data-view="liq">
+              <span class="nav-title">Расчёт объема жидкости</span>
+            </button>
+
+            <button disabled title="Добавим позже" style="opacity:.6; cursor:not-allowed">
+              <span class="nav-title">Скоро: прочие</span>
+            </button>
+          </div>
+
+          <div class="hint">
+            Датчик считаем как цилиндр: <span class="mono">h = 83 мм</span>, <span class="mono">d = 90 мм</span>.
+            Можно оставить поля шланга или датчиков пустыми — посчитается то, что задано.
+          </div>
+        </div>
+      </section>
+
+      <!-- Правая рабочая область -->
+      <main class="card" id="view-liq">
+        <div class="card-h">
+          <b>Расчёт объема жидкости</b>
+          <span class="pill mono">V = π·r²·h</span>
+        </div>
+
+        <div class="card-b">
+          <div class="row">
+            <div>
+              <label for="hoseDiameter">Диаметр шланга, мм (необязательно)</label>
+              <input id="hoseDiameter" type="number" inputmode="decimal" min="0" step="0.1" placeholder="например: 12.0" />
+            </div>
+            <div>
+              <label for="hoseLength">Длина шланга, м (необязательно)</label>
+              <input id="hoseLength" type="number" inputmode="decimal" min="0" step="0.01" placeholder="например: 25" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div>
+              <label for="sensorCount">Количество датчиков в системе, шт (необязательно)</label>
+              <input id="sensorCount" type="number" inputmode="numeric" min="0" step="1" placeholder="например: 8" />
+            </div>
+            <div>
+              <label for="roundTo">Округление (литры)</label>
+              <select id="roundTo">
+                <option value="6">до 6 знаков</option>
+                <option value="5">до 5 знаков</option>
+                <option value="4" selected>до 4 знаков</option>
+                <option value="3">до 3 знаков</option>
+                <option value="2">до 2 знаков</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn primary" id="btnCalc">Посчитать</button>
+            <button class="btn" id="btnCopy">Скопировать результат</button>
+            <button class="btn" id="btnClear">Очистить</button>
+            <span class="hint" id="status" style="margin:0;">Можно заполнить только шланг или только датчики — будет расчёт.</span>
+          </div>
+
+          <div class="result" id="result" aria-live="polite">
+            <div class="kv total">
+              <span>Общий объём, литры</span>
+              <strong class="mono" id="outTotal">—</strong>
+            </div>
+            <div class="kv">
+              <span>Объём в шлангах, литры</span>
+              <strong class="mono" id="outHose">—</strong>
+            </div>
+            <div class="kv">
+              <span>Объём в датчиках, литры</span>
+              <strong class="mono" id="outSensors">—</strong>
+            </div>
+            <div class="hint">
+              1 датчик (цилиндр) ≈ <span class="mono" id="outOneSensor">—</span> л
+              <span class="mono"> (d=90 мм, h=83 мм)</span>.
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <footer>
+      Скажи какие ещё калькуляторы нужны — добавлю в левое меню.
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ===== Utils =====
+    const $ = (id) => document.getElementById(id);
+
+    function finiteNumberAllowEmpty(x){
+      // пустое значение -> null (не ошибка)
+      if (x === "" || x === null || x === undefined) return null;
+      const n = Number(x);
+      return Number.isFinite(n) ? n : NaN;
+    }
+
+    function roundTo(n, digits){
+      const d = Math.max(0, Math.min(12, Number(digits) || 0));
+      const p = Math.pow(10, d);
+      return Math.round(n * p) / p;
+    }
+
+    function formatRu(n, digits){
+      const x = Number(n);
+      if (!Number.isFinite(x)) return "—";
+      return x.toLocaleString("ru-RU", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      });
+    }
+
+    function showToast(msg){
+      const t = $("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(showToast._tm);
+      showToast._tm = setTimeout(() => t.classList.remove("show"), 1600);
+    }
+
+    // ===== Constants (sensor geometry) =====
+    // Датчик: цилиндрический сосуд
+    // h = 83 мм, d = 90 мм
+    const SENSOR_DIAMETER_M = 90 / 1000;
+    const SENSOR_HEIGHT_M   = 83 / 1000;
+
+    // ===== Calculations =====
+    function litersFromCylinder(diameterMm, heightOrLengthM){
+      const dM = diameterMm / 1000;
+      const r = dM / 2;
+      const vM3 = Math.PI * r * r * heightOrLengthM;
+      return vM3 * 1000; // литры
+    }
+
+    function litersOneSensor(){
+      const r = SENSOR_DIAMETER_M / 2;
+      const vM3 = Math.PI * r * r * SENSOR_HEIGHT_M;
+      return vM3 * 1000; // литры
+    }
+
+    function calc(){
+      const dMm = finiteNumberAllowEmpty($("hoseDiameter").value.trim());
+      const lM  = finiteNumberAllowEmpty($("hoseLength").value.trim());
+      const cntRaw = finiteNumberAllowEmpty($("sensorCount").value.trim());
+      const digits = Number($("roundTo").value) || 4;
+
+      const oneSensorL = litersOneSensor();
+      $("outOneSensor").textContent = formatRu(roundTo(oneSensorL, digits), digits);
+
+      // Валидация: если поле заполнено, оно должно быть числом и > 0 (для шланга)
+      // Датчики: если заполнено, число >= 0
+      if (Number.isNaN(dMm) || Number.isNaN(lM) || Number.isNaN(cntRaw)){
+        $("status").textContent = "Есть поле с некорректным числом.";
+        return null;
+      }
+
+      let hoseL = 0;
+      let sensorsL = 0;
+
+      const hoseAny = (dMm !== null || lM !== null);
+      const sensorsAny = (cntRaw !== null);
+
+      // ШЛАНГ: считаем только если заполнены оба поля
+      if (hoseAny){
+        if (dMm === null || lM === null){
+          $("status").textContent = "Для расчёта шланга нужно заполнить и диаметр, и длину. Либо очисти одно из полей.";
+        } else if (dMm <= 0 || lM <= 0){
+          $("status").textContent = "Диаметр и длина шланга должны быть > 0 (или оставь оба поля пустыми).";
+          return null;
+        } else {
+          hoseL = litersFromCylinder(dMm, lM);
+        }
+      }
+
+      // ДАТЧИКИ: считаем если задано количество
+      if (sensorsAny){
+        if (cntRaw < 0){
+          $("status").textContent = "Количество датчиков должно быть ≥ 0 (или оставь поле пустым).";
+          return null;
+        }
+        const cnt = Math.floor(cntRaw);
+        sensorsL = oneSensorL * cnt;
+      }
+
+      // Если вообще ничего не задано
+      if (!hoseAny && !sensorsAny){
+        $("outHose").textContent = "—";
+        $("outSensors").textContent = "—";
+        $("outTotal").textContent = "—";
+        $("status").textContent = "Заполни шланг (оба поля) и/или количество датчиков.";
+        return null;
+      }
+
+      const totalL = hoseL + sensorsL;
+
+      // Вывод
+      $("outHose").textContent = (hoseAny && dMm !== null && lM !== null) ? formatRu(roundTo(hoseL, digits), digits) : "—";
+      $("outSensors").textContent = (sensorsAny) ? formatRu(roundTo(sensorsL, digits), digits) : "—";
+      $("outTotal").textContent = formatRu(roundTo(totalL, digits), digits);
+
+      // Статус
+      const parts = [];
+      if (hoseAny){
+        if (dMm !== null && lM !== null) parts.push(`Шланги: ${formatRu(roundTo(hoseL, digits), digits)} л`);
+        else parts.push("Шланги: не посчитано (нужно 2 поля)");
+      }
+      if (sensorsAny){
+        const cnt = Math.floor(cntRaw);
+        parts.push(`Датчики: ${cnt} шт → ${formatRu(roundTo(sensorsL, digits), digits)} л`);
+      }
+      $("status").textContent = parts.join(" · ") || "Готово.";
+
+      // persist
+      localStorage.setItem("calc_liq_state", JSON.stringify({
+        hoseDiameter: $("hoseDiameter").value,
+        hoseLength: $("hoseLength").value,
+        sensorCount: $("sensorCount").value,
+        roundTo: $("roundTo").value
+      }));
+
+      return { totalL, hoseL, sensorsL, oneSensorL, digits };
+    }
+
+    async function copyResult(){
+      const out = calc();
+      if (!out) return;
+
+      const digits = Number($("roundTo").value) || 4;
+      const dText = $("hoseDiameter").value.trim();
+      const lText = $("hoseLength").value.trim();
+      const cText = $("sensorCount").value.trim();
+
+      const hosePart = (dText && lText)
+        ? `Шланг: d = ${dText} мм, L = ${lText} м → ${formatRu(roundTo(out.hoseL, digits), digits)} л`
+        : "Шланг: —";
+
+      const sensPart = (cText !== "")
+        ? `Датчики: ${Math.floor(Number(cText) || 0)} шт, 1 датчик ≈ ${formatRu(roundTo(out.oneSensorL, digits), digits)} л → ${formatRu(roundTo(out.sensorsL, digits), digits)} л`
+        : "Датчики: —";
+
+      const text =
+`Расчёт объема жидкости
+${hosePart}
+${sensPart}
+ИТОГО: ${formatRu(roundTo(out.totalL, digits), digits)} л`;
+
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("Скопировано в буфер обмена");
+      }catch(e){
+        showToast("Не удалось скопировать (ограничения браузера)");
+      }
+    }
+
+    function clearAll(){
+      $("hoseDiameter").value = "";
+      $("hoseLength").value = "";
+      $("sensorCount").value = "";
+      $("roundTo").value = "4";
+
+      $("outTotal").textContent = "—";
+      $("outHose").textContent = "—";
+      $("outSensors").textContent = "—";
+
+      const digits = Number($("roundTo").value) || 4;
+      $("outOneSensor").textContent = formatRu(roundTo(litersOneSensor(), digits), digits);
+
+      $("status").textContent = "Можно заполнить только шланг или только датчики — будет расчёт.";
+      localStorage.removeItem("calc_liq_state");
+    }
+
+    function loadState(){
+      const digits = Number($("roundTo").value) || 4;
+      $("outOneSensor").textContent = formatRu(roundTo(litersOneSensor(), digits), digits);
+
+      try{
+        const raw = localStorage.getItem("calc_liq_state");
+        if(!raw) return;
+        const s = JSON.parse(raw);
+
+        if (s?.hoseDiameter != null) $("hoseDiameter").value = s.hoseDiameter;
+        if (s?.hoseLength != null) $("hoseLength").value = s.hoseLength;
+        if (s?.sensorCount != null) $("sensorCount").value = s.sensorCount;
+        if (s?.roundTo != null) $("roundTo").value = s.roundTo;
+
+        // Автопересчёт если что-то задано
+        if (
+          $("hoseDiameter").value.trim() !== "" ||
+          $("hoseLength").value.trim() !== "" ||
+          $("sensorCount").value.trim() !== ""
+        ) calc();
+      }catch(_){}
+    }
+
+    // ===== Events =====
+    $("btnCalc").addEventListener("click", calc);
+    $("btnCopy").addEventListener("click", copyResult);
+    $("btnClear").addEventListener("click", clearAll);
+
+    ["hoseDiameter","hoseLength","sensorCount","roundTo"].forEach(id=>{
+      $(id).addEventListener("keydown", (e)=>{ if(e.key==="Enter") calc(); });
+      $(id).addEventListener("input", ()=>{
+        localStorage.setItem("calc_liq_state", JSON.stringify({
+          hoseDiameter: $("hoseDiameter").value,
+          hoseLength: $("hoseLength").value,
+          sensorCount: $("sensorCount").value,
+          roundTo: $("roundTo").value
+        }));
+      });
+    });
+
+    // Navigation (на будущее)
+    document.querySelectorAll(".nav button[data-view]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".nav button[data-view]").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+      });
+    });
+
+    loadState();
+  </script>
+</body>
+</html>
