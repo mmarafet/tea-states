@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Чайное состояние — выбор раздела</title>
+  <style>
+    :root{
+      --bg:#0b0c10; --card:#121420; --text:#e9eaf0; --muted:#a8adbd;
+      --line:rgba(255,255,255,.10);
+      --accent:#7ddc7a; --accent2:#7ab7ff; --warn:#ffcc66;
+      --pill:#1a1d2c;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --w:980px;
+      font-synthesis-weight:none;
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f6f7fb; --card:#ffffff; --text:#12131a; --muted:#5a6170; --line:rgba(0,0,0,.10); --pill:#f0f2f8; --shadow:0 14px 40px rgba(18,19,26,.12); }
+    }
+    body{ margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(125,220,122,.10), transparent 50%),
+                  radial-gradient(1000px 500px at 90% 20%, rgba(122,183,255,.10), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    [data-theme="dark"]{
+      --bg:#0f1116;
+      --card:#161a24;
+      --text:#eef1ff;
+      --muted:#a6adcf;
+      --line:rgba(255,255,255,.10);
+      --shadow:0 24px 80px rgba(0,0,0,.55);
+    }
+    .wrap{ max-width:var(--w); margin:0 auto; padding:22px 14px 44px; }
+    .top{ display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    h1{ margin:0; font-size:26px; letter-spacing:.2px; }
+    .crumb{ color:var(--muted); font-size:13px; margin-top:6px; }
+    .themeToggle{
+      border:1px solid var(--line);
+      background:var(--card);
+      color:var(--text);
+      border-radius:14px;
+      padding:8px 12px;
+      font-size:18px;
+      cursor:pointer;
+    }
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:22px;
+      box-shadow:var(--shadow); padding:20px; margin-top:14px; }
+    .hint{ color:var(--muted); font-size:13px; line-height:1.4; }
+
+    .tiles{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:12px; }
+    @media (min-width: 640px){ .tiles{ grid-template-columns:1fr 1fr; } }
+    a.tile{
+      text-decoration:none;
+      color:inherit;
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:18px 18px 16px;
+      cursor:pointer;
+      overflow:hidden;
+      background:
+        radial-gradient(700px 220px at 20% 0%, rgba(125,220,122,.22), transparent 55%),
+        radial-gradient(560px 260px at 90% 30%, rgba(122,183,255,.22), transparent 58%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: 0 12px 34px rgba(0,0,0,.28);
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      min-height:128px;
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+    }
+    @media (prefers-color-scheme: light){
+      a.tile{
+        background:
+          radial-gradient(700px 220px at 20% 0%, rgba(125,220,122,.18), transparent 55%),
+          radial-gradient(560px 260px at 90% 30%, rgba(122,183,255,.18), transparent 58%),
+          linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.00));
+        box-shadow: 0 18px 44px rgba(18,19,26,.10);
+      }
+    }
+    a.tile:hover{ transform: translateY(-1px); box-shadow: 0 18px 46px rgba(0,0,0,.34); border-color: rgba(255,255,255,.18); }
+    @media (prefers-color-scheme: light){ a.tile:hover{ box-shadow: 0 22px 52px rgba(18,19,26,.14); border-color: rgba(0,0,0,.14);} }
+    a.tile:active{ transform: translateY(0); }
+    .tileIcon{
+      width:54px;height:54px;border-radius:18px;
+      border:1px solid var(--line);
+      display:flex;align-items:center;justify-content:center;
+      font-size:26px;
+      background: rgba(0,0,0,.12);
+      flex:0 0 auto;
+    }
+    @media (prefers-color-scheme: light){ .tileIcon{ background: rgba(0,0,0,.04);} }
+    .tileTitle{ font-size:18px; font-weight:800; letter-spacing:.2px; margin-top:2px; }
+    .tileSub{ color:var(--muted); font-size:13px; line-height:1.45; margin-top:6px; }
+    .tileBadges{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .badge{
+      font-size:12px; font-weight:750;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+    }
+    @media (prefers-color-scheme: light){ .badge{ background: rgba(0,0,0,.03);} }
+    .badge.green{ border-color: rgba(125,220,122,.35); }
+    .badge.blue{ border-color: rgba(122,183,255,.45); }
+    .footer{ margin-top:12px; color:var(--muted); font-size:12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Чайное состояние</h1>
+        <div class="crumb">Выбери раздел — дальше будет подбор по состояниям</div>
+      </div>
+      <button class="themeToggle" id="themeToggle" aria-label="переключить тему">🌙</button>
+    </div>
+
+    <div class="card">
+      <div class="hint">Структура проекта: главная → отдельные страницы «Травы» и «Китайский чай».</div>
+
+      <div class="tiles" role="navigation" aria-label="разделы">
+        <a class="tile" href="tea.html">
+          <div class="tileIcon">🍵</div>
+          <div style="min-width:0;">
+            <div class="tileTitle">Китайский чай</div>
+            <div class="tileSub">Пуэры, улуны, зелёные, белые и красные. Подбор под твой ритм дня.</div>
+            <div class="tileBadges">
+              <span class="badge green">ясность</span>
+              <span class="badge blue">фокус</span>
+              <span class="badge green">ровная энергия</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="tile" href="herbs.html" style="background:
+          radial-gradient(700px 220px at 18% 0%, rgba(125,220,122,.26), transparent 55%),
+          radial-gradient(560px 260px at 90% 35%, rgba(255,204,102,.18), transparent 58%),
+          linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));">
+          <div class="tileIcon">🌿</div>
+          <div style="min-width:0;">
+            <div class="tileTitle">Травы</div>
+            <div class="tileSub">Сборы и одиночные травы. Мягкая настройка состояния: спокойствие, тепло, лёгкость.</div>
+            <div class="tileBadges">
+              <span class="badge green">баланс</span>
+              <span class="badge blue">спокойствие</span>
+              <span class="badge green">заземление</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="footer">
+        Не медицинский совет. Реакции индивидуальны. Травы/чаи могут иметь противопоказания и взаимодействия с лекарствами.
+        При беременности/лактации, хронических заболеваниях, гипертонии, тревоге/панике, нарушениях сна — лучше обсудить со специалистом.
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const btn = document.getElementById("themeToggle");
+    let theme = localStorage.getItem("theme") || "light";
+    if(theme==="dark") document.body.setAttribute("data-theme","dark");
+    function sync(){ btn.textContent = theme==="dark" ? "☀️" : "🌙"; }
+    sync();
+    btn.addEventListener("click", ()=>{
+      theme = (theme==="dark") ? "light" : "dark";
+      if(theme==="dark") document.body.setAttribute("data-theme","dark");
+      else document.body.removeAttribute("data-theme");
+      localStorage.setItem("theme", theme);
+      sync();
+    });
+  })();
+  </script>
+</body>
+</html>
