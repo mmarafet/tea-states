@@ -1,0 +1,2077 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Монтажные комплектующие</title>
+  <style>
+
+    :root{
+      --bg:#0b0f19;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --accent:#22c55e;
+      --accent2:#62b3ff;
+      --border:rgba(148,163,184,.18);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius:18px;
+      --pad:16px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+    :root[data-theme="light"]{
+        --bg:#f7f8fb;
+        --card:#ffffff;
+        --muted:#5b6474;
+        --text:#0b1220;
+        --border:rgba(15,23,42,.12);
+        --shadow: 0 10px 24px rgba(2,6,23,.10);
+        --accent:#16a34a;
+        --accent2:#0b74ff;
+      }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      background: radial-gradient(1000px 600px at 10% 0%, rgba(34,197,94,.12), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(98,179,255,.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{ max-width: 1120px; margin: 0 auto; padding: 22px 16px 44px; }
+    header.top{
+      display:flex; gap:14px; align-items:flex-start; justify-content:space-between;
+      flex-wrap:wrap; margin-bottom: 14px;
+    }
+    .title{ display:flex; gap:12px; align-items:center; }
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(34,197,94,.95), rgba(98,179,255,.25));
+      box-shadow: var(--shadow);
+      border:1px solid var(--border);
+    }
+    h1{ font-size: 18px; line-height: 1.2; margin:0; letter-spacing:.2px; }
+    .subtitle{ margin:2px 0 0; color:var(--muted); font-size: 13px; }
+    .grid{ display:grid; grid-template-columns: 280px 1fr; gap: 14px; }
+    @media (max-width: 920px){ .grid{ grid-template-columns: 1fr; } }
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-h{
+      padding: 14px var(--pad);
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .card-h b{ font-size: 14px; }
+    .card-b{ padding: var(--pad); }
+    .pill{
+      font-size: 12px;
+      color: var(--muted);
+      border:1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space:nowrap;
+    }
+    .nav{ display:flex; flex-direction:column; gap:10px; }
+    .nav button{
+      width:100%;
+      text-align:left;
+      background: transparent;
+      border:1px solid var(--border);
+      color: var(--text);
+      padding: 12px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: .15s ease;
+      display:flex; align-items:center; justify-content:flex-start; gap:10px;
+      font-weight: 900;
+    }
+    .nav button:hover{ transform: translateY(-1px); }
+    .nav button.active{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+    .nav .nav-title{ width:100%; display:block; font-size: 13px; line-height: 1.2; }
+    .hint{ margin-top: 10px; font-size: 12px; color: var(--muted); line-height: 1.35; }
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 560px){ .row{ grid-template-columns: 1fr; } }
+    label{ display:block; font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+    input, select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      outline:none;
+    }
+    input:focus, select:focus{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+    .actions{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 12px; align-items:center; }
+    .btn{
+      border:1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: .15s ease;
+      display:inline-flex; align-items:center; gap:8px;
+      font-weight: 900;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.primary{
+      border-color: rgba(34,197,94,.55);
+      background: linear-gradient(135deg, rgba(34,197,94,.28), rgba(34,197,94,.10));
+    }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .result{ margin-top: 14px; border-top:1px dashed var(--border); padding-top: 14px; display:grid; gap: 10px; }
+    .kv{
+      display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+      padding: 10px 12px; border:1px solid var(--border); border-radius: 14px;
+    }
+    .kv span{ color: var(--muted); font-size: 12px; }
+    .kv strong{ font-size: 15px; letter-spacing:.2px; }
+    .kv.total{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.06));
+    }
+    .kv.total span{ color: var(--text); font-weight: 900; }
+    .kv.total strong{ font-size: 16px; }
+    .toast{
+      position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+      background: rgba(2,6,23,.85); color: #fff;
+      border:1px solid rgba(255,255,255,.12);
+      padding: 10px 12px; border-radius: 14px;
+      box-shadow: var(--shadow);
+      opacity:0; pointer-events:none;
+      transition: .18s ease;
+      font-size: 13px;
+      max-width: calc(100% - 24px);
+      z-index: 9999;
+    }
+    .toast.show{ opacity:1; transform: translateX(-50%) translateY(-4px); }
+
+    /* ===== Mounting stepper ===== */
+    #view-mount .m-stepper{ display:flex; flex-wrap:wrap; gap:8px; }
+    #view-mount .m-step{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      font-size:13px;
+      color:var(--muted);
+    }
+    #view-mount .m-step .n{
+      width:22px;height:22px;border-radius:8px;
+      display:grid;place-items:center;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:900;
+    }
+    #view-mount .m-step.active{
+      color:var(--text);
+      border-color: rgba(34,197,94,.45);
+      background: rgba(34,197,94,.10);
+    }
+    #view-mount .m-step.active .n{
+      color:var(--text);
+      border-color: rgba(34,197,94,.55);
+      background: rgba(34,197,94,.18);
+    }
+    #view-mount .m-stepPane{ display:none; }
+    #view-mount .m-stepPane.active{ display:block; }
+    #view-mount .tiles{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; }
+    @media (max-width: 560px){ #view-mount .tiles{ grid-template-columns: 1fr; } }
+    #view-mount .tile{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px 12px;
+      cursor:pointer;
+      user-select:none;
+      background: rgba(255,255,255,.02);
+      transition: .15s ease;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-weight:900;
+    }
+    #view-mount .tile:hover{ transform: translateY(-1px); }
+    #view-mount .tile.active{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+      background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.06));
+    }
+    #view-mount .switches{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width: 560px){ #view-mount .switches{ grid-template-columns: 1fr; } }
+    #view-mount .tog{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:10px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background: rgba(255,255,255,.02);
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      color:var(--text);
+    }
+    #view-mount .tog small{ color:var(--muted); font-weight:700; }
+    #view-mount .tog input{ width:auto; }
+    #view-mount .tog.disabled{ opacity:.65; cursor:not-allowed; }
+    #view-mount .note{
+      border:1px dashed rgba(98,179,255,.45);
+      background: rgba(98,179,255,.08);
+      padding:10px 12px;
+      border-radius:16px;
+      font-size:13px;
+      color:var(--text);
+    }
+    #view-mount .warn{
+      border:1px dashed rgba(255,200,87,.55);
+      background: rgba(255,200,87,.10);
+      padding:10px 12px;
+      border-radius:16px;
+      font-size:13px;
+    }
+    #view-mount .table{ width:100%; border-collapse: collapse; overflow:hidden; border-radius:14px; border:1px solid var(--border); }
+    #view-mount .table th,#view-mount .table td{ padding:10px 10px; border-bottom:1px solid var(--border); font-size:13px; vertical-align: top; }
+    #view-mount .table th{ text-align:left; color:var(--muted); font-weight:900; background: rgba(255,255,255,.04); }
+    #view-mount .table tr:last-child td{ border-bottom:none; }
+
+    /* ===== PSU scoped CSS ===== */
+    #psuApp{
+      --bg:#0b0d10; --text:#e9eef7; --muted:#9aa6bf;
+      --border:rgba(255,255,255,.10); --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --accent:#62b3ff; --ok:#58d18b; --bad:#ff6b6b; --warn:#ffc857;
+      --input:#0c1220; --ring: 0 0 0 3px rgba(98,179,255,.18);
+      --card: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      --overlay: rgba(0,0,0,.55);
+
+      
+      --modal-bg: rgba(12, 16, 22, .90);
+      --modal-bg-light: rgba(255,255,255,.90);
+    }#psuApp [data-theme="light"]{
+      --bg:#f6f7fb; --text:#172033; --muted:#5b6b86;
+      --border:rgba(20,35,60,.12); --shadow: 0 10px 30px rgba(20,35,60,.10);
+      --accent:#0b74ff; --ok:#1a9b52; --bad:#d63a3a; --warn:#b77800;
+      --input:#f3f6ff; --ring: 0 0 0 3px rgba(11,116,255,.16);
+      --card: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.86));
+      --overlay: rgba(10,20,40,.35);
+    }#psuApp *{box-sizing:border-box}#psuApp{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, rgba(98,179,255,.10), transparent 60%),
+                  radial-gradient(800px 500px at 90% 10%, rgba(88,209,139,.08), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.35;
+    }#psuApp .wrap{max-width:1180px;margin:0 auto;padding:22px 14px 60px}#psuApp header{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 16px; border:1px solid var(--border); border-radius:18px; background:rgba(255,255,255,.02);
+      box-shadow: var(--shadow);
+      position:sticky; top:10px; z-index:50; backdrop-filter: blur(10px);
+    }#psuApp header h1{font-size:18px;margin:0;font-weight:850;letter-spacing:.2px}#psuApp header .sub{font-size:12px;color:var(--muted); margin-top:4px}#psuApp .actions{display:flex; gap:10px; align-items:center; flex-wrap:wrap}#psuApp .btn, #psuApp .chip{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:800;
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .06s ease, border-color .2s ease, background .2s ease;
+    }#psuApp .btn:hover{transform: translateY(-1px); border-color: rgba(98,179,255,.38)}#psuApp .btn:active{transform: translateY(0px)}#psuApp .btn.primary{
+      border-color: rgba(98,179,255,.55);
+      background: linear-gradient(180deg, rgba(98,179,255,.22), rgba(98,179,255,.10));
+    }#psuApp .btn.ghost{background: transparent;}#psuApp .chip{display:flex; gap:8px; align-items:center; padding:8px 10px; font-weight:900;}#psuApp .dot{width:9px;height:9px;border-radius:999px;background:var(--accent)}#psuApp .dot.ok{background:var(--ok)}#psuApp .dot.bad{background:var(--bad)}#psuApp main{margin-top:16px;display:grid;grid-template-columns: 1fr; gap:14px}#psuApp .grid2{display:grid;grid-template-columns: 1.25fr .75fr; gap:14px}@media (max-width:980px){#psuApp .grid2{grid-template-columns:1fr}#psuApp header{position:relative; top:auto}}#psuApp .card{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      padding:14px;
+    }#psuApp .card h2{margin:0 0 8px 0;font-size:14px;letter-spacing:.2px}#psuApp .muted{color:var(--muted)}#psuApp .row{display:flex; gap:12px; flex-wrap:wrap}#psuApp .field{flex:1; min-width:180px}#psuApp label{display:block;font-size:12px;color:var(--muted); margin:0 0 6px 0}#psuApp input, #psuApp select{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background: var(--input);
+      color: var(--text);
+      outline:none;
+      transition: box-shadow .2s ease, border-color .2s ease, opacity .2s ease;
+      font-size:14px;
+    }#psuApp input:focus, #psuApp select:focus{box-shadow: var(--ring); border-color: rgba(98,179,255,.55)}#psuApp input[disabled]{opacity:.55; cursor:not-allowed}#psuApp .help{font-size:12px;color:var(--muted); margin-top:6px}#psuApp .divider{height:1px;background:var(--border);margin:12px 0}#psuApp .stepper{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}#psuApp .step{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      font-size:13px;
+      color:var(--muted);
+    }#psuApp .step .n{
+      width:22px;height:22px;border-radius:8px;
+      display:grid;place-items:center;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:950;
+    }#psuApp .step.active{color:var(--text); border-color: rgba(98,179,255,.45); background: rgba(98,179,255,.10)}#psuApp .step.active .n{color:var(--text); border-color: rgba(98,179,255,.55); background: rgba(98,179,255,.18)}#psuApp .navrow{display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap}#psuApp .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:950;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      white-space:nowrap;
+    }#psuApp .badge.ok{border-color: rgba(88,209,139,.45); background: rgba(88,209,139,.12); color: var(--ok)}#psuApp .badge.bad{border-color: rgba(255,107,107,.45); background: rgba(255,107,107,.12); color: var(--bad)}#psuApp .badge.warn{border-color: rgba(255,200,87,.45); background: rgba(255,200,87,.12); color: var(--warn)}#psuApp .table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid var(--border);
+    }#psuApp .table th, #psuApp .table td{
+      padding:10px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size:13px;
+      vertical-align: top;
+    }#psuApp .table th{
+      text-align:left;
+      color: var(--muted);
+      font-weight:950;
+      background: rgba(255,255,255,.04);
+    }#psuApp .table tr:last-child td{border-bottom:none}#psuApp .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;}#psuApp .okbox{
+      border:1px dashed rgba(88,209,139,.5);
+      background: rgba(88,209,139,.08);
+      padding:10px 12px; border-radius:14px;
+      font-size:13px;
+    }#psuApp .dangerbox{
+      border:1px dashed rgba(255,107,107,.5);
+      background: rgba(255,107,107,.08);
+      padding:10px 12px; border-radius:14px;
+      font-size:13px;
+    }#psuApp .hintbox{
+      border:1px dashed rgba(98,179,255,.45);
+      background: rgba(98,179,255,.08);
+      padding:10px 12px; border-radius:14px;
+      font-size:13px;
+    }#psuApp .viz{
+      border:2px solid rgba(255,255,255,.22);
+      border-radius:14px;
+      background: rgba(255,255,255,.02);
+      height: 560px;
+      position: relative;
+      overflow: hidden;
+    }#psuApp [data-theme="light"] .viz{
+      border-color: rgba(20,35,60,.25);
+      background: rgba(255,255,255,.65);
+    }#psuApp .vizTitle{
+      position:absolute; left:14px; top:12px;
+      font-weight:950; font-size:28px; letter-spacing:.2px;
+      color: rgba(255,255,255,.92);
+      user-select:none;
+      pointer-events:none;
+    }#psuApp [data-theme="light"] .vizTitle{ color: rgba(20,35,60,.92); }#psuApp .vizSvg{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      display:block;
+    }#psuApp .nodeNum{ font-weight:950; font-size:28px; fill: #2f7fff; user-select:none; }#psuApp .nodeSourceHalo{ fill: rgba(88,209,139,.18); stroke: rgba(88,209,139,.6); stroke-width: 2; }#psuApp .edgeLine{ stroke: rgba(255,255,255,.75); stroke-width: 3; }#psuApp [data-theme="light"] .edgeLine{ stroke: rgba(20,35,60,.75); }#psuApp .edgeHit{ stroke: rgba(255,255,255,.01); stroke-width: 18; cursor:pointer; }#psuApp .edgeText{ font-weight:900; font-size:18px; fill: rgba(255,255,255,.92); user-select:none; }#psuApp [data-theme="light"] .edgeText{ fill: rgba(20,35,60,.92); }#psuApp .nodeHitCursor{ cursor: grab; }#psuApp .nodeHitCursor:active{ cursor: grabbing; }#psuApp .sensOuter{ fill: rgba(0, 182, 255, .06); stroke: #00b6ff; stroke-width: 4; }#psuApp .sensOuterSoft{ fill: transparent; stroke: rgba(0,182,255,.18); stroke-width: 10; }#psuApp .sensWater{ fill: rgba(0, 182, 255, .45); }#psuApp .sensWaterWave{ fill: rgba(0, 182, 255, .30); }#psuApp .sensInnerLine{ stroke: rgba(0,182,255,.65); stroke-width: 2; }#psuApp .menu{
+      position:absolute;
+      min-width: 220px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+      box-shadow: var(--shadow);
+      padding:8px;
+      display:none;
+      z-index:20;
+      backdrop-filter: blur(10px);
+    }#psuApp [data-theme="light"] .menu{
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.82));
+    }#psuApp .menu .mi{
+      padding:10px 10px;
+      border-radius:12px;
+      cursor:pointer;
+      border:1px solid transparent;
+      font-weight:900;
+      font-size:13px;
+      color: var(--text);
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }#psuApp .menu .mi:hover{
+      border-color: rgba(98,179,255,.35);
+      background: rgba(98,179,255,.10);
+    }#psuApp .menu .mi .k{ width:10px; height:10px; border-radius:99px; background: var(--accent); }#psuApp .menu .mi.green .k{ background: var(--ok); }#psuApp .menu .mi.gray .k{ background: rgba(154,166,191,.75); }#psuApp .menu .mi.noclick{ cursor: default; }#psuApp .menu .mi.noclick:hover{ border-color: transparent; background: transparent; }#psuApp .inlineBind{
+      display:flex; gap:8px; align-items:center; width:100%;
+    }#psuApp .miniInput{
+      width:86px; padding:8px 10px;
+      border-radius:10px; border:1px solid var(--border);
+      background: var(--input); color: var(--text);
+      font-weight:900;
+    }#psuApp .miniBtn{
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid rgba(98,179,255,.45);
+      background: rgba(98,179,255,.12);
+      color: var(--text);
+      font-weight:950;
+      cursor:pointer;
+      user-select:none;
+    }#psuApp .modal{
+      position:fixed; inset:0;
+      background: var(--overlay);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:999;
+    }#psuApp .modalCard{
+      width: min(520px, 96vw);
+      border:1px solid var(--border);
+      border-radius:18px;
+      background: var(--modal-bg);
+      box-shadow: var(--shadow);
+      padding:14px;
+      backdrop-filter: blur(10px);
+    }#psuApp [data-theme="light"] .modalCard{
+      background: var(--modal-bg-light);
+    }#psuApp .modalHead{
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      margin-bottom:10px;
+    }#psuApp .modalHead b{ font-size:14px; }#psuApp .xbtn{ border-radius:12px; padding:8px 10px; }#psuApp .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px; border-radius:999px; border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      font-weight:900; font-size:12px;
+    }#psuApp .tog{
+      display:flex; gap:10px; align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      cursor:pointer;
+      user-select:none;
+      font-weight:900;
+      font-size:13px;
+      color:var(--muted);
+    }#psuApp .tog input{ width:auto; padding:0; margin:0; }#psuApp .tog.active{color:var(--text); border-color: rgba(98,179,255,.45); background: rgba(98,179,255,.10)}#psuApp .err{
+      border:1px dashed rgba(255,107,107,.55);
+      background: rgba(255,107,107,.10);
+      border-radius:16px;
+      padding:10px 12px;
+      margin-top:14px;
+      display:none;
+      font-size:13px;
+    }#psuApp .err b{color:var(--bad)}
+/* --- интеграция в общий дизайн --- */
+#psuApp{ background: transparent; }
+#psuApp .wrap{ max-width: 100%; padding: 0; }
+#psuApp header{ position: static; top:auto; margin: 0 0 12px 0; box-shadow:none; backdrop-filter:none; }
+#psuApp header h1, #psuApp header .sub{ display:none; }
+#psuApp main{ padding: 0; }
+
+  
+/* --- PSU: список БП и привязки --- */
+#psuApp .psuPanel{ padding:12px; }
+#psuApp .psuPanelHead{ align-items:center; justify-content:space-between; gap:12px; }
+#psuApp .psuList{ display:flex; flex-direction:column; gap:10px; }
+#psuApp .psuRow{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:10px 10px;
+  border: 1px solid rgba(148,163,184,.22);
+  background: rgba(255,255,255,.02);
+  border-radius: 14px;
+}
+#psuApp[data-theme="light"] .psuRow{
+  background: rgba(15,23,42,.02);
+  border-color: rgba(15,23,42,.10);
+}
+#psuApp .psuRow .meta{ font-size:12px; color: var(--muted); margin-top:2px; }
+#psuApp .psuRow .actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+#psuApp .psuRow .tag{
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(34,197,94,.35);
+  background: rgba(34,197,94,.10);
+}
+#psuApp .psuRow .tag.bad{
+  border-color: rgba(239,68,68,.45);
+  background: rgba(239,68,68,.10);
+}
+#psuApp .psuEditGrid{ grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 980px){
+  #psuApp .psuEditGrid{ grid-template-columns: 1fr; }
+}
+#psuApp .nodePsu{
+  font-size:12px;
+  opacity:.95;
+  fill: var(--muted);
+}
+#psuApp[data-theme="light"] .nodePsu{ fill: rgba(239,68,68,.92); }
+
+
+/* ===== PSU: гармонизация под общий дизайн + общая тема ===== */
+#psuApp{
+  --bg: transparent;
+  --text: var(--text);
+  --muted: var(--muted);
+  --border: var(--border);
+  --shadow: var(--shadow);
+  --accent: var(--accent);
+  --ok: var(--accent);
+  --ring: 0 0 0 4px rgba(34,197,94,.12);
+}
+#psuApp #themeChip, #psuApp #themeLabel{ display:none !important; }
+
+/* зелёные акценты как на сайте */
+#psuApp input:focus, #psuApp select:focus{
+  border-color: rgba(34,197,94,.55) !important;
+  box-shadow: 0 0 0 4px rgba(34,197,94,.12) !important;
+}
+#psuApp .btn.primary{
+  border-color: rgba(34,197,94,.55) !important;
+  background: linear-gradient(135deg, rgba(34,197,94,.18), rgba(34,197,94,.06)) !important;
+}
+#psuApp .btn:hover{ border-color: rgba(34,197,94,.38) !important; }
+#psuApp .step.active{
+  border-color: rgba(34,197,94,.45) !important;
+  background: rgba(34,197,94,.10) !important;
+}
+#psuApp .step.active .n{
+  border-color: rgba(34,197,94,.55) !important;
+  background: rgba(34,197,94,.18) !important;
+}
+#psuApp .hintbox{
+  border-color: rgba(34,197,94,.45) !important;
+  background: rgba(34,197,94,.08) !important;
+}
+
+/* в светлой теме линии связей — красные */
+#psuApp[data-theme="light"] .edgeLine{ stroke: rgba(239,68,68,.92) !important; }
+#psuApp[data-theme="light"] .edgeLenText{ fill: rgba(239,68,68,.92) !important; }
+
+/* статус без "JS:" */
+#psuApp #statusText{ font-weight:700; }
+
+
+
+/* ===== nav links (как кнопки) ===== */
+.nav a{
+  width:100%;
+  text-align:left;
+  background: transparent;
+  border:1px solid var(--border);
+  color: var(--text);
+  padding: 12px 12px;
+  border-radius: 14px;
+  cursor:pointer;
+  transition: .15s ease;
+  display:flex; align-items:center; justify-content:flex-start; gap:10px;
+  font-weight: 900;
+  text-decoration:none;
+}
+.nav a:hover{ transform: translateY(-1px); }
+.nav a.active{
+  border-color: rgba(34,197,94,.55);
+  box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+}
+
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="title">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Монтажные комплектующие</h1>
+        <div class="subtitle">Степпер (структура) • дальше подключим Excel</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+      <button class="btn" id="themeToggle" type="button" title="Переключить тему">Тема: —</button>
+      <a class="pill mono" href="./index.html" style="text-decoration:none; color:inherit;">Главная</a>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <div class="card-h">
+        <b>Калькуляторы</b>
+        <span class="pill">меню</span>
+      </div>
+      <div class="card-b">
+        
+<div class="nav">
+  <a href="./liquid.html" class=""><span class="nav-title">Расчёт объема жидкости</span></a>
+  <a href="./mount.html" class="active"><span class="nav-title">Монтажные комплектующие</span></a>
+  <a href="./psu.html" class=""><span class="nav-title">Питание датчиков</span></a>
+</div>
+<div class="hint">Тема, оформление и сохранение настроек единые на всех страницах. Новые калькуляторы добавим сюда же.</div>
+
+      </div>
+    </section>
+
+    <section class="card" id="calc-mount">
+<div class="card-h">
+<b>Монтажные комплектующие</b>
+<span class="pill">степпер (структура)</span>
+</div>
+<div class="card-b">
+<div class="m-stepper" id="m_stepper"></div>
+<div class="m-stepPane" id="m_step0">
+<div class="hint" style="margin-top:12px">Шаг 1 — Тип объекта</div>
+<div class="tiles" id="m_objTiles" style="margin-top:10px"></div>
+<div style="display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap">
+<div></div><button class="btn primary" id="m_next0" type="button">Далее →</button>
+</div>
+</div>
+<div class="m-stepPane" id="m_step1">
+<div class="hint" style="margin-top:12px">Шаг 2 — Крепление к стене (если применимо)</div>
+<div id="m_wallBlock" style="margin-top:10px"><div class="tiles" id="m_wallTiles"></div></div>
+<div class="note" id="m_wallNA" style="display:none; margin-top:10px">Для <b>резервуара</b> крепление к стене не требуется.</div>
+<div style="display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap">
+<button class="btn" id="m_prev1" type="button">← Назад</button>
+<button class="btn primary" id="m_next1" type="button">Далее →</button>
+</div>
+</div>
+<div class="m-stepPane" id="m_step2">
+<div class="hint" style="margin-top:12px">Шаг 3 — Условия прокладки и защиты</div>
+<div class="switches" style="margin-top:10px">
+<div class="tog" id="m_togGofra">
+<div>Гофра<br/><small id="m_gofraSub">—</small></div>
+<input id="m_gofra" type="checkbox"/>
+</div>
+<div class="tog" id="m_togEx">
+<div>Взрывозащитное исполнение<br/><small id="m_exSub">—</small></div>
+<input id="m_ex" type="checkbox"/>
+</div>
+<div class="tog" id="m_togVib">
+<div>Вибрация<br/><small>Если да → поплавки в расчёт</small></div>
+<input id="m_vib" type="checkbox"/>
+</div>
+<div class="tog">
+<div>Соединители<br/><small>указываются вручную</small></div>
+<span class="pill">OK</span>
+</div>
+</div>
+<div class="warn" id="m_floatNote" style="display:none; margin-top:10px">
+                ✅ Включена <b>вибрация</b> — в ведомость будут добавлены <b>поплавки</b> (привяжем к Excel).
+              </div>
+<div style="display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap">
+<button class="btn" id="m_prev2" type="button">← Назад</button>
+<button class="btn primary" id="m_next2" type="button">Далее →</button>
+</div>
+</div>
+<div class="m-stepPane" id="m_step3">
+<div class="hint" style="margin-top:12px">Шаг 4 — Датчики и гидротрасса</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Кол-во датчиков (шт.)</label>
+<input id="m_sensors" min="0" placeholder="например: 12" step="1" type="number"/>
+</div>
+<div class="tog" id="m_togHeat" style="height:48px; align-self:end;">
+<div>Обогрев датчиков<br/><small>если включить → потребление выше</small></div>
+<input id="m_heat" type="checkbox"/>
+</div>
+</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Длина трассы (м)</label>
+<input id="m_len" min="0" placeholder="например: 50" step="0.1" type="number"/>
+</div>
+<div>
+<label>Диаметр трубки (мм)</label>
+<input id="m_diam" min="0" placeholder="например: 12" step="0.1" type="number"/>
+</div>
+</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Кол-во углов (шт.)</label>
+<input id="m_elbows" min="0" placeholder="0" step="1" type="number"/>
+</div>
+<div>
+<label>Соединители для углов (шт.) (если есть)</label>
+<input id="m_connElbows" min="0" placeholder="0" step="1" type="number"/>
+</div>
+</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Кол-во тройников (шт.)</label>
+<input id="m_tees" min="0" placeholder="0" step="1" type="number"/>
+</div>
+<div>
+<label>Соединители для тройников (шт.) (если есть)</label>
+<input id="m_connTees" min="0" placeholder="0" step="1" type="number"/>
+</div>
+</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Кол-во четверников (шт.)</label>
+<input id="m_crosses" min="0" placeholder="0" step="1" type="number"/>
+</div>
+<div>
+<label>Соединители для четверников (шт.) (если есть)</label>
+<input id="m_connCrosses" min="0" placeholder="0" step="1" type="number"/>
+</div>
+</div>
+<div style="display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap">
+<button class="btn" id="m_prev3" type="button">← Назад</button>
+<button class="btn primary" id="m_next3" type="button">Далее →</button>
+</div>
+</div>
+<div class="m-stepPane" id="m_step4">
+<div class="hint" style="margin-top:12px">Шаг 5 — Серверы, питание и связь</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Количество серверов (шт.)</label>
+<input id="m_servers" min="0" placeholder="например: 1" step="1" type="number"/>
+</div>
+<div>
+<label>Расстояние от крайнего датчика до сервера (м)</label>
+<input id="m_distLast" min="0" placeholder="например: 80" step="0.1" type="number"/>
+</div>
+</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Кол-во блоков питания (шт.)</label>
+<input id="m_psuCount" min="0" placeholder="например: 2" step="1" type="number"/>
+</div>
+<div>
+<label>Мощность одного БП (Вт)</label>
+<input id="m_psuPower" min="0" placeholder="например: 240" step="1" type="number"/>
+</div>
+</div>
+<div class="row" style="margin-top:10px">
+<div>
+<label>Расстояние от сервера до точки подключения (м)</label>
+<input id="m_distConn" min="0" placeholder="например: 20" step="0.1" type="number"/>
+</div>
+<div>
+<label>Интернет заказчика</label>
+<select id="m_custNet">
+<option value="1">Да</option>
+<option value="0">Нет</option>
+</select>
+</div>
+</div>
+<div class="switches" style="margin-top:10px">
+<div class="tog" id="m_togAnt">
+<div>Интернет-антенна<br/><small>нужна/не нужна</small></div>
+<input id="m_ant" type="checkbox"/>
+</div>
+<div class="tog" id="m_togAntPlace">
+<div>Размещение антенны<br/><small>в сервере / выносная</small></div>
+<select id="m_antPlace" style="width:160px">
+<option value="in">В сервере</option>
+<option value="out">Выносная</option>
+</select>
+</div>
+</div>
+<div class="row" id="m_antDistRow" style="margin-top:10px">
+<div>
+<label>Расстояние от сервера до антенны (м)</label>
+<input id="m_antDist" min="0" placeholder="например: 15" step="0.1" type="number"/>
+</div>
+<div class="note">Дистанция учитывается только при <b>выносной</b> антенне.</div>
+</div>
+<div id="m_tunnelBlock" style="display:none; margin-top:10px">
+<div class="switches">
+<div class="tog" id="m_togTr">
+<div>Трансформатор<br/><small>только для тоннеля</small></div>
+<input id="m_tr" type="checkbox"/>
+</div>
+<div class="tog">
+<div>Кол-во и расстояние<br/><small>если нужен</small></div>
+<div style="display:flex; gap:8px; align-items:center">
+<input id="m_trCount" min="0" placeholder="шт" step="1" style="width:92px" type="number"/>
+<input id="m_trDist" min="0" placeholder="м" step="0.1" style="width:92px" type="number"/>
+</div>
+</div>
+</div>
+</div>
+<div style="display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap">
+<button class="btn" id="m_prev4" type="button">← Назад</button>
+<button class="btn primary" id="m_next4" type="button">Итог →</button>
+</div>
+</div>
+<div class="m-stepPane" id="m_step5">
+<div class="hint" style="margin-top:12px">Шаг 6 — Итог (пока структура)</div>
+<div class="note" style="margin-top:10px">
+                Сейчас это <b>структура</b> и свод введённых параметров. Когда пришлёшь Excel — подставлю реальные позиции/формулы и получится ведомость комплектующих.
+              </div>
+<div style="margin-top:10px; overflow:auto">
+<table class="table" id="m_outTable"></table>
+</div>
+<div class="actions">
+<button class="btn primary" id="m_copy">Скопировать итог</button>
+<button class="btn" id="m_reset">Сбросить</button>
+<span class="hint" id="m_status" style="margin:0;">—</span>
+</div>
+<div style="display:flex; justify-content:space-between; gap:10px; margin-top:12px; flex-wrap:wrap">
+<button class="btn" id="m_prev5" type="button">← Назад</button>
+<div></div>
+</div>
+</div>
+</div>
+</section>
+  </div>
+
+  <div class="toast" id="toast">Готово</div>
+</div>
+
+<script>
+// ===== Общая тема (светлая/тёмная) =====
+    const THEME_KEY = "monitron_site_theme";
+    const themeBtn = document.getElementById("themeToggle");
+
+    function systemTheme(){
+      try{
+        return (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+      }catch(_){ return "dark"; }
+    }
+    function themeLabel(t){ return t === "light" ? "Светлая" : "Тёмная"; }
+
+    function applyTheme(t){
+      document.documentElement.setAttribute("data-theme", t);
+      if(themeBtn) themeBtn.textContent = "Тема: " + themeLabel(t);
+
+      // синхронизируем встроенный калькулятор питания датчиков
+      const psu = document.getElementById("psuApp");
+      if(psu) psu.setAttribute("data-theme", t);
+    }
+
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      applyTheme(saved || systemTheme());
+    }
+
+    if(themeBtn){
+      themeBtn.addEventListener("click", () => {
+        const cur = document.documentElement.getAttribute("data-theme") || systemTheme();
+        const next = (cur === "light") ? "dark" : "light";
+        localStorage.setItem(THEME_KEY, next);
+        applyTheme(next);
+      });
+    }
+    initTheme();
+
+    // второй проход после инициализации PSU-скрипта (на случай, если он трогает тему)
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        const cur = document.documentElement.getAttribute("data-theme") || systemTheme();
+        applyTheme(cur);
+      }, 0);
+    }, { once:true });
+
+(function(){
+  const errBanner = document.getElementById("errBanner");
+  function showError(msg){
+    errBanner.style.display = "block";
+    errBanner.innerHTML = `<b>Ошибка:</b> ${String(msg).replaceAll("<","&lt;")}`;
+    const dot = document.getElementById("statusDot");
+    const txt = document.getElementById("statusText");
+    if(dot) dot.className = "dot bad";
+    if(txt) txt.textContent = "Ошибка";
+  }
+  window.addEventListener("error", (e) => showError(e.error ? e.error.message : e.message));
+  window.addEventListener("unhandledrejection", (e) => showError(e.reason ? e.reason : "unhandledrejection"));
+
+  try{
+    const STORAGE_KEY = "psu_graph_calc_v6";
+    const steps = [
+      { title: "Параметры", desc: "V, S, БП" },
+      { title: "Схема", desc: "датчики и связи" },
+      { title: "Результат", desc: "A и B" },
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const clamp = (x, a, b) => Math.min(Math.max(x, a), b);
+    const num = (v, def=0) => {
+      const x = (typeof v === "string") ? v.trim() : v;
+      if (x === "" || x === null || x === undefined) return def;
+      const n = Number(x);
+      return Number.isFinite(n) ? n : def;
+    };
+    const ceil = (x) => Math.ceil(x - 1e-12);
+
+    const defaultState = () => ({
+      theme: "dark",
+      step: 0,
+      Vpsu: 24,
+      S: 0.7,
+      reservePct: 30,
+      derate: 0.7,
+      override: false,
+      Vmin: 17,
+      Inorm: 0.05,
+      Iheat: 0.65,
+      psuNom: "240",
+      psuCustom: 240,
+      heatMode: "all",
+      heatValue: 20,
+      N: 5,
+      sourceId: 1,
+      nodes: [],
+      edges: [],
+    });
+
+    let state = loadState();
+
+    function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return initGraph(defaultState());
+        const parsed = JSON.parse(raw);
+        const merged = { ...defaultState(), ...parsed };
+        return initGraph(merged);
+      }catch(e){ return initGraph(defaultState()); }
+    }
+
+    function setTheme(theme){
+      state.theme = theme;
+      document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
+      $("themeLabel").textContent = theme === "light" ? "Светлая" : "Тёмная";
+      saveState();
+      draw();
+    }
+
+    function renderStepper(){
+      const holder = $("stepper");
+      holder.innerHTML = "";
+      steps.forEach((s, idx) => {
+        const el = document.createElement("div");
+        el.className = "step" + (state.step === idx ? " active" : "");
+        el.innerHTML = `<div class="n">${idx+1}</div><div><div>${s.title}</div><div class="mono muted" style="font-size:12px">${s.desc}</div></div>`;
+        el.addEventListener("click", () => goStep(idx));
+        holder.appendChild(el);
+      });
+    }
+
+    function goStep(i){
+      state.step = clamp(i, 0, steps.length-1);
+      document.querySelectorAll(".stepPane").forEach(p => {
+        const s = Number(p.getAttribute("data-step"));
+        p.style.display = (s === state.step) ? "block" : "none";
+      });
+      renderStepper();
+      computeAndRender();
+      saveState();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    function initGraph(s){
+      const N = Math.max(1, Math.floor(num(s.N, 5)));
+      s.N = N;
+      s.sourceId = clamp(Math.floor(num(s.sourceId,1)), 1, N);
+
+      if(!Array.isArray(s.nodes) || s.nodes.length !== N){
+        s.nodes = [];
+        s.edges = [];
+        const pad = 150;
+        const W = 1000, H = 560;
+        const cx = W/2, cy = H/2 + 25;
+        const r = Math.min(W, H)/2 - pad;
+        for(let i=1;i<=N;i++){
+          const ang = (i-1)/N * Math.PI*2 - Math.PI/2;
+          s.nodes.push({ id:i, x: cx + r*Math.cos(ang), y: cy + r*Math.sin(ang) });
+        }
+      }else{
+        s.nodes = s.nodes.map(n => ({
+          id: n.id,
+          x: clamp(num(n.x, 500), 60, 940),
+          y: clamp(num(n.y, 280), 80, 520),
+        }));
+        s.edges = Array.isArray(s.edges) ? s.edges.filter(e => e && e.a && e.b && e.a !== e.b) : [];
+      }
+      return s;
+    }
+
+    function resetAll(){
+      if(!confirm("Сбросить всё к настройкам по умолчанию?")) return;
+      state = initGraph(defaultState());
+      applyToUI();
+      saveState();
+      goStep(0);
+    }
+
+    function setN(newN){
+      state.N = Math.max(1, Math.floor(num(newN, 5)));
+      state.sourceId = clamp(state.sourceId, 1, state.N);
+      state.nodes = [];
+      state.edges = [];
+      initGraph(state);
+      const lf = $("linkFrom"); const lt = $("linkTo");
+      if(lf && lt){ lf.value = 1; lt.value = Math.min(2, state.N); }
+      hideMenu();
+      draw();
+      computeAndRender();
+      saveState();
+    }
+
+    // Visualizer refs
+    const svg = $("svg");
+    const viz = $("viz");
+    const menu = $("menu");
+    const modal = $("modal");
+    const edgeLabel = $("edgeLabel");
+    const edgeLen = $("edgeLen");
+
+    // UX: Enter в поле длины = "Сохранить", Esc = закрыть
+    if(edgeLen){
+      edgeLen.addEventListener("keydown", (e) => {
+        if(e.key === "Enter"){
+          e.preventDefault();
+          const btn = $("saveEdge");
+          if(btn) btn.click();
+        }else if(e.key === "Escape"){
+          e.preventDefault();
+          closeModal();
+        }
+      });
+    }
+// new bind input in menu
+    const bindToInput = $("bindToInput");
+    const bindToBtn = $("bindToBtn");
+
+    let activeNodeId = null;
+    let bindFromId = null;
+    let draggingId = null;
+    let dragOffset = {x:0,y:0};
+    let editingEdgeKey = null;
+
+    function edgeKey(a,b){
+      const x = Math.min(a,b), y = Math.max(a,b);
+      return `${x}-${y}`;
+    }
+    function upsertEdge(a,b,len=1){
+      const k = edgeKey(a,b);
+      const e = state.edges.find(e => edgeKey(e.a,e.b) === k);
+      if(e){ e.len = Math.max(0, num(len, e.len ?? 1)); }
+      else state.edges.push({ a: Math.min(a,b), b: Math.max(a,b), len: Math.max(0, num(len, 1)) });
+    }
+    function deleteEdgeByKey(k){
+      state.edges = state.edges.filter(e => edgeKey(e.a,e.b) !== k);
+    }
+
+    function svgPointFromClient(clientX, clientY){
+      const rect = svg.getBoundingClientRect();
+      const x = (clientX - rect.left) / rect.width * 1000;
+      const y = (clientY - rect.top) / rect.height * 560;
+      return {x, y};
+    }
+
+    function showMenuAt(clientX, clientY, nodeId){
+      activeNodeId = nodeId;
+      bindToInput.value = "";
+      bindToInput.setAttribute("placeholder", `1..${state.N}`);
+      const rect = viz.getBoundingClientRect();
+      menu.style.left = `${clientX - rect.left + 10}px`;
+      menu.style.top = `${clientY - rect.top + 10}px`;
+      menu.style.display = "block";
+      // focus input for faster work
+      setTimeout(() => { try{ bindToInput.focus(); }catch(e){} }, 0);
+    }
+    function hideMenu(){
+      menu.style.display = "none";
+      activeNodeId = null;
+    }
+
+    function trimZeros(x){
+      const n = Number(x);
+      if(!Number.isFinite(n)) return "0";
+      return (Math.round(n*10)/10).toString();
+    }
+
+    // Attach background click ONCE
+    svg.addEventListener("click", (e) => {
+      if(e.target === svg){
+        hideMenu();
+        bindFromId = null;
+        draw();
+      }
+    });
+
+    function sensorIcon(n){
+      // Vector icon inspired by your sample: rounded rect + "water" at bottom.
+      // Centered at (n.x, n.y). Size ~ 44x58.
+      const w = 44, h = 58, rx = 10;
+      const x = n.x - w/2, y = n.y - h/2;
+      const waterH = 22;
+      const wy = y + h - waterH;
+      const wave = `
+        <path class="sensWaterWave" d="
+          M ${x+4} ${wy+8}
+          C ${x+12} ${wy+2}, ${x+20} ${wy+14}, ${x+28} ${wy+8}
+          C ${x+34} ${wy+4}, ${x+36} ${wy+12}, ${x+40} ${wy+8}
+          L ${x+40} ${y+h-6}
+          L ${x+4} ${y+h-6}
+          Z" />
+      `;
+      return `
+        <g>
+          <rect class="sensOuterSoft" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"></rect>
+          <rect class="sensOuter" x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}"></rect>
+
+          <clipPath id="clip-${n.id}">
+            <rect x="${x+3}" y="${y+3}" width="${w-6}" height="${h-6}" rx="${rx-3}"></rect>
+          </clipPath>
+
+          <g clip-path="url(#clip-${n.id})">
+            <rect class="sensWater" x="${x+3}" y="${wy}" width="${w-6}" height="${waterH}" rx="0"></rect>
+            ${wave}
+          </g>
+
+          <line class="sensInnerLine" x1="${x+10}" y1="${y+h*0.45}" x2="${x+w-10}" y2="${y+h*0.45}"></line>
+          <line class="sensInnerLine" x1="${x+10}" y1="${y+h*0.58}" x2="${x+w-10}" y2="${y+h*0.58}"></line>
+        </g>
+      `;
+    }
+
+    function draw(){
+      const nodesById = new Map(state.nodes.map(n => [n.id, n]));
+      const edges = state.edges.filter(e => nodesById.has(e.a) && nodesById.has(e.b) && e.a !== e.b);
+
+      const defs = `
+        <defs>
+          <filter id="soft">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.35)"/>
+          </filter>
+        </defs>
+      `;
+
+      const edgeEls = edges.map(e => {
+        const a = nodesById.get(e.a), b = nodesById.get(e.b);
+        const mx = (a.x+b.x)/2, my = (a.y+b.y)/2;
+        const lenText = (e.len ?? 0) ? `${trimZeros(e.len)}` : "0";
+        return `
+          <g data-edge="${edgeKey(e.a,e.b)}">
+            <line class="edgeLine" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line>
+            <line class="edgeHit" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" data-edgehit="${edgeKey(e.a,e.b)}"></line>
+            <text class="edgeText" x="${mx+6}" y="${my-6}">${lenText}</text>
+          </g>
+        `;
+      }).join("");
+
+      const nodeEls = state.nodes.map(n => {
+        const isSource = n.id === state.sourceId;
+        const hitW = 64, hitH = 84;
+        const hx = n.x - hitW/2, hy = n.y - hitH/2;
+        return `
+          <g data-node="${n.id}" filter="url(#soft)">
+            ${isSource ? `<circle class="nodeSourceHalo" cx="${n.x}" cy="${n.y}" r="36"></circle>` : ``}
+            ${sensorIcon(n)}
+            <text class="nodeNum" x="${n.x-8}" y="${n.y-40}">${n.id}</text>
+            <rect class="nodeHitCursor" x="${hx}" y="${hy}" width="${hitW}" height="${hitH}" fill="transparent" data-nodehit="${n.id}"></rect>
+          </g>
+        `;
+      }).join("");
+
+      const bindHint = bindFromId ? `
+        <g>
+          <text x="14" y="60" class="edgeText" style="font-size:18px;opacity:.9">
+            Режим привязки: выбери датчик для связи с #${bindFromId}
+          </text>
+        </g>
+      ` : "";
+
+      svg.innerHTML = `${defs}<rect x="0" y="0" width="1000" height="560" fill="transparent"></rect>${edgeEls}${nodeEls}${bindHint}`;
+
+      svg.querySelectorAll("[data-nodehit]").forEach(el => {
+        el.addEventListener("pointerdown", onNodePointerDown);
+        el.addEventListener("click", onNodeClick);
+      });
+      svg.querySelectorAll("[data-edgehit]").forEach(el => el.addEventListener("click", onEdgeClick));
+    }
+
+    function onNodeClick(e){
+      e.stopPropagation();
+      const id = Number(e.target.getAttribute("data-nodehit"));
+      if(!Number.isFinite(id)) return;
+
+      if(bindFromId && bindFromId !== id){
+        upsertEdge(bindFromId, id, 1);
+        bindFromId = null;
+        hideMenu();
+        draw();
+        computeAndRender();
+        saveState();
+        return;
+      }
+      showMenuAt(e.clientX, e.clientY, id);
+    }
+
+    function onNodePointerDown(e){
+      const id = Number(e.target.getAttribute("data-nodehit"));
+      if(!Number.isFinite(id)) return;
+      draggingId = id;
+      hideMenu();
+      const pt = svgPointFromClient(e.clientX, e.clientY);
+      const node = state.nodes.find(n => n.id === id);
+      if(node){
+        dragOffset.x = node.x - pt.x;
+        dragOffset.y = node.y - pt.y;
+      }
+      svg.setPointerCapture(e.pointerId);
+      svg.addEventListener("pointermove", onPointerMove);
+      svg.addEventListener("pointerup", onPointerUp);
+    }
+
+    function onPointerMove(e){
+      if(!draggingId) return;
+      const pt = svgPointFromClient(e.clientX, e.clientY);
+      const node = state.nodes.find(n => n.id === draggingId);
+      if(!node) return;
+      node.x = clamp(pt.x + dragOffset.x, 60, 940);
+      node.y = clamp(pt.y + dragOffset.y, 80, 520);
+      draw();
+    }
+
+    function onPointerUp(){
+      svg.removeEventListener("pointermove", onPointerMove);
+      svg.removeEventListener("pointerup", onPointerUp);
+      draggingId = null;
+      computeAndRender();
+      saveState();
+    }
+
+    function onEdgeClick(e){
+      e.stopPropagation();
+      const k = e.target.getAttribute("data-edgehit");
+      if(!k) return;
+      editingEdgeKey = k;
+      const ed = state.edges.find(x => edgeKey(x.a,x.b) === k);
+      if(!ed) return;
+      edgeLabel.textContent = `#${ed.a} — #${ed.b}`;
+      edgeLen.value = ed.len ?? 1;
+      modal.style.display = "flex";
+      // фокус в поле длины для быстрого ввода
+      setTimeout(() => { try{ edgeLen.focus(); edgeLen.select(); }catch(e){} }, 0);
+}
+
+    function closeModal(){
+      modal.style.display = "none";
+      editingEdgeKey = null;
+    }
+    $("closeModal").addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => { if(e.target === modal) closeModal(); });
+
+    $("saveEdge").addEventListener("click", () => {
+      if(!editingEdgeKey) return closeModal();
+      const ed = state.edges.find(x => edgeKey(x.a,x.b) === editingEdgeKey);
+      if(ed){
+        ed.len = Math.max(0, num(edgeLen.value, ed.len ?? 1));
+        saveState();
+        draw();
+        computeAndRender();
+      }
+      closeModal();
+    });
+
+    $("delEdge").addEventListener("click", () => {
+      if(!editingEdgeKey) return closeModal();
+      deleteEdgeByKey(editingEdgeKey);
+      saveState();
+      draw();
+      computeAndRender();
+      closeModal();
+    });
+
+    $("miBind").addEventListener("click", () => {
+      if(activeNodeId){
+        bindFromId = activeNodeId;
+        hideMenu();
+        draw();
+      }
+    });
+
+    // New: bind directly to a number
+    function bindToNumber(){
+      if(!activeNodeId) return;
+      const target = Math.floor(num(bindToInput.value, 0));
+      if(!(target >= 1 && target <= state.N)){
+        alert(`Введи номер датчика от 1 до ${state.N}`);
+        return;
+      }
+      if(target === activeNodeId){
+        alert("Нельзя привязать датчик к самому себе.");
+        return;
+      }
+      upsertEdge(activeNodeId, target, 1);
+      bindFromId = null;
+      hideMenu();
+      draw();
+      computeAndRender();
+      saveState();
+    }
+    bindToBtn.addEventListener("click", (e) => { e.stopPropagation(); bindToNumber(); });
+    bindToInput.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){ e.preventDefault(); e.stopPropagation(); bindToNumber(); }
+      if(e.key === "Escape"){ hideMenu(); }
+    });
+
+    $("miSource").addEventListener("click", () => {
+      if(activeNodeId){
+        state.sourceId = activeNodeId;
+        bindFromId = null;
+        hideMenu();
+        draw();
+        computeAndRender();
+        saveState();
+      }
+    });
+    $("miClear").addEventListener("click", () => {
+      if(!activeNodeId) return;
+      state.edges = state.edges.filter(e => e.a !== activeNodeId && e.b !== activeNodeId);
+      bindFromId = null;
+      hideMenu();
+      draw();
+      computeAndRender();
+      saveState();
+    });
+
+    
+    function addLinkByNumbers(){
+      const from = Math.floor(num($("linkFrom").value, 0));
+      const to = Math.floor(num($("linkTo").value, 0));
+      if(!(from >= 1 && from <= state.N) || !(to >= 1 && to <= state.N)){
+        alert(`Введи номера датчиков в диапазоне 1..${state.N}`);
+        return;
+      }
+      if(from === to){
+        alert("Нельзя сделать связь датчика с самим собой.");
+        return;
+      }
+      upsertEdge(from, to, 1);
+      bindFromId = null;
+      hideMenu();
+      draw();
+      computeAndRender();
+      saveState();
+    }
+    $("addLinkBtn").addEventListener("click", (e) => { e.stopPropagation(); addLinkByNumbers(); });
+    ["linkFrom","linkTo"].forEach(id => $(id).addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){ e.preventDefault(); addLinkByNumbers(); }
+    }));
+
+$("autoChainBtn").addEventListener("click", () => {
+      state.edges = [];
+      for(let i=1;i<state.N;i++) upsertEdge(i, i+1, 1);
+      draw(); computeAndRender(); saveState();
+    });
+    function copperLoopRperM(S){
+      const s = Math.max(0.0001, num(S, 0.7));
+      return 2 * 0.0175 / s;
+    }
+    function psuNominalW(){
+      const sel = state.psuNom || "240";
+      if(sel === "custom") return Math.max(1, num(state.psuCustom, 240));
+      return Math.max(1, num(sel, 240));
+    }
+    function heatFraction(N){
+      const mode = state.heatMode || "all";
+      if(mode === "none") return 0;
+      if(mode === "all") return 1;
+      if(N <= 0) return 0;
+      const v = Math.max(0, num(state.heatValue, 0));
+      if(mode === "pct") return clamp(v/100, 0, 1);
+      if(mode === "count") return clamp(v/N, 0, 1);
+      return 1;
+    }
+
+    function computeScenario(IperSensor){
+      const N = state.N;
+      const Vpsu = clamp(num(state.Vpsu, 24), 24, 30);
+      const Vmin = num(state.Vmin, 17);
+
+      const adj = new Map();
+      for(let i=1;i<=N;i++) adj.set(i, []);
+      for(const e of state.edges){
+        const a = e.a, b = e.b;
+        if(a<1||a>N||b<1||b>N||a===b) continue;
+        adj.get(a).push({to:b, len: Math.max(0, num(e.len, 0))});
+        adj.get(b).push({to:a, len: Math.max(0, num(e.len, 0))});
+      }
+
+      const source = clamp(state.sourceId, 1, N);
+
+      const parent = new Array(N+1).fill(0);
+      const plen = new Array(N+1).fill(0);
+      const order = [];
+      const q = [source];
+      parent[source] = -1;
+      const visited = new Set([source]);
+      let hasCycle = false;
+
+      while(q.length){
+        const v = q.shift();
+        order.push(v);
+        for(const nb of adj.get(v)){
+          const u = nb.to;
+          if(!visited.has(u)){
+            visited.add(u);
+            parent[u] = v;
+            plen[u] = nb.len;
+            q.push(u);
+          }else if(parent[v] !== u && parent[u] !== v){
+            hasCycle = true;
+          }
+        }
+      }
+
+      const unreachable = [];
+      for(let i=1;i<=N;i++) if(!visited.has(i)) unreachable.push(i);
+
+      const children = Array.from({length:N+1}, ()=>[]);
+      for(let i=1;i<=N;i++) if(parent[i] > 0) children[parent[i]].push(i);
+
+      const sub = new Array(N+1).fill(0);
+      for(let i=order.length-1;i>=0;i--){
+        const v = order[i];
+        let s = 1;
+        for(const ch of children[v]) s += sub[ch];
+        sub[v] = s;
+      }
+
+      const rPerM = copperLoopRperM(state.S);
+
+      const V = new Array(N+1).fill(NaN);
+      V[source] = Vpsu;
+
+      for(const v of order){
+        for(const ch of children[v]){
+          const Iseg = sub[ch] * IperSensor;
+          const dV = Iseg * rPerM * plen[ch];
+          V[ch] = V[v] - dV;
+        }
+      }
+
+      let VminNode = Infinity, VminId = source;
+      for(const v of visited){
+        if(V[v] < VminNode){
+          VminNode = V[v];
+          VminId = v;
+        }
+      }
+      if(!Number.isFinite(VminNode)) VminNode = Vpsu;
+
+      const allow = Math.max(0, Vpsu - Vmin);
+      const dropWorst = Math.max(0, Vpsu - VminNode);
+
+      const Itotal = N * IperSensor;
+      const Praw = Vpsu * Itotal;
+      const reserve = 1 + (Math.max(0, num(state.reservePct,0))/100);
+      const Pneed = Praw * reserve;
+
+      const Pnom = psuNominalW();
+      const derate = clamp(num(state.derate,0.7), 0.1, 1);
+      const Puse = Pnom * derate;
+      const Npsu = ceil(Pneed / Puse);
+
+      return {
+        source, visited, unreachable, hasCycle,
+        parent, plen, sub, V,
+        Vpsu, Vmin, allow, VminNode, VminId, dropWorst,
+        IperSensor, Itotal, Praw, Pneed,
+        Pnom, derate, Puse, Npsu, rPerM, N
+      };
+    }
+
+    function fmt(x, d=2){
+      if(!Number.isFinite(x)) return "—";
+      const pow = Math.pow(10, d);
+      return (Math.round(x*pow)/pow).toString();
+    }
+    function fmtInt(x){ return Number.isFinite(x) ? String(Math.round(x)) : "—"; }
+
+    function renderSummary(targetId, calc, label){
+      const el = $(targetId);
+      const okBadge = (calc.VminNode >= calc.Vmin - 1e-9 && calc.unreachable.length===0)
+        ? `<span class="badge ok">По V: OK</span>`
+        : `<span class="badge bad">По V: плохо</span>`;
+
+      const cycleBadge = calc.hasCycle ? `<span class="badge warn">Есть петля (цикл) — расчёт по дереву BFS</span>` : ``;
+      const unreachBadge = calc.unreachable.length ? `<span class="badge bad">Не подключены: ${calc.unreachable.length}</span>` : ``;
+
+      el.innerHTML = `
+        <div class="row">
+          <div class="field"><span class="badge">${label}</span></div>
+          <div class="field">${okBadge}</div>
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+          <div class="field"><span class="badge">V БП: <b>${fmt(calc.Vpsu,1)}</b> В</span></div>
+          <div class="field"><span class="badge">Vmin датчика: <b>${fmt(calc.Vmin,1)}</b> В</span></div>
+          <div class="field"><span class="badge">Доп. просадка: <b>${fmt(calc.allow,2)}</b> В</span></div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <div class="field"><span class="badge">Худшее V: <b>${fmt(calc.VminNode,2)}</b> В (датчик #${calc.VminId})</span></div>
+          <div class="field"><span class="badge">Потеря: <b>${fmt(calc.dropWorst,2)}</b> В</span></div>
+        </div>
+        <div class="divider"></div>
+        <div class="row">
+          <div class="field"><span class="badge">I/датчик: <b>${fmt(calc.IperSensor,3)}</b> A</span></div>
+          <div class="field"><span class="badge">I всего: <b>${fmt(calc.Itotal,2)}</b> A</span></div>
+          <div class="field"><span class="badge">P с запасом: <b>${fmt(calc.Pneed,1)}</b> Вт</span></div>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <div class="field"><span class="badge warn">БП: <b>${fmt(calc.Pnom,0)}</b>Вт, полезно <b>${fmt(calc.Puse,0)}</b>Вт</span></div>
+          <div class="field"><span class="badge warn">Нужно БП: <b>${fmtInt(calc.Npsu)}</b> шт</span></div>
+        </div>
+        <div style="margin-top:10px">${cycleBadge} ${unreachBadge}</div>
+        <div class="help" style="margin-top:8px">Проводник: <b>медь (Cu)</b>, R петли 1м: <span class="mono">${fmt(calc.rPerM,4)}</span> Ω/м.</div>
+      `;
+    }
+
+    function renderNodeTable(calcA, calcB){
+      const table = $("nodeTable");
+      const N = state.N;
+
+      const rows = [];
+      const unA = new Set(calcA.unreachable);
+      const unB = new Set(calcB.unreachable);
+
+      for(let i=1;i<=N;i++){
+        const va = calcA.V[i];
+        const vb = calcB.V[i];
+
+        const ra = unA.has(i);
+        const rb = unB.has(i);
+
+        const okA = (!ra) && (va >= calcA.Vmin - 1e-9);
+        const okB = (!rb) && (vb >= calcB.Vmin - 1e-9);
+
+        rows.push(`
+          <tr>
+            <td><b>#${i}</b>${i===calcA.source ? ` <span class="badge ok">источник</span>` : ``}</td>
+            <td>${calcA.parent[i] > 0 ? `#${calcA.parent[i]} (L=${fmt(calcA.plen[i],1)}м)` : (i===calcA.source ? "—" : "—")}</td>
+            <td><span class="mono">${Number.isFinite(va)?fmt(va,2):"—"}</span> ${ra?'<span class="badge bad">нет связи</span>':(okA?'<span class="badge ok">OK</span>':'<span class="badge bad">низко</span>')}</td>
+            <td><span class="mono">${Number.isFinite(vb)?fmt(vb,2):"—"}</span> ${rb?'<span class="badge bad">нет связи</span>':(okB?'<span class="badge ok">OK</span>':'<span class="badge bad">низко</span>')}</td>
+          </tr>
+        `);
+      }
+
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Датчик</th>
+            <th>Родитель (по дереву)</th>
+            <th>Сценарий A (V на датчике)</th>
+            <th>Сценарий B (V на датчике)</th>
+          </tr>
+        </thead>
+        <tbody>${rows.join("")}</tbody>
+      `;
+    }
+
+    function computeAndRender(){
+      const Inorm = num(state.Inorm, 0.05);
+      const f = heatFraction(state.N);
+      const Iheat = num(state.Iheat, 0.65);
+      const Ieff = Inorm*(1-f) + Iheat*f;
+
+      const calcA = computeScenario(Inorm);
+      const calcB = computeScenario(Ieff);
+
+      renderSummary("sumA", calcA, "A — без обогрева");
+      renderSummary("sumB", calcB, (state.heatMode==="none") ? "B — обогрев не используется" : "B — с обогревом");
+      renderNodeTable(calcA, calcB);
+    }
+
+    function setOverrideUI(enabled){
+      const dis = !enabled;
+      $("Vmin").disabled = dis;
+      $("Inorm").disabled = dis;
+      $("Iheat").disabled = dis;
+      const tog = $("overrideToggle");
+      if(enabled) tog.classList.add("active");
+      else tog.classList.remove("active");
+    }
+
+    function applyToUI(){
+      setTheme(state.theme || "dark");
+      $("Vpsu").value = clamp(num(state.Vpsu,24), 24, 30);
+      $("S").value = num(state.S, 0.7);
+      $("reservePct").value = num(state.reservePct,30);
+      $("derate").value = num(state.derate,0.7);
+
+      $("psuNom").value = state.psuNom || "240";
+      $("psuCustom").value = num(state.psuCustom,240);
+
+      $("overrideChk").checked = !!state.override;
+      $("Vmin").value = num(state.Vmin,17);
+      $("Inorm").value = num(state.Inorm,0.05);
+      $("Iheat").value = num(state.Iheat,0.65);
+      setOverrideUI(!!state.override);
+
+      $("N").value = Math.max(1, Math.floor(num(state.N,5)));
+
+      // add-link controls defaults
+      const lf = $("linkFrom"); const lt = $("linkTo");
+      if(lf && lt){
+        lf.value = 1;
+        lt.value = Math.min(2, state.N);
+      }
+
+
+      $("heatMode").value = state.heatMode || "all";
+      $("heatValue").value = num(state.heatValue,20);
+
+      renderStepper();
+      initGraph(state);
+      draw();
+    }
+
+    // UI wiring
+    $("Vpsu").addEventListener("input", () => { state.Vpsu = clamp(num($("Vpsu").value,24), 24, 30); computeAndRender(); saveState(); });
+    $("S").addEventListener("input", () => { state.S = Math.max(0.1, num($("S").value,0.7)); computeAndRender(); saveState(); });
+    $("reservePct").addEventListener("input", () => { state.reservePct = Math.max(0, num($("reservePct").value,30)); computeAndRender(); saveState(); });
+    $("derate").addEventListener("input", () => { state.derate = clamp(num($("derate").value,0.7), 0.1, 1); computeAndRender(); saveState(); });
+
+    $("psuNom").addEventListener("change", () => { state.psuNom = $("psuNom").value; computeAndRender(); saveState(); });
+    $("psuCustom").addEventListener("input", () => { state.psuCustom = Math.max(1, num($("psuCustom").value,240)); computeAndRender(); saveState(); });
+
+    $("overrideChk").addEventListener("change", () => {
+      state.override = $("overrideChk").checked;
+      setOverrideUI(state.override);
+      if(!state.override){
+        state.Vmin = 17; state.Inorm = 0.05; state.Iheat = 0.65;
+        $("Vmin").value = state.Vmin; $("Inorm").value = state.Inorm; $("Iheat").value = state.Iheat;
+      }else{
+        state.Vmin = num($("Vmin").value,17);
+        state.Inorm = num($("Inorm").value,0.05);
+        state.Iheat = num($("Iheat").value,0.65);
+      }
+      computeAndRender(); saveState();
+    });
+
+    ["Vmin","Inorm","Iheat"].forEach(id => {
+      $(id).addEventListener("input", () => {
+        if(!state.override) return;
+        state.Vmin = num($("Vmin").value,17);
+        state.Inorm = num($("Inorm").value,0.05);
+        state.Iheat = num($("Iheat").value,0.65);
+        computeAndRender(); saveState();
+      });
+    });
+
+    $("N").addEventListener("change", () => setN($("N").value));
+    $("heatMode").addEventListener("change", () => { state.heatMode = $("heatMode").value; computeAndRender(); saveState(); });
+    $("heatValue").addEventListener("input", () => { state.heatValue = Math.max(0, num($("heatValue").value,20)); computeAndRender(); saveState(); });
+
+    $("next0").addEventListener("click", () => goStep(1));
+    $("next1").addEventListener("click", () => goStep(2));
+    $("prev1").addEventListener("click", () => goStep(0));
+    $("prev2").addEventListener("click", () => goStep(1));
+    $("toStep1").addEventListener("click", () => goStep(0));
+
+    $("themeChip").addEventListener("click", () => setTheme(state.theme === "light" ? "dark" : "light"));
+    $("resetBtn").addEventListener("click", resetAll);
+
+    $("exportBtn").addEventListener("click", () => {
+      const payload = JSON.stringify({ ...state, step: 0 }, null, 2);
+      const blob = new Blob([payload], {type:"application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const dt = new Date();
+      const pad = (x)=> String(x).padStart(2,"0");
+      a.download = `psu_graph_calc_${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    $("importBtn").addEventListener("click", () => $("fileInput").click());
+    $("fileInput").addEventListener("change", async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if(!file) return;
+      try{
+        const txt = await file.text();
+        const data = JSON.parse(txt);
+        state = initGraph({ ...defaultState(), ...data, step: 0 });
+        applyToUI();
+        saveState();
+        goStep(0);
+      }catch(err){
+        alert("Не удалось импортировать JSON. Проверь файл.");
+      }finally{
+        e.target.value = "";
+      }
+    });
+
+    // init
+    applyToUI();
+    goStep(num(state.step,0));
+
+    // status
+    const dot = $("statusDot");
+    const txt = $("statusText");
+    dot.className = "dot ok";
+    txt.textContent = "Готово";
+    errBanner.style.display = "none";
+    computeAndRender();
+
+  }catch(e){
+    showError(e && e.message ? e.message : e);
+  }
+})();
+</script>
+
+<script>
+(() => {
+  const toast = document.getElementById("toast");
+  function showToast(msg){
+    if(!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast._tm);
+    showToast._tm = setTimeout(() => toast.classList.remove("show"), 1600);
+  }
+  const byId = (id) => document.getElementById(id);
+// ===== монтажный степпер (структура + сохранение) =====
+    const MKEY = "calc_mounting_state_v1";
+    const mSteps = [
+      { title:"Тип объекта" },
+      { title:"Крепление" },
+      { title:"Условия" },
+      { title:"Трасса" },
+      { title:"Сервер/связь" },
+      { title:"Итог" },
+    ];
+    const m = {
+      step: 0,
+      obj: "building",
+      wall: "anchor",
+      gofra: false,
+      ex: false,
+      vib: false,
+      sensors: 0,
+      heat: false,
+      len: 0,
+      diam: 0,
+      elbows: 0, connElbows: 0,
+      tees: 0, connTees: 0,
+      crosses: 0, connCrosses: 0,
+      servers: 0,
+      distLast: 0,
+      psuCount: 0, psuPower: 0,
+      distConn: 0,
+      custNet: true,
+      ant: false, antPlace: "in", antDist: 0,
+      tr: false, trCount: 0, trDist: 0,
+    };
+
+    function mLoad(){ try{ const raw = localStorage.getItem(MKEY); if(!raw) return; Object.assign(m, JSON.parse(raw)||{}); }catch(_ ){} }
+    function mSave(){ try{ localStorage.setItem(MKEY, JSON.stringify(m)); }catch(_ ){} }
+
+    const m_stepper = byId("m_stepper");
+    function mRenderStepper(){
+      m_stepper.innerHTML = "";
+      mSteps.forEach((s, i) => {
+        const el = document.createElement("div");
+        el.className = "m-step" + (m.step === i ? " active" : "");
+        el.innerHTML = `<div class="n">${i+1}</div><div>${s.title}</div>`;
+        el.addEventListener("click", () => mGo(i));
+        m_stepper.appendChild(el);
+      });
+    }
+    function mShowPane(){
+      for(let i=0;i<mSteps.length;i++) byId("m_step"+i).classList.toggle("active", m.step===i);
+    }
+    function mGo(i){
+      m.step = Math.max(0, Math.min(mSteps.length-1, i));
+      mRenderStepper();
+      mShowPane();
+      mApplyVisibility();
+      mRenderOutput();
+      mSave();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    const objTiles = byId("m_objTiles");
+    const objList = [
+      { key:"building", label:"Здание" },
+      { key:"tank", label:"Резервуар" },
+      { key:"tunnel", label:"Тоннель" },
+      { key:"special", label:"Спец. назначение" },
+    ];
+    function mRenderObjTiles(){
+      objTiles.innerHTML = "";
+      objList.forEach(o => {
+        const el = document.createElement("div");
+        el.className = "tile" + (m.obj===o.key ? " active" : "");
+        el.innerHTML = `<div>${o.label}</div><span class="pill">выбор</span>`;
+        el.addEventListener("click", () => {
+          m.obj = o.key;
+          if(m.obj === "tank") m.gofra = true;
+          mRenderObjTiles();
+          mApplyVisibility();
+          mRenderOutput();
+          mSave();
+        });
+        objTiles.appendChild(el);
+      });
+    }
+
+    const wallTiles = byId("m_wallTiles");
+    const wallList = [
+      { key:"anchor", label:"Обычный анкер" },
+      { key:"chem", label:"Химический анкер" },
+    ];
+    function mRenderWallTiles(){
+      wallTiles.innerHTML = "";
+      wallList.forEach(w => {
+        const el = document.createElement("div");
+        el.className = "tile" + (m.wall===w.key ? " active" : "");
+        el.innerHTML = `<div>${w.label}</div><span class="pill">стена</span>`;
+        el.addEventListener("click", () => {
+          m.wall = w.key;
+          mRenderWallTiles();
+          mRenderOutput();
+          mSave();
+        });
+        wallTiles.appendChild(el);
+      });
+    }
+
+    function mBindToggles(){
+      const gofra = byId("m_gofra");
+      const ex = byId("m_ex");
+      const vib = byId("m_vib");
+
+      const gofraWrap = byId("m_togGofra");
+      const exWrap = byId("m_togEx");
+      const vibWrap = byId("m_togVib");
+
+      const gofraSub = byId("m_gofraSub");
+      const exSub = byId("m_exSub");
+      const floatNote = byId("m_floatNote");
+
+      function sync(){
+        gofra.checked = !!m.gofra;
+        ex.checked = !!m.ex;
+        vib.checked = !!m.vib;
+        floatNote.style.display = m.vib ? "block" : "none";
+
+        gofraSub.textContent = (m.obj === "tank") ? "для резервуара всегда ДА" : "по необходимости";
+        exSub.textContent = (m.obj === "tank") ? "для резервуара скрыто" : "по необходимости";
+
+        if(m.obj === "tank"){
+          m.gofra = true;
+          gofra.checked = true;
+          gofraWrap.classList.add("disabled");
+          gofra.disabled = true;
+
+          exWrap.classList.add("disabled");
+          ex.disabled = true;
+          ex.checked = false;
+          m.ex = false;
+        } else {
+          gofraWrap.classList.remove("disabled");
+          gofra.disabled = false;
+          exWrap.classList.remove("disabled");
+          ex.disabled = false;
+        }
+      }
+
+      gofraWrap.addEventListener("click", (e)=>{ if(m.obj==="tank") return; if(e.target.tagName.toLowerCase()==="input") return; gofra.checked=!gofra.checked; gofra.dispatchEvent(new Event("change")); });
+      exWrap.addEventListener("click", (e)=>{ if(m.obj==="tank") return; if(e.target.tagName.toLowerCase()==="input") return; ex.checked=!ex.checked; ex.dispatchEvent(new Event("change")); });
+      vibWrap.addEventListener("click", (e)=>{ if(e.target.tagName.toLowerCase()==="input") return; vib.checked=!vib.checked; vib.dispatchEvent(new Event("change")); });
+
+      gofra.addEventListener("change", ()=>{ m.gofra = !!gofra.checked; sync(); mRenderOutput(); mSave(); });
+      ex.addEventListener("change", ()=>{ m.ex = !!ex.checked; sync(); mRenderOutput(); mSave(); });
+      vib.addEventListener("change", ()=>{ m.vib = !!vib.checked; sync(); mRenderOutput(); mSave(); });
+
+      sync();
+      mBindToggles._sync = sync;
+    }
+
+    function mBindNums(){
+      const num = (id, key) => {
+        const el = byId(id);
+        const apply = () => { m[key] = Number(el.value || 0); mRenderOutput(); mSave(); };
+        el.addEventListener("input", apply);
+        el.addEventListener("change", apply);
+      };
+      num("m_sensors","sensors"); num("m_len","len"); num("m_diam","diam");
+      num("m_elbows","elbows"); num("m_connElbows","connElbows");
+      num("m_tees","tees"); num("m_connTees","connTees");
+      num("m_crosses","crosses"); num("m_connCrosses","connCrosses");
+
+      const heat = byId("m_heat");
+      const heatWrap = byId("m_togHeat");
+      heatWrap.addEventListener("click", (e)=>{ if(e.target.tagName.toLowerCase()==="input") return; heat.checked=!heat.checked; heat.dispatchEvent(new Event("change")); });
+      heat.addEventListener("change", ()=>{ m.heat = !!heat.checked; mRenderOutput(); mSave(); });
+
+      num("m_servers","servers"); num("m_distLast","distLast");
+      num("m_psuCount","psuCount"); num("m_psuPower","psuPower");
+      num("m_distConn","distConn"); num("m_trCount","trCount"); num("m_trDist","trDist");
+
+      byId("m_custNet").addEventListener("change", (e)=>{ m.custNet = (e.target.value === "1"); mRenderOutput(); mSave(); });
+
+      const ant = byId("m_ant"); const antWrap = byId("m_togAnt");
+      const antPlace = byId("m_antPlace"); const antDist = byId("m_antDist");
+      antWrap.addEventListener("click", (e)=>{ if(e.target.tagName.toLowerCase()==="input") return; ant.checked=!ant.checked; ant.dispatchEvent(new Event("change")); });
+      ant.addEventListener("change", ()=>{ m.ant = !!ant.checked; mApplyVisibility(); mRenderOutput(); mSave(); });
+      antPlace.addEventListener("change", ()=>{ m.antPlace = antPlace.value; mApplyVisibility(); mRenderOutput(); mSave(); });
+      antDist.addEventListener("input", ()=>{ m.antDist = Number(antDist.value || 0); mRenderOutput(); mSave(); });
+
+      const tr = byId("m_tr"); const trWrap = byId("m_togTr");
+      trWrap.addEventListener("click", (e)=>{ if(e.target.tagName.toLowerCase()==="input") return; tr.checked=!tr.checked; tr.dispatchEvent(new Event("change")); });
+      tr.addEventListener("change", ()=>{ m.tr = !!tr.checked; mApplyVisibility(); mRenderOutput(); mSave(); });
+    }
+
+    function mApplyVisibility(){
+      const appliesWall = (m.obj !== "tank");
+      byId("m_wallBlock").style.display = appliesWall ? "block" : "none";
+      byId("m_wallNA").style.display = appliesWall ? "none" : "block";
+
+      if(mBindToggles._sync) mBindToggles._sync();
+
+      const antDistRow = byId("m_antDistRow");
+      byId("m_antPlace").disabled = !m.ant;
+      antDistRow.style.display = (m.ant && (m.antPlace === "out")) ? "grid" : "none";
+
+      const tunnelBlock = byId("m_tunnelBlock");
+      tunnelBlock.style.display = (m.obj === "tunnel") ? "block" : "none";
+      byId("m_trCount").disabled = !(m.obj==="tunnel" && m.tr);
+      byId("m_trDist").disabled = !(m.obj==="tunnel" && m.tr);
+      if(m.obj !== "tunnel"){ m.tr = false; m.trCount = 0; m.trDist = 0; byId("m_tr").checked = false; }
+    }
+
+    function mFillInputs(){
+      byId("m_sensors").value = m.sensors ?? 0; byId("m_heat").checked = !!m.heat;
+      byId("m_len").value = m.len ?? 0; byId("m_diam").value = m.diam ?? 0;
+      byId("m_elbows").value = m.elbows ?? 0; byId("m_connElbows").value = m.connElbows ?? 0;
+      byId("m_tees").value = m.tees ?? 0; byId("m_connTees").value = m.connTees ?? 0;
+      byId("m_crosses").value = m.crosses ?? 0; byId("m_connCrosses").value = m.connCrosses ?? 0;
+      byId("m_servers").value = m.servers ?? 0; byId("m_distLast").value = m.distLast ?? 0;
+      byId("m_psuCount").value = m.psuCount ?? 0; byId("m_psuPower").value = m.psuPower ?? 0;
+      byId("m_distConn").value = m.distConn ?? 0; byId("m_custNet").value = m.custNet ? "1" : "0";
+      byId("m_ant").checked = !!m.ant; byId("m_antPlace").value = m.antPlace || "in"; byId("m_antDist").value = m.antDist ?? 0;
+      byId("m_tr").checked = !!m.tr; byId("m_trCount").value = m.trCount ?? 0; byId("m_trDist").value = m.trDist ?? 0;
+    }
+
+    function mOutRows(){
+      const objName = ({building:"Здание", tank:"Резервуар", tunnel:"Тоннель", special:"Спец. назначение"})[m.obj] || m.obj;
+      const wallName = ({anchor:"Обычный анкер", chem:"Химический анкер"})[m.wall] || m.wall;
+      const rows = [];
+      rows.push({pos:"Тип объекта", unit:"—", qty: objName, note:""});
+      if(m.obj !== "tank") rows.push({pos:"Крепление к стене", unit:"—", qty: wallName, note:""});
+      rows.push({pos:"Гофра", unit:"—", qty: m.obj==="tank" ? "Да (по умолчанию)" : (m.gofra ? "Да" : "Нет"), note:""});
+      if(m.obj !== "tank") rows.push({pos:"Взрывозащита", unit:"—", qty: m.ex ? "Да" : "Нет", note:""});
+      rows.push({pos:"Вибрация", unit:"—", qty: m.vib ? "Да" : "Нет", note: m.vib ? "→ поплавки (по Excel)" : ""});
+
+      rows.push({pos:"Датчики", unit:"шт", qty: Number(m.sensors||0), note: m.heat ? "обогрев: да" : "обогрев: нет"});
+      rows.push({pos:"Трасса (длина)", unit:"м", qty: Number(m.len||0), note: (m.diam?`Ø ${m.diam} мм`:"")});
+
+      rows.push({pos:"Углы", unit:"шт", qty: Number(m.elbows||0), note:""});
+      if(Number(m.connElbows||0)>0) rows.push({pos:"Соединители для углов", unit:"шт", qty:Number(m.connElbows||0), note:"вручную"});
+
+      rows.push({pos:"Тройники", unit:"шт", qty: Number(m.tees||0), note:""});
+      if(Number(m.connTees||0)>0) rows.push({pos:"Соединители для тройников", unit:"шт", qty:Number(m.connTees||0), note:"вручную"});
+
+      rows.push({pos:"Четверники", unit:"шт", qty: Number(m.crosses||0), note:""});
+      if(Number(m.connCrosses||0)>0) rows.push({pos:"Соединители для четверников", unit:"шт", qty:Number(m.connCrosses||0), note:"вручную"});
+
+      rows.push({pos:"Серверы", unit:"шт", qty: Number(m.servers||0), note:""});
+      rows.push({pos:"Блоки питания", unit:"шт", qty: Number(m.psuCount||0), note: m.psuPower?`${m.psuPower} Вт/шт`:""});
+
+      rows.push({pos:"Датчик → сервер (крайний)", unit:"м", qty: Number(m.distLast||0), note:""});
+      rows.push({pos:"Сервер → точка подключения", unit:"м", qty: Number(m.distConn||0), note:""});
+
+      rows.push({pos:"Интернет заказчика", unit:"—", qty: m.custNet ? "Да" : "Нет", note:""});
+      rows.push({pos:"Интернет-антенна", unit:"—", qty: m.ant ? "Да" : "Нет", note: m.ant ? (m.antPlace==="out" ? "выносная" : "в сервере") : ""});
+      if(m.ant && m.antPlace==="out") rows.push({pos:"Сервер → антенна", unit:"м", qty: Number(m.antDist||0), note:"выносная"});
+
+      if(m.obj==="tunnel"){
+        rows.push({pos:"Трансформатор", unit:"—", qty: m.tr ? "Да" : "Нет", note:"только тоннель"});
+        if(m.tr){
+          rows.push({pos:"Трансформаторы", unit:"шт", qty:Number(m.trCount||0), note:""});
+          rows.push({pos:"Трансформатор → сервер", unit:"м", qty:Number(m.trDist||0), note:""});
+        }
+      }
+
+      const notes = [];
+      if(m.obj==="tank") notes.push("резервуар: гофра по умолчанию");
+      if(m.vib) notes.push("вибрация: добавить поплавки (по Excel)");
+      if(m.heat) notes.push("обогрев: выше потребление");
+      return { rows, notes };
+    }
+
+    function mRenderOutput(){
+      const out = mOutRows();
+      const tbl = byId("m_outTable");
+      tbl.innerHTML =
+        `<thead><tr><th>Позиция</th><th>Ед.</th><th>Кол-во</th><th>Комментарий</th></tr></thead>` +
+        `<tbody>` + out.rows.map(r => `
+          <tr>
+            <td><b>${String(r.pos)}</b></td>
+            <td>${String(r.unit)}</td>
+            <td class="mono">${String(r.qty)}</td>
+            <td>${String(r.note||"")}</td>
+          </tr>`).join("") + `</tbody>`;
+      byId("m_status").textContent = out.notes.length ? ("Примечания: " + out.notes.join(" • ")) : "Примечаний нет.";
+    }
+
+    async function mCopy(){
+      const out = mOutRows();
+      const lines = out.rows.map(r => `- ${r.pos}: ${r.qty} ${r.unit}${r.note ? " ("+r.note+")" : ""}`);
+      const text = `Монтажные комплектующие — параметры\n${lines.join("\n")}`;
+      try{ await navigator.clipboard.writeText(text); showToast("Итог скопирован"); }
+      catch(e){ showToast("Не удалось скопировать"); }
+    }
+    function mReset(){ localStorage.removeItem(MKEY); location.reload(); }
+
+    function mInit(){
+      mLoad();
+      if(m.obj === "tank") m.gofra = true;
+
+      mRenderStepper();
+      mRenderObjTiles();
+      mRenderWallTiles();
+      mBindToggles();
+      mBindNums();
+      mFillInputs();
+      mApplyVisibility();
+      mRenderOutput();
+      mGo(Number(m.step||0));
+
+      byId("m_next0").addEventListener("click", () => mGo(1));
+      byId("m_prev1").addEventListener("click", () => mGo(0));
+      byId("m_next1").addEventListener("click", () => mGo(2));
+      byId("m_prev2").addEventListener("click", () => mGo(1));
+      byId("m_next2").addEventListener("click", () => mGo(3));
+      byId("m_prev3").addEventListener("click", () => mGo(2));
+      byId("m_next3").addEventListener("click", () => mGo(4));
+      byId("m_prev4").addEventListener("click", () => mGo(3));
+      byId("m_next4").addEventListener("click", () => mGo(5));
+      byId("m_prev5").addEventListener("click", () => mGo(4));
+
+      byId("m_copy").addEventListener("click", mCopy);
+      byId("m_reset").addEventListener("click", mReset);
+    }
+    mInit();
+  
+})();
+</script>
+</body>
+</html>
